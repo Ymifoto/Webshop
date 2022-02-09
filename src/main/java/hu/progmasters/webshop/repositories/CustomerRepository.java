@@ -1,5 +1,10 @@
 package hu.progmasters.webshop.repositories;
 
+import hu.progmasters.webshop.DatabaseConfig;
+import hu.progmasters.webshop.domain.Customer;
+
+import java.sql.*;
+
 public class CustomerRepository implements Repository {
 
     public CustomerRepository() {
@@ -19,5 +24,46 @@ public class CustomerRepository implements Repository {
                 + "company BOOLEAN NOT NULL DEFAULT 0);";
 
         execute(sql);
+    }
+
+    public Customer getCustomerByEmail(String email) {
+        try (Connection connection = DatabaseConfig.getConnection()) {
+            String sql = "SELECT * FROM customers WHERE email LIKE '?';";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet result = preparedStatement.executeQuery();
+            if (result.next()) {
+                return new Customer(result.getString("name")
+                        , result.getString("shipping_address")
+                        , result.getString("billing_address")
+                        , result.getInt("discount")
+                        , result.getString("email")
+                        , result.getBoolean("regular_costumer"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Not find customer!");
+        }
+        return null;
+    }
+
+    public void getAllCustomer() {
+        try (Connection connection = DatabaseConfig.getConnection()) {
+            String sql = "SELECT * FROM customers;";
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(sql);
+
+            while (result.next()) {
+                System.out.println(
+                        "ID: " + result.getInt("id") + " "
+                                + "Name: " + result.getString("name") + " "
+                                + "Email: " + result.getString("email") + " "
+                                + "Shipping address: " + result.getString("shipping_address") + " "
+                                + "Billing address: " + result.getString("billing_address") + " "
+                                + "Discount: " + result.getInt("discount") + "% "
+                                + "Regular costumer: " + result.getBoolean("regular_costumer")
+                );
+            }
+        } catch (SQLException e) {
+            System.out.println("Can't open database!");
+        }
     }
 }
