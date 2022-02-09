@@ -35,8 +35,7 @@ public class OrderRepository implements Repository {
                 + "order_id INT NOT NULL,"
                 + "costumer_id INT NOT NULL,"
                 + "FOREIGN KEY (product_id) REFERENCES products(id),"
-                + "FOREIGN KEY (order_id) REFERENCES orders(id),"
-                + "FOREIGN KEY (costumer_id) REFERENCES customers(id));";
+                + "FOREIGN KEY (order_id) REFERENCES orders(id));";
 
         execute(paymentMethodsTable);
         execute(shippingMethodsTable);

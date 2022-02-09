@@ -12,7 +12,8 @@ public class WebShopRepository implements Repository {
                 + "id INT PRIMARY KEY AUTO_INCREMENT,"
                 + "price INT NOT NULL,"
                 + "amount_min INT NOT NULL,"
-                + "amount_max INT NOT NULL);";
+                + "amount_max INT NOT NULL);"
+                + "shipping_method INT NOT NULL);";
 
         execute(shippingPriceTable);
     }

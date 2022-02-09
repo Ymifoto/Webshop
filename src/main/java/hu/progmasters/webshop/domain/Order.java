@@ -8,15 +8,17 @@ public class Order {
     private final int id;
     private final Customer customer;
     private final List<Product> orderedProducts = new ArrayList<>();
+    private final String shipping_method;
     private final int shipping_cost;
     private final int orderTotal;
     private final int generalTotal;
     private final String orderTime;
     private double taxAmount;
 
-    public Order(int id, Customer customer, int shipping_cost, int orderTotal, int generalTotal, String orderTime) {
+    public Order(int id, Customer customer, String shipping_method, int shipping_cost, int orderTotal, int generalTotal, String orderTime) {
         this.id = id;
         this.customer = customer;
+        this.shipping_method = shipping_method;
         this.shipping_cost = shipping_cost;
         this.orderTotal = orderTotal;
         this.generalTotal = generalTotal;
@@ -58,5 +60,9 @@ public class Order {
 
     public double getTaxAmount() {
         return taxAmount;
+    }
+
+    public String getShipping_method() {
+        return shipping_method;
     }
 }
