@@ -21,7 +21,8 @@ public class CustomerRepository implements Repository {
                 + "email VARCHAR(20) NOT NULL,"
                 + "regular_costumer BOOLEAN NOT NULL DEFAULT 0,"
                 + "discount INT NOT NULL DEFAULT 0,"
-                + "company BOOLEAN NOT NULL DEFAULT 0);";
+                + "company BOOLEAN NOT NULL DEFAULT 0),"
+                + "tax_number VARCHAR(14));";
 
         execute(sql);
     }
@@ -32,12 +33,15 @@ public class CustomerRepository implements Repository {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet result = preparedStatement.executeQuery();
             if (result.next()) {
-                return new Customer(result.getString("name")
+                return new Customer(result.getInt("id")
+                        , result.getString("name")
                         , result.getString("shipping_address")
                         , result.getString("billing_address")
                         , result.getInt("discount")
                         , result.getString("email")
-                        , result.getBoolean("regular_costumer"));
+                        , result.getBoolean("regular_costumer")
+                        , result.getBoolean("company")
+                        , result.getString("tax_number"));
             }
         } catch (SQLException e) {
             System.out.println("Not find customer!");
@@ -60,6 +64,7 @@ public class CustomerRepository implements Repository {
                                 + "Billing address: " + result.getString("billing_address") + " "
                                 + "Discount: " + result.getInt("discount") + "% "
                                 + "Regular costumer: " + result.getBoolean("regular_costumer")
+                                + (result.getBoolean("company") ? "Tax number: " + result.getString("tax_number") : "")
                 );
             }
         } catch (SQLException e) {
