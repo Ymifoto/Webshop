@@ -13,7 +13,7 @@ public class InputHandler {
             try {
                 option = scanner.nextInt();
             } catch (InputMismatchException e) {
-                System.out.println("Its not int");
+                System.out.println("It's not a number");
                 scanner.nextLine();
             }
         } while (option < 0);
@@ -35,7 +35,7 @@ public class InputHandler {
             try {
                 option = scanner.nextDouble();
             } catch (InputMismatchException e) {
-                System.out.println("Its not a double");
+                System.out.println("It's not number");
                 scanner.nextLine();
             }
         } while (option < 0);
