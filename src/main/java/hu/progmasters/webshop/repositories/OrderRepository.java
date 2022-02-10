@@ -1,6 +1,8 @@
 package hu.progmasters.webshop.repositories;
 
-public class OrderRepository implements Repository {
+public class OrderRepository extends Repository {
+
+    private static final String TABLE = "orders";
 
     public OrderRepository() {
         createTable();

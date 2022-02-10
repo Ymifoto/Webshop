@@ -91,13 +91,13 @@ public class Customer {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
-        sb.append("ID: ").append(id).append(System.lineSeparator());
-        sb.append("Name:").append(name).append(System.lineSeparator());
+        sb.append("ID: ").append(id).append(", ");
+        sb.append("Name:").append(name).append(", ");
         sb.append("Email: ").append(email).append(System.lineSeparator());
-        sb.append("Shipping address: ").append(shipping_address).append(System.lineSeparator());
+        sb.append("Shipping address: ").append(shipping_address).append(", ");
         sb.append("Billing address: ").append(billing_address).append(System.lineSeparator());
-        sb.append("Discount: ").append(discount).append("% ").append(System.lineSeparator());
-        sb.append("Regular customer: ").append(regular_customer ? "yes" : "no").append(System.lineSeparator());
+        sb.append("Discount: ").append(discount).append("% ").append(", ");
+        sb.append("Regular customer: ").append(regular_customer ? "yes" : "no").append(", ");
         sb.append(company ? "Tax number: " + tax_number + System.lineSeparator() : "");
         return sb.toString();
     }

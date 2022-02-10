@@ -1,7 +1,8 @@
 package hu.progmasters.webshop.repositories;
 
-public class CategoryRepository implements Repository {
+public class CategoryRepository extends Repository {
 
+    private static final String TABLE = "categories_name";
 
     public CategoryRepository() {
         createTable();

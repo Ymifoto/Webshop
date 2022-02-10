@@ -4,11 +4,11 @@ import hu.progmasters.webshop.repositories.*;
 
 public class WebShop {
 
-    ProductRepository productRepository = new ProductRepository();
-    CustomerRepository customerRepository = new CustomerRepository();
-    CategoryRepository categoryRepository = new CategoryRepository();
-    OrderRepository orderRepository = new OrderRepository();
-    WebShopRepository webShopRepository = new WebShopRepository();
+    private final ProductRepository productRepository = new ProductRepository();
+    private final CustomerRepository customerRepository = new CustomerRepository();
+    private final CategoryRepository categoryRepository = new CategoryRepository();
+    private final OrderRepository orderRepository = new OrderRepository();
+    private final WebShopRepository webShopRepository = new WebShopRepository();
 
     public WebShop() {
 
