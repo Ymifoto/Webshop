@@ -1,5 +1,6 @@
 package hu.progmasters.webshop.domain;
 
+import hu.progmasters.webshop.handlers.LogHandler;
 import hu.progmasters.webshop.repositories.*;
 
 public class WebShop {
@@ -11,6 +12,7 @@ public class WebShop {
     private final WebShopRepository webShopRepository = new WebShopRepository();
 
     public WebShop() {
-
+        LogHandler.addLog("Start program");
+        LogHandler.writeLog();
     }
 }
