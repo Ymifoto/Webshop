@@ -35,7 +35,9 @@ public class CategoryRepository extends Repository {
 
         } catch (SQLException e) {
             System.out.println("Not found category");
+            return null;
         }
+        category.setId(id);
         return category;
     }
 
@@ -43,7 +45,7 @@ public class CategoryRepository extends Repository {
         List<Product> products = new ArrayList<>();
 
         while (result.next()) {
-            products.add(new Product(result.getInt(1), result.getString("name"),
+            products.add(new Product(result.getInt("product_id"), result.getString("name"),
                     result.getString("vendor"), result.getInt("price"),
                     result.getInt("sale_price"), result.getString("description"),
                     result.getString("product_type"), Tax.valueOf(result.getString("tax"))

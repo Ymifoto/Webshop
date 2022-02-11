@@ -35,7 +35,7 @@ public class CustomerRepository extends Repository {
                 + "id INT PRIMARY KEY AUTO_INCREMENT,"
                 + "shipping_address VARCHAR(100) NOT NULL,"
                 + "billing_address VARCHAR(100) NOT NULL,"
-                + "tax_number VARCHAR(14)),"
+                + "tax_number VARCHAR(14),"
                 + "customer_id INT NOT NULL,"
                 + "FOREIGN KEY (customer_id) REFERENCES customers(id));";
 

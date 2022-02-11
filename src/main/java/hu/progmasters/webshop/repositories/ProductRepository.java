@@ -42,8 +42,7 @@ public class ProductRepository extends Repository {
                 + "product_type VARCHAR(20) NOT NULL,"
                 + "tax VARCHAR(10) NOT NULL,"
                 + "on_sale BOOLEAN NOT NULL DEFAULT 0,"
-                + "in_stock BOOLEAN NOT NULL DEFAULT 1"
-        + "FOREIGN KEY );";
+                + "in_stock BOOLEAN NOT NULL DEFAULT 1);";
 
         execute(productsTable);
     }
