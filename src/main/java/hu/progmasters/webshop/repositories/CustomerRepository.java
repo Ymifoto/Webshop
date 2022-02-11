@@ -1,6 +1,7 @@
 package hu.progmasters.webshop.repositories;
 
 import hu.progmasters.webshop.DatabaseConfig;
+import hu.progmasters.webshop.domain.Address;
 import hu.progmasters.webshop.domain.Customer;
 
 import java.sql.*;
@@ -19,7 +20,7 @@ public class CustomerRepository extends Repository {
 
     private void createTable() {
 
-        String sql = "CREATE TABLE IF NOT EXISTS customers("
+        String customers = "CREATE TABLE IF NOT EXISTS customers("
                 + "id INT PRIMARY KEY AUTO_INCREMENT,"
                 + "name VARCHAR(30) NOT NULL,"
                 + "shipping_address VARCHAR(100) NOT NULL,"
@@ -30,7 +31,16 @@ public class CustomerRepository extends Repository {
                 + "company BOOLEAN NOT NULL DEFAULT 0,"
                 + "tax_number VARCHAR(14));";
 
-        execute(sql);
+        String address = "CREATE TABLE IF NOT EXISTS address("
+                + "id INT PRIMARY KEY AUTO_INCREMENT,"
+                + "shipping_address VARCHAR(100) NOT NULL,"
+                + "billing_address VARCHAR(100) NOT NULL,"
+                + "tax_number VARCHAR(14)),"
+                + "customer_id INT NOT NULL,"
+                + "FOREIGN KEY (customer_id) REFERENCES customers(id));";
+
+        execute(customers);
+        execute(address);
     }
 
     public Customer getCustomerByEmail(String email) {
@@ -42,13 +52,11 @@ public class CustomerRepository extends Repository {
             if (result.next()) {
                 return new Customer(result.getInt("id")
                         , result.getString("name")
-                        , result.getString("shipping_address")
-                        , result.getString("billing_address")
+                        , new Address(result.getString("shipping_address"), result.getString("billing_address"), result.getString("tax_number"))
                         , result.getInt("discount")
                         , result.getString("email")
                         , result.getBoolean("regular_costumer")
-                        , result.getBoolean("company")
-                        , result.getString("tax_number"));
+                        , result.getBoolean("company"));
             }
         } catch (SQLException e) {
             System.out.println("Not find customer!");
@@ -65,13 +73,11 @@ public class CustomerRepository extends Repository {
             while (result.next()) {
                 customerList.add(new Customer(result.getInt("id")
                         , result.getString("name")
-                        , result.getString("shipping_address")
-                        , result.getString("billing_address")
+                        , new Address(result.getString("shipping_address"), result.getString("billing_address"), result.getString("tax_number"))
                         , result.getInt("discount")
                         , result.getString("email")
                         , result.getBoolean("regular_costumer")
-                        , result.getBoolean("company")
-                        , result.getString("tax_number")));
+                        , result.getBoolean("company")));
             }
             return customerList;
         } catch (SQLException e) {

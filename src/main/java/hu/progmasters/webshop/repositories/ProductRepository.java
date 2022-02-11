@@ -19,6 +19,17 @@ public class ProductRepository extends Repository {
     }
 
     private void createTable() {
+
+        String vendors = "CREATE TABLE IF NOT EXISTS vendors("
+                + "id INT PRIMARY KEY AUTO_INCREMENT,"
+                + "vendor_name VARCHAR(20) NOT NULL UNIQUE);";
+
+        String product_types = "CREATE TABLE IF NOT EXISTS product_types("
+                + "id INT PRIMARY KEY AUTO_INCREMENT,"
+                + "product_type_name VARCHAR(20) NOT NULL UNIQUE);";
+
+
+
         String productsTable = "CREATE TABLE IF NOT EXISTS products("
                 + "id INT PRIMARY KEY AUTO_INCREMENT,"
                 + "name VARCHAR(100) NOT NULL,"
@@ -31,7 +42,8 @@ public class ProductRepository extends Repository {
                 + "product_type VARCHAR(20) NOT NULL,"
                 + "tax VARCHAR(10) NOT NULL,"
                 + "on_sale BOOLEAN NOT NULL DEFAULT 0,"
-                + "in_stock BOOLEAN NOT NULL DEFAULT 1);";
+                + "in_stock BOOLEAN NOT NULL DEFAULT 1"
+        + "FOREIGN KEY );";
 
         execute(productsTable);
     }
@@ -49,7 +61,6 @@ public class ProductRepository extends Repository {
                         , result.getInt("price")
                         , result.getInt("sale_price")
                         , result.getString("description")
-                        , result.getInt("shipping_price")
                         , result.getString("product_type")
                         , Tax.valueOf(result.getString("tax"))
                         , result.getBoolean("on_sale")
@@ -74,7 +85,6 @@ public class ProductRepository extends Repository {
                         , result.getInt("price")
                         , result.getInt("sale_price")
                         , result.getString("description")
-                        , result.getInt("shipping_price")
                         , result.getString("product_type")
                         , Tax.valueOf(result.getString("tax"))
                         , result.getBoolean("on_sale")
@@ -85,9 +95,5 @@ public class ProductRepository extends Repository {
             System.out.println("Can't open database!");
             return Collections.emptyList();
         }
-    }
-
-    public List<Product> getProductList() {
-        return productList;
     }
 }

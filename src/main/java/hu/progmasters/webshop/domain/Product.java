@@ -8,20 +8,18 @@ public class Product {
     private int price;
     private  int sale_price;
     private String description;
-    private int shipping_price;
     private String productType;
     private Tax tax;
     private boolean onSale;
     private boolean inStock;
 
-    public Product(int id, String name, String vendor, int price, int sale_price, String description, int shipping_price, String productType, Tax tax, boolean onSale, boolean inStock) {
+    public Product(int id, String name, String vendor, int price, int sale_price, String description, String productType, Tax tax, boolean onSale, boolean inStock) {
         this.id = id;
         this.name = name;
         this.vendor = vendor;
         this.price = price;
         this.sale_price = sale_price;
         this.description = description;
-        this.shipping_price = shipping_price;
         this.productType = productType;
         this.tax = tax;
         this.onSale = onSale;
@@ -76,14 +74,6 @@ public class Product {
         this.description = description;
     }
 
-    public int getShipping_price() {
-        return shipping_price;
-    }
-
-    public void setShipping_price(int shipping_price) {
-        this.shipping_price = shipping_price;
-    }
-
     public String getProductType() {
         return productType;
     }
@@ -126,7 +116,6 @@ public class Product {
         sb.append(onSale ? "Sale price: " + sale_price : "");
         sb.append("Product type: ").append(productType).append(", ");
         sb.append("Description: ").append(description).append(System.lineSeparator());
-        sb.append("Shipping price: ").append(shipping_price).append(", ");
         sb.append("In stock: ").append(inStock ? "yes" : "no");
         return sb.toString();
     }
