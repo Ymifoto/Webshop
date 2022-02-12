@@ -82,7 +82,7 @@ public class CustomerRepository extends Repository {
                 + "billing_address VARCHAR(100) DEFAULT '',"
                 + "email VARCHAR(20) NOT NULL,"
                 + "regular_costumer BOOLEAN DEFAULT 0,"
-                + "discount INT DEFAULT 0,"
+                + "discount INT UNSIGNED DEFAULT 0,"
                 + "company BOOLEAN DEFAULT 0,"
                 + "tax_number VARCHAR(14));";
         execute(customers);

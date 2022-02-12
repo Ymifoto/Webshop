@@ -33,7 +33,7 @@ public abstract class Repository {
         LogHandler.addLog("Update " + table + " table, updated id: " + id + ", " + data.keySet());
     }
 
-    protected void insert(String table, Map<String, String> datas) {
+    protected int insert(String table, Map<String, String> datas) {
         int id = -1;
         try (Connection connection = DatabaseConfig.getConnection()) {
             String sql = "INSERT INTO " + table + "(" + getColumsNameForInsert(datas.keySet()) + ") VALUES(" + getPlaceHolders(datas.size()) + ");";
@@ -48,6 +48,7 @@ public abstract class Repository {
         }
         System.out.println("Insert succes");
         LogHandler.addLog("Insert " + table + " table, ID: " + id);
+        return id;
     }
 
     private String getColumsNameForUpdate(Set<String> datas) {

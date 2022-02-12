@@ -12,10 +12,6 @@ public class Category {
     private final List<Product> products = new ArrayList<>();
     private String description = "";
 
-    public Category() {
-
-    }
-
     public int getId() {
         return id;
     }

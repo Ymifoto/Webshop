@@ -72,12 +72,16 @@ public class CategoryRepository extends Repository {
             if (category.getName() == null) {
                 category.setName(result.getString("category_name"));
             }
-
-            productList.add(new Product(result.getInt("product_id"), result.getString("name"),
-                    result.getString("vendor"), result.getInt("price"),
-                    result.getInt("sale_price"), result.getString("description"),
-                    result.getString("product_type"), Tax.valueOf(result.getString("tax")),
-                    result.getBoolean("on_sale"), result.getBoolean("in_stock")));
+            productList.add(new Product(
+                    result.getInt("product_id"),
+                    result.getString("name"),
+                    result.getString("vendor"),
+                    result.getInt("price"),
+                    result.getInt("sale_price"),
+                    result.getString("description"),
+                    result.getString("product_type"),
+                    Tax.valueOf(result.getString("tax")),
+                    result.getBoolean("in_stock")));
         }
     }
 

@@ -26,19 +26,6 @@ public class Product {
         this.productType = productType;
         this.tax = tax;
         this.inStock = inStock;
-    }
-
-    public Product(int id, String name, String vendor, int price, int salePrice, String description, String productType, Tax tax, boolean onSale, boolean inStock) {
-        this.id = id;
-        this.name = name;
-        this.vendor = vendor;
-        this.price = price;
-        this.salePrice = salePrice;
-        this.description = description;
-        this.productType = productType;
-        this.tax = tax;
-        this.onSale = onSale;
-        this.inStock = inStock;
         setOnSale();
     }
 
@@ -50,73 +37,17 @@ public class Product {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getVendor() {
-        return vendor;
-    }
-
-    public void setVendor(String vendor) {
-        this.vendor = vendor;
-    }
-
     public int getPrice() {
-        return price;
+        return onSale ? salePrice : price;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public int getSale_price() {
-        return salePrice;
-    }
-
-    public void setSale_price(int sale_price) {
+    public void setSalePrice(int sale_price) {
         this.salePrice = sale_price;
         setOnSale();
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getProductType() {
-        return productType;
-    }
-
-    public void setProductType(String productType) {
-        this.productType = productType;
-    }
-
     public Tax getTax() {
         return tax;
-    }
-
-    public void setTax(Tax tax) {
-        this.tax = tax;
-    }
-
-    public boolean isOnSale() {
-        return onSale;
-    }
-
-    public void setOnSale(boolean onSale) {
-        this.onSale = onSale;
-    }
-
-    public boolean isInStock() {
-        return inStock;
-    }
-
-    public void setInStock(boolean inStock) {
-        this.inStock = inStock;
     }
 
     private void setOnSale() {

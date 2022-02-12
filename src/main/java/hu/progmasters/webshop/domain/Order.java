@@ -9,60 +9,42 @@ public class Order {
     private final Customer customer;
     private final List<Product> orderedProducts = new ArrayList<>();
     private final String shipping_method;
-    private final int shipping_cost;
+    private final int shippingCost;
     private final int orderTotal;
     private final int generalTotal;
     private final String orderTime;
     private double taxAmount;
 
-    public Order(int id, Customer customer, String shipping_method, int shipping_cost, int orderTotal, int generalTotal, String orderTime) {
+    public Order(int id, Customer customer, String shipping_method, int shippingCost, int orderTotal, String orderTime) {
         this.id = id;
         this.customer = customer;
         this.shipping_method = shipping_method;
-        this.shipping_cost = shipping_cost;
+        this.shippingCost = shippingCost;
         this.orderTotal = orderTotal;
-        this.generalTotal = generalTotal;
         this.orderTime = orderTime;
-        setTaxAmpunt();
+        generalTotal = shippingCost + orderTotal;
+        setTaxAmount();
     }
 
-    private void setTaxAmpunt () {
+    private void setTaxAmount() {
         taxAmount = orderedProducts.stream().mapToDouble(p -> p.getPrice() * p.getTax().getAmount()).sum();
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public Customer getCustomer() {
-        return customer;
     }
 
     public List<Product> getOrderedProducts() {
         return orderedProducts;
     }
 
-    public int getShipping_cost() {
-        return shipping_cost;
-    }
-
-    public int getOrderTotal() {
-        return orderTotal;
-    }
-
-    public int getGeneralTotal() {
-        return generalTotal;
-    }
-
-    public String getOrderTime() {
-        return orderTime;
-    }
-
-    public double getTaxAmount() {
-        return taxAmount;
-    }
-
-    public String getShipping_method() {
-        return shipping_method;
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("ID: ").append(id).append(", ");
+        sb.append("Customer: ").append(customer.getId() + ", " + customer.getName() + ", " + customer.getEmail()).append(System.lineSeparator());
+        sb.append("Ordered products: ").append(System.lineSeparator());
+        orderedProducts.forEach(p -> sb.append(p.getName() + ", "));
+        sb.append("Shipping method: ").append(shipping_method).append("Shipping cost: ").append(shippingCost).append(System.lineSeparator());
+        sb.append("General total: ").append(generalTotal).append(", ");
+        sb.append("Tax amount: ").append(taxAmount).append(System.lineSeparator());
+        sb.append("Order time: ").append(orderTime);
+        return sb.toString();
     }
 }

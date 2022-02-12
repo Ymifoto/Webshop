@@ -32,7 +32,6 @@ public class ProductRepository extends Repository {
                         , result.getString("description")
                         , result.getString("product_type")
                         , Tax.valueOf(result.getString("tax"))
-                        , result.getBoolean("on_sale")
                         , result.getBoolean("in_stock"));
             }
         } catch (SQLException e) {
@@ -101,13 +100,11 @@ public class ProductRepository extends Repository {
                     , result.getString("description")
                     , result.getString("product_type")
                     , Tax.valueOf(result.getString("tax"))
-                    , result.getBoolean("on_sale")
                     , result.getBoolean("in_stock")));
         }
     }
 
     private void createTable() {
-
         String vendors = "CREATE TABLE IF NOT EXISTS vendors("
                 + "id INT PRIMARY KEY AUTO_INCREMENT,"
                 + "vendor_name VARCHAR(20) NOT NULL UNIQUE);";
@@ -120,12 +117,12 @@ public class ProductRepository extends Repository {
                 + "id INT PRIMARY KEY AUTO_INCREMENT,"
                 + "name VARCHAR(100) NOT NULL,"
                 + "vendor VARCHAR(20) NOT NULL,"
-                + "price INT NOT NULL,"
-                + "sale_price INT DEFAULT 0,"
+                + "price INT UNSIGNED NOT NULL,"
+                + "sale_price INT UNSIGNED DEFAULT 0,"
                 + "description VARCHAR(255),"
                 + "product_type VARCHAR(50) NOT NULL,"
                 + "tax VARCHAR(10) NOT NULL,"
-                + "category_id INT,"
+                + "category_id INT UNSIGNED,"
                 + "on_sale BOOLEAN NOT NULL DEFAULT 0,"
                 + "in_stock BOOLEAN NOT NULL DEFAULT 1);";
 
