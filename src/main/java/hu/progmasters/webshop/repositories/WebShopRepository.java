@@ -2,19 +2,12 @@ package hu.progmasters.webshop.repositories;
 
 public class WebShopRepository extends Repository {
 
-    public WebShopRepository() {
-        createTable();
+
+    public void updateCategoriesTable() {
+        String sql = "INSERT IGNORE INTO categories(product_id,category_id) SELECT id,category_id FROM products WHERE category_id IS NOT NULL;";
+        execute(sql);
     }
 
-    private void createTable() {
 
-        String shippingPriceTable = "CREATE TABLE IF NOT EXISTS shipping_price("
-                + "id INT PRIMARY KEY AUTO_INCREMENT,"
-                + "price INT NOT NULL,"
-                + "amount_min INT NOT NULL,"
-                + "amount_max INT NOT NULL,"
-                + "shipping_method INT NOT NULL);";
 
-        execute(shippingPriceTable);
-    }
 }

@@ -1,16 +1,17 @@
 package hu.progmasters.webshop.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Category {
 
     private int id;
     private String name;
-    private List<Product> products;
-    private String description;
+    private final List<Product> products = new ArrayList<>();
+    private String description = "";
 
     public Category() {
-        this.description = description;
+
     }
 
     public int getId() {
@@ -33,15 +34,20 @@ public class Category {
         return products;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
-
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("ID: ").append(id).append(", ");
+        sb.append("Name: ").append(name).append(", ");
+        sb.append(description.length() > 0 ? "Description: " + description : description);
+        return sb.toString();
     }
 }

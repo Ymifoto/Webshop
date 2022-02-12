@@ -1,24 +1,27 @@
 package hu.progmasters.webshop.domain;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 public class Product {
 
-    private int id;
+    private final int id;
     private String name;
     private String vendor;
-    private int price;
-    private  int sale_price;
+    private Integer price;
+    private Integer salePrice;
     private String description;
     private String productType;
     private Tax tax;
     private boolean onSale;
     private boolean inStock;
 
-    public Product(int id, String name, String vendor, int price, int sale_price, String description, String productType, Tax tax, boolean onSale, boolean inStock) {
+    public Product(int id, String name, String vendor, int price, int salePrice, String description, String productType, Tax tax, boolean onSale, boolean inStock) {
         this.id = id;
         this.name = name;
         this.vendor = vendor;
         this.price = price;
-        this.sale_price = sale_price;
+        this.salePrice = salePrice;
         this.description = description;
         this.productType = productType;
         this.tax = tax;
@@ -28,10 +31,6 @@ public class Product {
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -59,11 +58,11 @@ public class Product {
     }
 
     public int getSale_price() {
-        return sale_price;
+        return salePrice;
     }
 
     public void setSale_price(int sale_price) {
-        this.sale_price = sale_price;
+        this.salePrice = sale_price;
     }
 
     public String getDescription() {
@@ -113,11 +112,23 @@ public class Product {
         sb.append("Name: ").append(name).append(", ");
         sb.append("Vendor: ").append(vendor).append(System.lineSeparator());
         sb.append("Price: ").append(price).append(", ");
-        sb.append(onSale ? "Sale price: " + sale_price : "");
+        sb.append(onSale ? "Sale price: " + salePrice + ", " : "");
         sb.append("Product type: ").append(productType).append(", ");
+        sb.append("In stock: ").append(inStock ? "yes" : "no").append(System.lineSeparator());
         sb.append("Description: ").append(description).append(System.lineSeparator());
-        sb.append("In stock: ").append(inStock ? "yes" : "no");
         return sb.toString();
+    }
+
+    public Map<String, String> getData() {
+        Map<String, String> data = new TreeMap<>();
+        data.put("name", name);
+        data.put("vendor", vendor);
+        data.put("price", price.toString());
+        data.put("sale_price", salePrice.toString());
+        data.put("description",description);
+        data.put("product_type",productType);
+        data.put("in_stock",String.valueOf(inStock));
+        return data;
     }
 }
 

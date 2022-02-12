@@ -1,11 +1,9 @@
 package hu.progmasters.webshop.repositories;
 
 import hu.progmasters.webshop.DatabaseConfig;
+import hu.progmasters.webshop.handlers.LogHandler;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -23,27 +21,33 @@ public abstract class Repository {
 
     protected void update(String table, int id, Map<String, String> datas) {
         try (Connection connection = DatabaseConfig.getConnection()) {
-            String update = "UPDATE " + table + " SET " + getColumsNameForUpdate(datas.keySet()) + " WHERE id = ?;";
-            PreparedStatement preparedStatement = connection.prepareStatement(update);
+            String sql = "UPDATE " + table + " SET " + getColumsNameForUpdate(datas.keySet()) + " WHERE id = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
             setMapValues(preparedStatement, datas.values());
             preparedStatement.setInt(datas.size() + 1, id);
-            System.out.println("Update succes");
+            preparedStatement.execute();
         } catch (SQLException e) {
-            e.printStackTrace();
             System.out.println("Update error!");
         }
+        System.out.println("Update succes");
+        LogHandler.addLog("Update " + table + " table, updated id: " + id + ", " + datas.keySet());
     }
 
-    protected void insert(String table, int id, Map<String, String> datas) {
+    protected void insert(String table, Map<String, String> datas) {
+        int id = -1;
         try (Connection connection = DatabaseConfig.getConnection()) {
-            String update = "INSERT INTO " + table + "(" + getColumsNameForInsert(datas.keySet()) + ") VALUES(" + getPlaceHolders(datas.size()) + ");";
-            PreparedStatement preparedStatement = connection.prepareStatement(update);
+            String sql = "INSERT INTO " + table + "(" + getColumsNameForInsert(datas.keySet()) + ") VALUES(" + getPlaceHolders(datas.size()) + ");";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             setMapValues(preparedStatement, datas.values());
-            System.out.println("Insert succes");
+            ResultSet result = preparedStatement.getGeneratedKeys();
+            if (result.next()) {
+                id = result.getInt(1);
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
             System.out.println("Insert error!");
         }
+        System.out.println("Insert succes");
+        LogHandler.addLog("Insert " + table + " table, ID: " + id);
     }
 
     private String getColumsNameForUpdate(Set<String> datas) {

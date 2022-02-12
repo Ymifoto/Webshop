@@ -18,6 +18,13 @@ public class OrderRepository extends Repository {
                 + "id INT PRIMARY KEY AUTO_INCREMENT,"
                 + "name VARCHAR(10) NOT NULL);";
 
+        String shippingPriceTable = "CREATE TABLE IF NOT EXISTS shipping_price("
+                + "id INT PRIMARY KEY AUTO_INCREMENT,"
+                + "price INT NOT NULL,"
+                + "amount_min INT NOT NULL,"
+                + "amount_max INT NOT NULL,"
+                + "shipping_method INT NOT NULL);";
+
         String ordersTable = "CREATE TABLE IF NOT EXISTS orders("
                 + "id INT PRIMARY KEY AUTO_INCREMENT,"
                 + "customer_id INT NOT NULL,"
@@ -41,6 +48,7 @@ public class OrderRepository extends Repository {
 
         execute(paymentMethodsTable);
         execute(shippingMethodsTable);
+        execute(shippingPriceTable);
         execute(ordersTable);
         execute(orderedProductsTable);
     }
