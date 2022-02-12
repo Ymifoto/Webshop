@@ -19,18 +19,18 @@ public abstract class Repository {
         }
     }
 
-    protected void update(String table, int id, Map<String, String> datas) {
+    protected void update(String table, int id, Map<String,String> data) {
         try (Connection connection = DatabaseConfig.getConnection()) {
-            String sql = "UPDATE " + table + " SET " + getColumsNameForUpdate(datas.keySet()) + " WHERE id = ?;";
+            String sql = "UPDATE " + table + " SET " + getColumsNameForUpdate(data.keySet()) + " WHERE id = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            setMapValues(preparedStatement, datas.values());
-            preparedStatement.setInt(datas.size() + 1, id);
+            setMapValues(preparedStatement, data.values());
+            preparedStatement.setInt(data.size() + 1, id);
             preparedStatement.execute();
         } catch (SQLException e) {
             System.out.println("Update error!");
         }
         System.out.println("Update succes");
-        LogHandler.addLog("Update " + table + " table, updated id: " + id + ", " + datas.keySet());
+        LogHandler.addLog("Update " + table + " table, updated id: " + id + ", " + data.keySet());
     }
 
     protected void insert(String table, Map<String, String> datas) {

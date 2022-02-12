@@ -2,6 +2,8 @@ package hu.progmasters.webshop.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class Category {
 
@@ -49,5 +51,13 @@ public class Category {
         sb.append("Name: ").append(name).append(", ");
         sb.append(description.length() > 0 ? "Description: " + description : description);
         return sb.toString();
+    }
+
+    public Map<String, String> getData() {
+        Map<String, String> data = new TreeMap<>();
+        data.put("id", String.valueOf(id));
+        data.put("name", name);
+        data.put("description", description);
+        return data;
     }
 }

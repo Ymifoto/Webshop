@@ -62,8 +62,8 @@ public class CategoryRepository extends Repository {
         webShopRepository.updateCategoriesTable();
     }
 
-    public void updateCategory(int id, Map<String, String> data) {
-        update(TABLE, id, data);
+    public void updateCategory(Category category) {
+        update(TABLE, category.getId(), category.getData());
     }
 
     private void getProductList(ResultSet result, Category category) throws SQLException {

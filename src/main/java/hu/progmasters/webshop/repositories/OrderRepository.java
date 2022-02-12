@@ -52,6 +52,4 @@ public class OrderRepository extends Repository {
         execute(ordersTable);
         execute(orderedProductsTable);
     }
-
-
 }

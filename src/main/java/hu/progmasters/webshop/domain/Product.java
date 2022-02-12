@@ -16,6 +16,18 @@ public class Product {
     private boolean onSale;
     private boolean inStock;
 
+    public Product(int id, String name, String vendor, Integer price, Integer salePrice, String description, String productType, Tax tax, boolean inStock) {
+        this.id = id;
+        this.name = name;
+        this.vendor = vendor;
+        this.price = price;
+        this.salePrice = salePrice;
+        this.description = description;
+        this.productType = productType;
+        this.tax = tax;
+        this.inStock = inStock;
+    }
+
     public Product(int id, String name, String vendor, int price, int salePrice, String description, String productType, Tax tax, boolean onSale, boolean inStock) {
         this.id = id;
         this.name = name;
@@ -27,6 +39,7 @@ public class Product {
         this.tax = tax;
         this.onSale = onSale;
         this.inStock = inStock;
+        setOnSale();
     }
 
     public int getId() {
@@ -63,6 +76,7 @@ public class Product {
 
     public void setSale_price(int sale_price) {
         this.salePrice = sale_price;
+        setOnSale();
     }
 
     public String getDescription() {
@@ -103,6 +117,10 @@ public class Product {
 
     public void setInStock(boolean inStock) {
         this.inStock = inStock;
+    }
+
+    private void setOnSale() {
+        onSale = salePrice > 0;
     }
 
     @Override
