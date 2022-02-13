@@ -14,16 +14,12 @@ import java.util.TreeMap;
 
 public class ShoppingCart extends Repository {
 
-    private final Customer customer;
+    private Customer customer;
     private final List<Product> productList = new ArrayList<>();
     private int shippingMethod;
     private int shippingCost;
     private int orderId;
     private static final String TABLE = "orders";
-
-    public ShoppingCart(Customer customer) {
-        this.customer = customer;
-    }
 
     public void addProduct(Product product) {
         productList.add(product);
@@ -75,5 +71,13 @@ public class ShoppingCart extends Repository {
             data.put( "product_id",String.valueOf(product.getId()));
             insert("ordered_products",data);
         }
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 }

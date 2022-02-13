@@ -84,7 +84,6 @@ public class CategoryRepository extends Repository {
     }
 
     private void createTable() {
-
         String categoriesNameTable = "CREATE TABLE IF NOT EXISTS categories_name("
                 + "id INT PRIMARY KEY AUTO_INCREMENT,"
                 + "category_name VARCHAR(50) NOT NULL UNIQUE,"

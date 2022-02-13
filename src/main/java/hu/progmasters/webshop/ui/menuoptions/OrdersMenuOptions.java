@@ -1,6 +1,8 @@
 package hu.progmasters.webshop.ui.menuoptions;
 
-public enum OrdersMenu implements Menu {
+import hu.progmasters.webshop.ui.Menu;
+
+public enum OrdersMenuOptions implements Menu {
 
     NEW_ORDER,ALL_ORDERS,SEARCH,BACK
 

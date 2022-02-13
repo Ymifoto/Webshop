@@ -1,6 +1,8 @@
 package hu.progmasters.webshop.ui.menuoptions;
 
-public enum ProductsMenu implements Menu {
+import hu.progmasters.webshop.ui.Menu;
+
+public enum ProductsMenuOptions implements Menu {
 
     ADD_NEW, UPDATE, ONSALE, INSTOCK, SEARCH, BACK
 }
