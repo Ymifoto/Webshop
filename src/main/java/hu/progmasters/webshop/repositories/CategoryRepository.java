@@ -12,11 +12,9 @@ import java.util.Map;
 public class CategoryRepository extends Repository {
 
     private static final String TABLE = "categories_name";
-    private final WebShopRepository webShopRepository;
 
-    public CategoryRepository(WebShopRepository webShopRepository) {
+    public CategoryRepository() {
         createTable();
-        this.webShopRepository = webShopRepository;
     }
 
     public Category getCategroyById(int id) {
@@ -59,7 +57,7 @@ public class CategoryRepository extends Repository {
 
     public void addCategory(Map<String, String> data) {
         insert(TABLE, data);
-        webShopRepository.updateCategoriesTable();
+        updateCategoriesTable();
     }
 
     public void updateCategory(Category category) {

@@ -36,7 +36,7 @@ public class OrderRepository extends Repository {
         }
     }
 
-    public void getAllOrders() {
+    public List<Order> getAllOrders() {
         List<Order> orders = new ArrayList<>();
         try (Connection connection = DatabaseConfig.getConnection()) {
             String sql = "SELECT * FROM orders AS o" +
@@ -65,6 +65,7 @@ public class OrderRepository extends Repository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return orders;
     }
 
     private List<Product> getOrderedProducts(int orderId) {

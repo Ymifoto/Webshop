@@ -10,10 +10,8 @@ import java.util.*;
 public class ProductRepository extends Repository {
 
     private static final String TABLE = "products";
-    private final WebShopRepository webShopRepository;
 
-    public ProductRepository(WebShopRepository webShopRepository) {
-        this.webShopRepository = webShopRepository;
+    public ProductRepository() {
         createTable();
     }
 
@@ -56,10 +54,10 @@ public class ProductRepository extends Repository {
         }
     }
 
-    public List<Product> getDiscountProducts() {
+    public List<Product> getStockOrDiscountProducts(String option) {
         List<Product> productList = new ArrayList<>();
         try (Connection connection = DatabaseConfig.getConnection()) {
-            String sql = "SELECT * FROM products WHERE on_sale = 1;";
+            String sql = "SELECT * FROM products WHERE " + option + " = 1;";
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(sql);
 
@@ -74,19 +72,19 @@ public class ProductRepository extends Repository {
 
     public void addProduct(Map<String, String> data) {
         insert(TABLE, data);
-        webShopRepository.updateCategoriesTable();
+        updateCategoriesTable();
     }
 
     public void updateProduct(Product product) {
         update(TABLE, product.getId(), product.getData());
-        webShopRepository.updateCategoriesTable();
+        updateCategoriesTable();
     }
 
     public void addProductToCategory(int productId, int categoryId) {
         Map<String, String> data = new TreeMap<>();
         data.put("category_id", String.valueOf(categoryId));
         update(TABLE, productId, data);
-        webShopRepository.updateCategoriesTable();
+        updateCategoriesTable();
 
     }
 

@@ -40,6 +40,29 @@ public class CustomerRepository extends Repository {
         return null;
     }
 
+    public Customer getCustomerById(int id) {
+        try (Connection connection = DatabaseConfig.getConnection()) {
+            String sql = "SELECT * FROM customers WHERE id = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            ResultSet result = preparedStatement.executeQuery();
+            if (result.next()) {
+                return new Customer(result.getInt("id")
+                        , result.getString("name")
+                        , result.getString("shipping_address")
+                        , result.getString("billing_address")
+                        , result.getInt("discount")
+                        , result.getString("email")
+                        , result.getBoolean("regular_costumer")
+                        , result.getBoolean("company")
+                        , result.getString("tax_number"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Not find customer!");
+        }
+        return null;
+    }
+
     public List<Customer> getAllCustomer() {
         List<Customer> customerList = new ArrayList<>();
         try (Connection connection = DatabaseConfig.getConnection()) {
