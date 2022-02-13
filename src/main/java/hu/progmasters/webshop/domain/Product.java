@@ -41,6 +41,38 @@ public class Product {
         return onSale ? salePrice : price;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setVendor(String vendor) {
+        this.vendor = vendor;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    public void setSalePrice(Integer salePrice) {
+        this.salePrice = salePrice;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
+    }
+
+    public void setTax(Tax tax) {
+        this.tax = tax;
+    }
+
+    public void setInStock(boolean inStock) {
+        this.inStock = inStock;
+    }
+
     public void setSalePrice(int sale_price) {
         this.salePrice = sale_price;
         setOnSale();

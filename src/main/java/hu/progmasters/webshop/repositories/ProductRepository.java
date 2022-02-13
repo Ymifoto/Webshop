@@ -38,6 +38,27 @@ public class ProductRepository extends Repository {
         return null;
     }
 
+    public List<Product> productSearch(String keyword) {
+        List<Product> productList = new ArrayList<>();
+        String sql = "SELECT * FROM products " +
+                "WHERE name LIKE ? " +
+                "OR vendor LIKE ? " +
+                "OR product_type LIKE ? " +
+                "OR description LIKE ?;";
+        try(Connection connection = DatabaseConfig.getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1,keyword);
+            preparedStatement.setString(2,keyword);
+            preparedStatement.setString(3,keyword);
+            preparedStatement.setString(4,keyword);
+            ResultSet result = preparedStatement.executeQuery();
+            getProductList(result,productList);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return productList;
+    }
+
     public List<Product> getAllProduct() {
         List<Product> productList = new ArrayList<>();
         try (Connection connection = DatabaseConfig.getConnection()) {

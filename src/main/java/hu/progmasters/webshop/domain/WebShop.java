@@ -3,6 +3,8 @@ package hu.progmasters.webshop.domain;
 import hu.progmasters.webshop.handlers.LogHandler;
 import hu.progmasters.webshop.ui.menuoptions.*;
 
+import java.util.List;
+
 public class WebShop extends Repositories {
 
     public WebShop() {
@@ -66,6 +68,7 @@ public class WebShop extends Repositories {
                     break;
                 case SEARCH:
                     System.out.println("Search products");
+                    productSearch();
                     break;
                 case BACK:
                     mainMenuOptions();
@@ -87,6 +90,11 @@ public class WebShop extends Repositories {
                     break;
                 case SEARCH:
                     System.out.println("Search customer");
+                    customerSearch();
+                    break;
+                case SEARCH_BYID:
+                    System.out.println("Search customer by ID");
+                    customerSearchById();
                     break;
                 case BACK:
                     mainMenuOptions();
@@ -113,5 +121,31 @@ public class WebShop extends Repositories {
                     break;
             }
         } while (option != OrdersMenu.BACK);
+    }
+
+    private void productSearch() {
+        System.out.println("Search products");
+        System.out.print("Give a keyword: ");
+        String keyword = "%" + inputHandler.getInputString() + "%";
+        List<Product> founded= productRepository.productSearch(keyword);
+        founded.forEach(System.out::println);
+        System.out.println("Found " + founded.size() + " product");
+    }
+
+    private void customerSearch() {
+        System.out.println("Search customers");
+        System.out.print("Give a keyword: ");
+        String keyword = "%" + inputHandler.getInputString() + "%";
+        List<Customer> founded= customerRepository.customerSearch(keyword);
+        founded.forEach(System.out::println);
+        System.out.println("Found " + founded.size() + " customer");
+    }
+
+    private void customerSearchById() {
+        System.out.println("Search customer by ID");
+        System.out.print("Give a ID: ");
+        int id = inputHandler.getInputNumber();
+        Customer customer = customerRepository.getCustomerById(id);
+        System.out.println(customer != null ? customer : "Not found!");
     }
 }

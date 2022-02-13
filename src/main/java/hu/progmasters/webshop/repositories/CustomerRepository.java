@@ -17,27 +17,24 @@ public class CustomerRepository extends Repository {
         createTable();
     }
 
-    public Customer getCustomerByEmail(String email) {
+    public List<Customer> customerSearch(String keyword) {
+        String sql = "SELECT * FROM customers " +
+                "WHERE name LIKE ? " +
+                "OR email LIKE ? " +
+                "OR shipping_address LIKE ? " +
+                "OR billing_address LIKE ?;";
         try (Connection connection = DatabaseConfig.getConnection()) {
-            String sql = "SELECT * FROM customers WHERE email LIKE '?';";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, email);
+            preparedStatement.setString(1, keyword);
+            preparedStatement.setString(2, keyword);
+            preparedStatement.setString(3, keyword);
+            preparedStatement.setString(4, keyword);
             ResultSet result = preparedStatement.executeQuery();
-            if (result.next()) {
-                return new Customer(result.getInt("id")
-                        , result.getString("name")
-                        , result.getString("shipping_address")
-                        , result.getString("billing_address")
-                        , result.getInt("discount")
-                        , result.getString("email")
-                        , result.getBoolean("regular_costumer")
-                        , result.getBoolean("company")
-                        , result.getString("tax_number"));
-            }
+            return getcustomersList(result);
         } catch (SQLException e) {
-            System.out.println("Not find customer!");
+            e.printStackTrace();
         }
-        return null;
+        return Collections.emptyList();
     }
 
     public Customer getCustomerById(int id) {
@@ -46,17 +43,7 @@ public class CustomerRepository extends Repository {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
             ResultSet result = preparedStatement.executeQuery();
-            if (result.next()) {
-                return new Customer(result.getInt("id")
-                        , result.getString("name")
-                        , result.getString("shipping_address")
-                        , result.getString("billing_address")
-                        , result.getInt("discount")
-                        , result.getString("email")
-                        , result.getBoolean("regular_costumer")
-                        , result.getBoolean("company")
-                        , result.getString("tax_number"));
-            }
+            return getcustomersList(result).get(0);
         } catch (SQLException e) {
             System.out.println("Not find customer!");
         }
@@ -64,28 +51,32 @@ public class CustomerRepository extends Repository {
     }
 
     public List<Customer> getAllCustomer() {
-        List<Customer> customerList = new ArrayList<>();
         try (Connection connection = DatabaseConfig.getConnection()) {
             String sql = "SELECT * FROM customers;";
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(sql);
+            return getcustomersList(result);
 
-            while (result.next()) {
-                customerList.add(new Customer(result.getInt("id")
-                        , result.getString("name")
-                        , result.getString("shipping_address")
-                        , result.getString("billing_address")
-                        , result.getInt("discount")
-                        , result.getString("email")
-                        , result.getBoolean("regular_costumer")
-                        , result.getBoolean("company")
-                        , result.getString("tax_number")));
-            }
-            return customerList;
         } catch (SQLException e) {
             System.out.println("Can't open database!");
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
+    }
+
+    private List<Customer> getcustomersList(ResultSet result) throws SQLException {
+        List<Customer> customerList = new ArrayList<>();
+        while (result.next()) {
+            customerList.add(new Customer(result.getInt("id")
+                    , result.getString("name")
+                    , result.getString("shipping_address")
+                    , result.getString("billing_address")
+                    , result.getInt("discount")
+                    , result.getString("email")
+                    , result.getBoolean("regular_costumer")
+                    , result.getBoolean("company")
+                    , result.getString("tax_number")));
+        }
+        return customerList;
     }
 
     public void addCustomer(Map<String, String> data) {
@@ -97,7 +88,6 @@ public class CustomerRepository extends Repository {
     }
 
     private void createTable() {
-
         String customers = "CREATE TABLE IF NOT EXISTS customers("
                 + "id INT PRIMARY KEY AUTO_INCREMENT,"
                 + "name VARCHAR(30) NOT NULL,"

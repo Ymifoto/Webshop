@@ -21,6 +21,7 @@ public class InputHandler {
     }
 
     public String getInputString() {
+        scanner.nextLine();
         String data;
         do {
         data = scanner.nextLine();
