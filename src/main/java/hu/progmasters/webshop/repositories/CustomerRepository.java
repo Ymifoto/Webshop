@@ -85,7 +85,6 @@ public class CustomerRepository extends Repository {
                     , result.getString("billing_address")
                     , result.getInt("discount")
                     , result.getString("email")
-                    , result.getBoolean("regular_costumer")
                     , result.getString("comapny_name")
                     , result.getBoolean("company")
                     , result.getString("tax_number")));
@@ -108,7 +107,6 @@ public class CustomerRepository extends Repository {
                 + "shipping_address VARCHAR(100) NOT NULL,"
                 + "billing_address VARCHAR(100) DEFAULT '',"
                 + "email VARCHAR(20) NOT NULL,"
-                + "regular_customer BOOLEAN DEFAULT 0,"
                 + "discount INT UNSIGNED DEFAULT 0,"
                 + "company BOOLEAN DEFAULT 0,"
                 + "company_name VARCHAR(100) DEFAULT '',"

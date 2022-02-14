@@ -11,19 +11,17 @@ public class Customer {
     private String billingAddress;
     private int discount;
     private String email;
-    private boolean regularCustomer;
     private String companyName;
     private boolean company;
     private String taxNumber;
 
-    public Customer(int id, String name, String shippingAddress, String billingAddress, int discount, String email, boolean regularCustomer, String companyName, boolean company, String taxNumber) {
+    public Customer(int id, String name, String shippingAddress, String billingAddress, int discount, String email, String companyName, boolean company, String taxNumber) {
         this.id = id;
         this.name = name;
         this.shippingAddress = shippingAddress;
         this.billingAddress = billingAddress;
         this.discount = discount;
         this.email = email;
-        this.regularCustomer = regularCustomer;
         this.companyName = companyName;
         this.company = company;
         this.taxNumber = taxNumber;
@@ -35,10 +33,6 @@ public class Customer {
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public int getDiscount() {
@@ -55,14 +49,6 @@ public class Customer {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public boolean isRegular_customer() {
-        return regularCustomer;
-    }
-
-    public void setRegular_customer(boolean regular_customer) {
-        this.regularCustomer = regular_customer;
     }
 
     public boolean isCompany() {
@@ -110,7 +96,7 @@ public class Customer {
         sb.append("Shipping address: ").append(shippingAddress).append(", ");
         sb.append("Billing address: ").append(billingAddress).append(System.lineSeparator());
         sb.append("Discount: ").append(discount).append("% ").append(", ");
-        sb.append("Regular customer: ").append(regularCustomer ? "yes" : "no").append(", ");
+        sb.append(company ? "Company name: " + companyName + " " : "");
         sb.append(company ? "Tax number: " + taxNumber + System.lineSeparator() : "");
         return sb.toString();
     }
@@ -122,7 +108,7 @@ public class Customer {
         data.put("billing_address", billingAddress);
         data.put("discount", String.valueOf(discount));
         data.put("email",email);
-        data.put("regular_costumer",String.valueOf(regularCustomer));
+        data.put("company_name",companyName);
         data.put("company",String.valueOf(company));
         data.put("tax_number",taxNumber);
         return data;

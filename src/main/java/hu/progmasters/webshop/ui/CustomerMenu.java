@@ -39,23 +39,6 @@ public class CustomerMenu extends Menu {
         } while (option != CustomersMenuOptions.BACK);
     }
 
-    private void customerSearch() {
-        System.out.println("Search customers");
-        System.out.print("Give a keyword: ");
-        String keyword = "%" + inputHandler.getInputString() + "%";
-        List<Customer> founded = customerRepository.customerSearch(keyword);
-        founded.forEach(System.out::println);
-        System.out.println("Found " + founded.size() + " customer");
-    }
-
-    private void customerSearchById() {
-        System.out.println("Search customer by ID");
-        System.out.print("Give a ID: ");
-        int id = inputHandler.getInputNumber();
-        Customer customer = customerRepository.getCustomerById(id);
-        System.out.println(customer != null ? customer : "Not found!");
-    }
-
     public Map<String, String> getCustomerData() {
         Map<String, String> customerData = new TreeMap<>();
         System.out.print("Give a name: ");
@@ -92,5 +75,22 @@ public class CustomerMenu extends Menu {
 
     public Customer getCustomerById(int id) {
         return customerRepository.getCustomerById(id);
+    }
+
+    private void customerSearch() {
+        System.out.println("Search customers");
+        System.out.print("Give a keyword: ");
+        String keyword = "%" + inputHandler.getInputString() + "%";
+        List<Customer> founded = customerRepository.customerSearch(keyword);
+        founded.forEach(System.out::println);
+        System.out.println("Found " + founded.size() + " customer");
+    }
+
+    private void customerSearchById() {
+        System.out.println("Search customer by ID");
+        System.out.print("Give a ID: ");
+        int id = inputHandler.getInputNumber();
+        Customer customer = customerRepository.getCustomerById(id);
+        System.out.println(customer != null ? customer : "Not found!");
     }
 }
