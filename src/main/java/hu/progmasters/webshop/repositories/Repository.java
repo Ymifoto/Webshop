@@ -39,12 +39,14 @@ public abstract class Repository {
             String sql = "INSERT INTO " + table + "(" + getColumsNameForInsert(datas.keySet()) + ") VALUES(" + getPlaceHolders(datas.size()) + ");";
             PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             setMapValues(preparedStatement, datas.values());
+            preparedStatement.execute();
             ResultSet result = preparedStatement.getGeneratedKeys();
             if (result.next()) {
                 id = result.getInt(1);
             }
         } catch (SQLException e) {
             System.out.println("Insert error!");
+            return id;
         }
         System.out.println("Insert succes");
         LogHandler.addLog("Insert " + table + " table, ID: " + id);
@@ -68,13 +70,14 @@ public abstract class Repository {
             setColumns = counter != datas.size() ? setColumns + data + "," : setColumns + data;
             counter++;
         }
+        System.out.println(setColumns);
         return setColumns;
     }
 
     private String getPlaceHolders(int count) {
         String placeHolders = "";
         for (int i = 0; i < count; i++) {
-            placeHolders = i - 1 == count ? "?" : "?,";
+            placeHolders += i + 1 == count ? "?" : "?,";
         }
         return placeHolders;
     }

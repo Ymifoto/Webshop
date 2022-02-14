@@ -17,14 +17,14 @@ public class InputHandler {
                 scanner.nextLine();
             }
         } while (option < 0);
+        scanner.nextLine();
         return option;
     }
 
     public String getInputString() {
-        scanner.nextLine();
         String data;
         do {
-        data = scanner.nextLine();
+            data = scanner.nextLine();
 
         } while (data == null);
         return data;
@@ -40,6 +40,7 @@ public class InputHandler {
                 scanner.nextLine();
             }
         } while (option < 0);
+        scanner.nextLine();
         return option;
     }
 }

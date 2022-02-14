@@ -56,14 +56,6 @@ public class ShoppingCart extends Repository {
         }
     }
 
-    public void setShippingMethod(int shippingMethod) {
-        this.shippingMethod = shippingMethod;
-    }
-
-    public List<Product> getProductList() {
-        return productList;
-    }
-
     private void setOrderedProductsTable() {
         Map<String,String> data = new TreeMap<>();
         data.put("order_id",String.valueOf(orderId));
@@ -71,6 +63,14 @@ public class ShoppingCart extends Repository {
             data.put( "product_id",String.valueOf(product.getId()));
             insert("ordered_products",data);
         }
+    }
+
+    public List<Product> getProductList() {
+        return productList;
+    }
+
+    public void setShippingMethod(int shippingMethod) {
+        this.shippingMethod = shippingMethod;
     }
 
     public Customer getCustomer() {

@@ -3,7 +3,7 @@ package hu.progmasters.webshop.ui;
 import hu.progmasters.webshop.repositories.OrderRepository;
 import hu.progmasters.webshop.ui.menuoptions.OrdersMenuOptions;
 
-public class OrderMenu implements Menu {
+public class OrderMenu extends Menu {
 
     private final OrderRepository orderRepository = new OrderRepository();
 

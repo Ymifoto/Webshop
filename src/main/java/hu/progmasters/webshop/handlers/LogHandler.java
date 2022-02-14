@@ -39,11 +39,12 @@ public class LogHandler {
         }
     }
 
-    public static void create() {
+    private static void create() {
         Path file = Path.of(FILE);
         try {
-            Files.deleteIfExists(file);
-            Files.createFile(file);
+            if (Files.deleteIfExists(file)) {
+                Files.createFile(file);
+            }
         } catch (IOException e) {
             System.out.println("CAN CREATE FILE!");
         }

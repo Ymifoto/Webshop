@@ -37,6 +37,19 @@ public class CustomerRepository extends Repository {
         return Collections.emptyList();
     }
 
+    public Customer getCustomerByEmail(String email) {
+        try (Connection connection = DatabaseConfig.getConnection()) {
+            String sql = "SELECT * FROM customers WHERE email LIKE ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, email);
+            ResultSet result = preparedStatement.executeQuery();
+            return getcustomersList(result).get(0);
+        } catch (SQLException e) {
+            System.out.println("Not find customer!");
+        }
+        return null;
+    }
+
     public Customer getCustomerById(int id) {
         try (Connection connection = DatabaseConfig.getConnection()) {
             String sql = "SELECT * FROM customers WHERE id = ?;";
@@ -73,14 +86,15 @@ public class CustomerRepository extends Repository {
                     , result.getInt("discount")
                     , result.getString("email")
                     , result.getBoolean("regular_costumer")
+                    , result.getString("comapny_name")
                     , result.getBoolean("company")
                     , result.getString("tax_number")));
         }
         return customerList;
     }
 
-    public void addCustomer(Map<String, String> data) {
-        insert(TABLE, data);
+    public int addCustomer(Map<String, String> data) {
+        return insert(TABLE, data);
     }
 
     public void updateCustomer(Customer customer) {
@@ -94,9 +108,10 @@ public class CustomerRepository extends Repository {
                 + "shipping_address VARCHAR(100) NOT NULL,"
                 + "billing_address VARCHAR(100) DEFAULT '',"
                 + "email VARCHAR(20) NOT NULL,"
-                + "regular_costumer BOOLEAN DEFAULT 0,"
+                + "regular_customer BOOLEAN DEFAULT 0,"
                 + "discount INT UNSIGNED DEFAULT 0,"
                 + "company BOOLEAN DEFAULT 0,"
+                + "company_name VARCHAR(100) DEFAULT '',"
                 + "tax_number VARCHAR(14));";
         execute(customers);
     }

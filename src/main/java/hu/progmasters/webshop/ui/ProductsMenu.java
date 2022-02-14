@@ -6,7 +6,7 @@ import hu.progmasters.webshop.ui.menuoptions.ProductsMenuOptions;
 
 import java.util.List;
 
-public class ProductsMenu implements Menu {
+public class ProductsMenu extends Menu {
 
 
     private final ProductRepository productRepository = new ProductRepository();

@@ -3,7 +3,7 @@ package hu.progmasters.webshop.ui;
 import hu.progmasters.webshop.repositories.CategoryRepository;
 import hu.progmasters.webshop.ui.menuoptions.CategoryMenuOptions;
 
-public class CategoryMenu implements Menu {
+public class CategoryMenu extends Menu {
 
     private final CategoryRepository categoryRepository = new CategoryRepository();
 
