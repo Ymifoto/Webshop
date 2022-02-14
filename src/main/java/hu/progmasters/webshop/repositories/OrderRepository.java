@@ -54,6 +54,7 @@ public class OrderRepository extends Repository {
                         , result.getString("billing_address")
                         , result.getInt("discount"), result.getString("email")
                         , result.getBoolean("regulas_customer")
+                        , result.getString("company_name")
                         , result.getBoolean("company")
                         , result.getString("tax_number"))
                         , result.getString("sm_name")

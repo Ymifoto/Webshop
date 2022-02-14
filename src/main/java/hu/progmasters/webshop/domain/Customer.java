@@ -12,10 +12,11 @@ public class Customer {
     private int discount;
     private String email;
     private boolean regularCustomer;
+    private String companyName;
     private boolean company;
     private String taxNumber;
 
-    public Customer(int id, String name, String shippingAddress, String billingAddress, int discount, String email, boolean regularCustomer, boolean company, String taxNumber) {
+    public Customer(int id, String name, String shippingAddress, String billingAddress, int discount, String email, boolean regularCustomer, String companyName, boolean company, String taxNumber) {
         this.id = id;
         this.name = name;
         this.shippingAddress = shippingAddress;
@@ -23,6 +24,7 @@ public class Customer {
         this.discount = discount;
         this.email = email;
         this.regularCustomer = regularCustomer;
+        this.companyName = companyName;
         this.company = company;
         this.taxNumber = taxNumber;
     }
@@ -93,6 +95,10 @@ public class Customer {
 
     public void setTaxNumber(String taxNumber) {
         this.taxNumber = taxNumber;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
     @Override
