@@ -31,7 +31,6 @@ public class CustomerMenu extends Menu {
                         System.out.print("Customer ID: ");
                         id = inputHandler.getInputNumber();
                         updateCustomer(id, getCustomerData());
-                        System.out.println("Update customer");
                     }
                     break;
                 case SEARCH:

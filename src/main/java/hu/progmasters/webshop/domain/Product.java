@@ -1,5 +1,6 @@
 package hu.progmasters.webshop.domain;
 
+import java.sql.SQLOutput;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -41,43 +42,6 @@ public class Product {
         return onSale ? salePrice : price;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setVendor(String vendor) {
-        this.vendor = vendor;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
-    public void setSalePrice(Integer salePrice) {
-        this.salePrice = salePrice;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setProductType(String productType) {
-        this.productType = productType;
-    }
-
-    public void setTax(Tax tax) {
-        this.tax = tax;
-    }
-
-    public void setInStock(boolean inStock) {
-        this.inStock = inStock;
-    }
-
-    public void setSalePrice(int sale_price) {
-        this.salePrice = sale_price;
-        setOnSale();
-    }
-
     public Tax getTax() {
         return tax;
     }
@@ -106,10 +70,42 @@ public class Product {
         data.put("vendor", vendor);
         data.put("price", String.valueOf(price));
         data.put("sale_price", String.valueOf(salePrice));
-        data.put("description",description);
-        data.put("product_type",productType);
-        data.put("in_stock",String.valueOf(inStock));
+        data.put("description", description);
+        data.put("product_type", productType);
+        data.put("in_stock", inStock ? "1" : "0");
         return data;
+    }
+
+    public void updateData(Map<String, String> data) {
+
+        if (data.get("name").length() > 0) {
+            name = data.get("name");
+        }
+        if (data.get("vendor").length() > 0) {
+            vendor = data.get("vendor");
+        }
+        if (data.get("product_type").length() > 0) {
+            productType = data.get("product_type");
+        }
+        try {
+            if (data.get("price").length() > 0) {
+                price = Integer.parseInt(data.get("price"));
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Not a number, price not updated");
+        }
+        try {
+            if (data.get("sale_price").length() > 0) {
+                salePrice = Integer.parseInt(data.get("sale_price"));
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Not a number, sale price not updated");
+        }
+        if (data.get("description").length() > 0) {
+            description = data.get("description");
+        }
+        inStock = data.get("in_stock").equals("1");
+        setOnSale();
     }
 }
 

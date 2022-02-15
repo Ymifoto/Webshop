@@ -25,6 +25,7 @@ public abstract class Repository {
             preparedStatement.setInt(data.size() + 1, id);
             preparedStatement.execute();
         } catch (SQLException e) {
+            e.printStackTrace();
             System.out.println("Update error!");
         }
         LogHandler.addLog("Update " + table + " table, updated id: " + id + ", " + data.keySet());
@@ -45,7 +46,6 @@ public abstract class Repository {
             System.out.println("Insert error!");
             return id;
         }
-        System.out.println("Insert succes");
         LogHandler.addLog("Insert " + table + " table, ID: " + id);
         return id;
     }
