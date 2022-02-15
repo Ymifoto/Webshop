@@ -13,17 +13,25 @@ public class CustomerMenu extends Menu {
     private final CustomerRepository customerRepository = new CustomerRepository();
 
     public void menuOptions() {
+        int id;
+
         CustomersMenuOptions option;
         do {
             option = (CustomersMenuOptions) getMenu(CustomersMenuOptions.values());
             switch (option) {
                 case ADD_NEW:
                     System.out.println("Add customer");
-                    int id = addNewUser();
+                    id = addNewUser();
                     System.out.println(id > 0 ? "Customer added, ID: " + id : "");
                     break;
                 case UPDATE:
-                    System.out.println("Update customer");
+                    customerSearch();
+                    if (yesOrNo("Update customer (yes/no): ")) {
+                        System.out.print("Customer ID: ");
+                        id = inputHandler.getInputNumber();
+                        updateCustomer(id, getCustomerData());
+                        System.out.println("Update customer");
+                    }
                     break;
                 case SEARCH:
                     System.out.println("Search customer");
@@ -53,6 +61,8 @@ public class CustomerMenu extends Menu {
         if (!yesOrNo("Billing and shipping address are the same? (yes or no): ")) {
             System.out.print("Give a billing address: ");
             customerData.put("billing_address", inputHandler.getInputString());
+        } else {
+            customerData.put("billing_address", customerData.get("shipping_address"));
         }
 
         if (yesOrNo("Corporate customer? (yes or no): ")) {
@@ -61,6 +71,10 @@ public class CustomerMenu extends Menu {
             customerData.put("company_name", inputHandler.getInputString());
             System.out.print("Give a tax number: ");
             customerData.put("tax_number", inputHandler.getInputString());
+        } else {
+            customerData.put("company", "0");
+            customerData.put("company_name", "null");
+            customerData.put("tax_number", "null");
         }
         return customerData;
     }
@@ -92,5 +106,11 @@ public class CustomerMenu extends Menu {
         int id = inputHandler.getInputNumber();
         Customer customer = customerRepository.getCustomerById(id);
         System.out.println(customer != null ? customer : "Not found!");
+    }
+
+    private void updateCustomer(int id, Map<String, String> data) {
+        Customer customer = getCustomerById(id);
+        customer.updateData(data);
+        customerRepository.updateCustomer(customer);
     }
 }

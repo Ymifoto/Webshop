@@ -4,9 +4,7 @@ import hu.progmasters.webshop.DatabaseConfig;
 import hu.progmasters.webshop.handlers.LogHandler;
 
 import java.sql.*;
-import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 
 public abstract class Repository {
 
@@ -19,26 +17,25 @@ public abstract class Repository {
         }
     }
 
-    protected void update(String table, int id, Map<String,String> data) {
+    protected void update(String table, int id, Map<String, String> data) {
         try (Connection connection = DatabaseConfig.getConnection()) {
-            String sql = "UPDATE " + table + " SET " + getColumsNameForUpdate(data.keySet()) + " WHERE id = ?;";
+            String sql = "UPDATE " + table + " SET " + getColumsName(true, data) + " WHERE id = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            setMapValues(preparedStatement, data.values());
+            setMapValues(preparedStatement, data);
             preparedStatement.setInt(data.size() + 1, id);
             preparedStatement.execute();
         } catch (SQLException e) {
             System.out.println("Update error!");
         }
-        System.out.println("Update succes");
         LogHandler.addLog("Update " + table + " table, updated id: " + id + ", " + data.keySet());
     }
 
     protected int insert(String table, Map<String, String> datas) {
         int id = -1;
         try (Connection connection = DatabaseConfig.getConnection()) {
-            String sql = "INSERT INTO " + table + "(" + getColumsNameForInsert(datas.keySet()) + ") VALUES(" + getPlaceHolders(datas.size()) + ");";
+            String sql = "INSERT INTO " + table + "(" + getColumsName(false,datas) + ") VALUES(" + getPlaceHolders(datas.size()) + ");";
             PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-            setMapValues(preparedStatement, datas.values());
+            setMapValues(preparedStatement, datas);
             preparedStatement.execute();
             ResultSet result = preparedStatement.getGeneratedKeys();
             if (result.next()) {
@@ -53,24 +50,17 @@ public abstract class Repository {
         return id;
     }
 
-    private String getColumsNameForUpdate(Set<String> datas) {
+    private String getColumsName(boolean update, Map<String, String> datas) {
         String setColumns = "";
         int counter = 1;
-        for (String data : datas) {
-            setColumns = counter != datas.size() ? setColumns + data + " = ?," : setColumns + data + " = ?";
+        for (Map.Entry<String, String> entry : datas.entrySet()) {
+            if (update) {
+                setColumns = counter != datas.size() ? setColumns + entry.getKey() + " = ?," : setColumns + entry.getKey() + " = ?";
+            } else {
+                setColumns = counter != datas.size() ? setColumns + entry.getKey() + "," : setColumns + entry.getKey();
+            }
             counter++;
         }
-        return setColumns;
-    }
-
-    private String getColumsNameForInsert(Set<String> datas) {
-        String setColumns = "";
-        int counter = 1;
-        for (String data : datas) {
-            setColumns = counter != datas.size() ? setColumns + data + "," : setColumns + data;
-            counter++;
-        }
-        System.out.println(setColumns);
         return setColumns;
     }
 
@@ -82,10 +72,10 @@ public abstract class Repository {
         return placeHolders;
     }
 
-    private void setMapValues(PreparedStatement preparedStatement, Collection<String> datas) throws SQLException {
+    private void setMapValues(PreparedStatement preparedStatement, Map<String, String> datas) throws SQLException {
         int counter = 1;
-        for (String data : datas) {
-            preparedStatement.setString(counter, data);
+        for (Map.Entry<String, String> entry : datas.entrySet()) {
+            preparedStatement.setString(counter, entry.getValue());
             counter++;
         }
     }

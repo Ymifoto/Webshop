@@ -19,7 +19,7 @@ public class MainMenu extends Menu {
         MainMenuOptions option;
         do {
             customer = shoppingCart.getCustomer();
-            System.out.println(customer != null ? "Selected customer: " + customer.getName() + " " + customer.getEmail() : "Not selected customer");
+            System.out.println(customer != null ? "Logged in: " + customer.getName() + " " + customer.getEmail() : "Not selected customer");
             option = (MainMenuOptions) getMenu(MainMenuOptions.values());
             switch (option) {
                 case LOGIN:
@@ -27,7 +27,10 @@ public class MainMenu extends Menu {
                     break;
                 case REGISTER:
                     int id = customerMenu.addNewUser();
-                    shoppingCart.setCustomer(customerMenu.getCustomerById(id));
+                    customer = customerMenu.getCustomerById(id);
+                    if (customer != null) {
+                        shoppingCart.setCustomer(customerMenu.getCustomerById(id));
+                    }
                     break;
                 case PRODUCTS:
                     productsMenu.menuOptions();
@@ -40,6 +43,9 @@ public class MainMenu extends Menu {
                     break;
                 case ORDERS:
                     orderMenu.menuOptions();
+                    break;
+                case LOGOUT:
+                    shoppingCart.setCustomer(null);
                     break;
                 case QUIT:
                     LogHandler.writeLog();

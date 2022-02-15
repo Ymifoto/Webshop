@@ -4,10 +4,7 @@ import hu.progmasters.webshop.DatabaseConfig;
 import hu.progmasters.webshop.domain.Customer;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CustomerRepository extends Repository {
 
@@ -76,6 +73,14 @@ public class CustomerRepository extends Repository {
         return Collections.emptyList();
     }
 
+    public int addCustomer(Map<String, String> data) {
+        return insert(TABLE, data);
+    }
+
+    public void updateCustomer(Customer customer) {
+        update(TABLE, customer.getId(), customer.getData());
+    }
+
     private List<Customer> getcustomersList(ResultSet result) throws SQLException {
         List<Customer> customerList = new ArrayList<>();
         while (result.next()) {
@@ -83,21 +88,12 @@ public class CustomerRepository extends Repository {
                     , result.getString("name")
                     , result.getString("shipping_address")
                     , result.getString("billing_address")
-                    , result.getInt("discount")
                     , result.getString("email")
-                    , result.getString("comapny_name")
+                    , result.getString("company_name")
                     , result.getBoolean("company")
                     , result.getString("tax_number")));
         }
         return customerList;
-    }
-
-    public int addCustomer(Map<String, String> data) {
-        return insert(TABLE, data);
-    }
-
-    public void updateCustomer(Customer customer) {
-        update(TABLE, customer.getId(), customer.getData());
     }
 
     private void createTable() {
@@ -107,7 +103,6 @@ public class CustomerRepository extends Repository {
                 + "shipping_address VARCHAR(100) NOT NULL,"
                 + "billing_address VARCHAR(100) DEFAULT '',"
                 + "email VARCHAR(20) NOT NULL,"
-                + "discount INT UNSIGNED DEFAULT 0,"
                 + "company BOOLEAN DEFAULT 0,"
                 + "company_name VARCHAR(100) DEFAULT '',"
                 + "tax_number VARCHAR(14));";

@@ -8,15 +8,15 @@ public class Product {
     private final int id;
     private String name;
     private String vendor;
-    private Integer price;
-    private Integer salePrice;
+    private int price;
+    private int salePrice;
     private String description;
     private String productType;
     private Tax tax;
     private boolean onSale;
     private boolean inStock;
 
-    public Product(int id, String name, String vendor, Integer price, Integer salePrice, String description, String productType, Tax tax, boolean inStock) {
+    public Product(int id, String name, String vendor, int price, int salePrice, String description, String productType, Tax tax, boolean inStock) {
         this.id = id;
         this.name = name;
         this.vendor = vendor;
@@ -104,8 +104,8 @@ public class Product {
         Map<String, String> data = new TreeMap<>();
         data.put("name", name);
         data.put("vendor", vendor);
-        data.put("price", price.toString());
-        data.put("sale_price", salePrice.toString());
+        data.put("price", String.valueOf(price));
+        data.put("sale_price", String.valueOf(salePrice));
         data.put("description",description);
         data.put("product_type",productType);
         data.put("in_stock",String.valueOf(inStock));
