@@ -27,37 +27,41 @@ public class CustomerRepository extends Repository {
             preparedStatement.setString(3, keyword);
             preparedStatement.setString(4, keyword);
             ResultSet result = preparedStatement.executeQuery();
-            return getcustomersList(result);
+            return getCustomers(result);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return Collections.emptyList();
     }
 
-    public Customer getCustomerByEmail(String email) {
+    public Optional<Customer> getCustomerByEmail(String email) {
         try (Connection connection = DatabaseConfig.getConnection()) {
             String sql = "SELECT * FROM customers WHERE email LIKE ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, email);
             ResultSet result = preparedStatement.executeQuery();
-            return getcustomersList(result).get(0);
+
+            List<Customer> customer = getCustomers(result);
+            return customer.isEmpty() ? Optional.empty() : Optional.of(customer.get(0));
         } catch (SQLException e) {
             System.out.println("Not find customer!");
         }
-        return null;
+        return Optional.empty();
     }
 
-    public Customer getCustomerById(int id) {
+    public Optional<Customer> getCustomerById(int id) {
         try (Connection connection = DatabaseConfig.getConnection()) {
             String sql = "SELECT * FROM customers WHERE id = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
             ResultSet result = preparedStatement.executeQuery();
-            return getcustomersList(result).get(0);
+
+            List<Customer> customer = getCustomers(result);
+            return customer.isEmpty() ? Optional.empty() : Optional.of(customer.get(0));
         } catch (SQLException e) {
             System.out.println("Not find customer!");
         }
-        return null;
+        return Optional.empty();
     }
 
     public List<Customer> getAllCustomer() {
@@ -65,7 +69,7 @@ public class CustomerRepository extends Repository {
             String sql = "SELECT * FROM customers;";
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(sql);
-            return getcustomersList(result);
+            return getCustomers(result);
 
         } catch (SQLException e) {
             System.out.println("Can't open database!");
@@ -81,7 +85,7 @@ public class CustomerRepository extends Repository {
         update(TABLE, customer.getId(), customer.getData());
     }
 
-    private List<Customer> getcustomersList(ResultSet result) throws SQLException {
+    private List<Customer> getCustomers(ResultSet result) throws SQLException {
         List<Customer> customerList = new ArrayList<>();
         while (result.next()) {
             customerList.add(new Customer(result.getInt("id")

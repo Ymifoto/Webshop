@@ -6,6 +6,7 @@ import hu.progmasters.webshop.ui.menuoptions.CustomersMenuOptions;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 
 public class CustomerMenu extends Menu {
@@ -40,6 +41,9 @@ public class CustomerMenu extends Menu {
                 case SEARCH_BYID:
                     System.out.println("Search customer by ID");
                     customerSearchById();
+                    break;
+                case ALL_CUSTOMER:
+                    customerRepository.getAllCustomer().forEach(System.out::println);
                     break;
                 case BACK:
                     break;
@@ -83,11 +87,11 @@ public class CustomerMenu extends Menu {
         return customerRepository.addCustomer(getCustomerData());
     }
 
-    public Customer getCustomerByEmail(String email) {
+    public Optional<Customer> getCustomerByEmail(String email) {
         return customerRepository.getCustomerByEmail(email);
     }
 
-    public Customer getCustomerById(int id) {
+    public Optional<Customer> getCustomerById(int id) {
         return customerRepository.getCustomerById(id);
     }
 
@@ -101,16 +105,17 @@ public class CustomerMenu extends Menu {
     }
 
     private void customerSearchById() {
-        System.out.println("Search customer by ID");
         System.out.print("Give a ID: ");
         int id = inputHandler.getInputNumber();
-        Customer customer = customerRepository.getCustomerById(id);
+        Customer customer = customerRepository.getCustomerById(id).orElse(null);
         System.out.println(customer != null ? customer : "Not found!");
     }
 
     private void updateCustomer(int id, Map<String, String> data) {
-        Customer customer = getCustomerById(id);
-        customer.updateData(data);
-        customerRepository.updateCustomer(customer);
+        Optional<Customer> customer = getCustomerById(id);
+        if (customer.isPresent()) {
+            customer.get().updateData(data);
+            customerRepository.updateCustomer(customer.get());
+        }
     }
 }

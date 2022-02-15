@@ -5,6 +5,8 @@ import hu.progmasters.webshop.domain.ShoppingCart;
 import hu.progmasters.webshop.handlers.LogHandler;
 import hu.progmasters.webshop.ui.menuoptions.MainMenuOptions;
 
+import java.util.Optional;
+
 public class MainMenu extends Menu {
 
     private final ProductsMenu productsMenu = new ProductsMenu();
@@ -15,11 +17,11 @@ public class MainMenu extends Menu {
 
 
     public void menuOptions() {
-        Customer customer;
+        Optional<Customer> customer;
         MainMenuOptions option;
         do {
-            customer = shoppingCart.getCustomer();
-            System.out.println(customer != null ? "Logged in: " + customer.getName() + " " + customer.getEmail() : "Not selected customer");
+            customer = Optional.ofNullable(shoppingCart.getCustomer());
+            System.out.println(customer.map(value -> "Logged in: " + value.getName() + " " + value.getEmail()).orElse("Not selected customer"));
             option = (MainMenuOptions) getMenu(MainMenuOptions.values());
             switch (option) {
                 case LOGIN:
@@ -27,10 +29,7 @@ public class MainMenu extends Menu {
                     break;
                 case REGISTER:
                     int id = customerMenu.addNewUser();
-                    customer = customerMenu.getCustomerById(id);
-                    if (customer != null) {
-                        shoppingCart.setCustomer(customerMenu.getCustomerById(id));
-                    }
+                    shoppingCart.setCustomer(customerMenu.getCustomerById(id).get());
                     break;
                 case PRODUCTS:
                     productsMenu.menuOptions();
@@ -54,13 +53,15 @@ public class MainMenu extends Menu {
     }
 
     protected void setCustomer() {
-        Customer customer;
-        do {
-            System.out.print("Give your email address: ");
-            String email = inputHandler.getInputString();
-            customer = customerMenu.getCustomerByEmail(email);
-        } while (customer == null);
-        shoppingCart.setCustomer(customer);
-        System.out.println("Customer selected");
+        Optional<Customer> customer;
+        System.out.print("Give your email address: ");
+        String email = inputHandler.getInputString();
+        customer = customerMenu.getCustomerByEmail(email);
+        if (customer.isPresent()) {
+            shoppingCart.setCustomer(customer.get());
+            System.out.println("Logged in");
+        } else {
+            System.out.println("Not found customer");
+        }
     }
 }
