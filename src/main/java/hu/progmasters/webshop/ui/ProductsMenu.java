@@ -1,19 +1,23 @@
 package hu.progmasters.webshop.ui;
 
-import hu.progmasters.webshop.domain.Customer;
 import hu.progmasters.webshop.domain.Product;
+import hu.progmasters.webshop.domain.ShoppingCart;
 import hu.progmasters.webshop.repositories.ProductRepository;
 import hu.progmasters.webshop.ui.menuoptions.ProductsMenuOptions;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.TreeMap;
 
 public class ProductsMenu extends Menu {
 
 
     private final ProductRepository productRepository = new ProductRepository();
+    private final ShoppingCart shoppingCart;
+
+    public ProductsMenu(ShoppingCart shoppingCart) {
+        this.shoppingCart = shoppingCart;
+    }
 
     public void menuOptions() {
         ProductsMenuOptions option;
@@ -42,6 +46,10 @@ public class ProductsMenu extends Menu {
                 case SEARCH:
                     System.out.println("Product search");
                     productSearch();
+                    break;
+                case ADD_TO_CART:
+                    System.out.print("Give a product id: ");
+                    addProductToCart(shoppingCart,productRepository.getProductById(inputHandler.getInputNumber()));
                     break;
                 case BACK:
                     break;
@@ -84,6 +92,10 @@ public class ProductsMenu extends Menu {
             productData.put("in_stock", "0");
         }
         return productData;
+    }
+
+    public ProductRepository getProductRepository() {
+        return productRepository;
     }
 
     private void updateProduct(int id, Map<String, String> data) {

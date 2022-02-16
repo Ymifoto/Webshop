@@ -7,7 +7,6 @@ public class OrderMenu extends Menu {
 
     private final OrderRepository orderRepository = new OrderRepository();
 
-
     public void menuOptions() {
         OrdersMenuOptions option;
         do {

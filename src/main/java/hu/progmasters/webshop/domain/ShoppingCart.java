@@ -22,7 +22,9 @@ public class ShoppingCart extends Repository {
     private static final String TABLE = "orders";
 
     public void addProduct(Product product) {
-        productList.add(product);
+        if (product != null) {
+            productList.add(product);
+        }
     }
 
     public void finalizeOrder() {
@@ -31,9 +33,9 @@ public class ShoppingCart extends Repository {
         getShippingCost(orderTotal);
         data.put("customer_id", String.valueOf(customer.getId()));
         data.put("order_total", String.valueOf(orderTotal));
-        data.put("shipping_method",String.valueOf(shippingMethod));
-        data.put("shipping_cost",String.valueOf(shippingCost));
-        data.put("general_total",String.valueOf(orderTotal + shippingCost));
+        data.put("shipping_method", String.valueOf(shippingMethod));
+        data.put("shipping_cost", String.valueOf(shippingCost));
+        data.put("general_total", String.valueOf(orderTotal + shippingCost));
         orderId = insert(TABLE, data);
         setOrderedProductsTable();
     }
@@ -57,11 +59,11 @@ public class ShoppingCart extends Repository {
     }
 
     private void setOrderedProductsTable() {
-        Map<String,String> data = new TreeMap<>();
-        data.put("order_id",String.valueOf(orderId));
+        Map<String, String> data = new TreeMap<>();
+        data.put("order_id", String.valueOf(orderId));
         for (Product product : productList) {
-            data.put( "product_id",String.valueOf(product.getId()));
-            insert("ordered_products",data);
+            data.put("product_id", String.valueOf(product.getId()));
+            insert("ordered_products", data);
         }
     }
 

@@ -1,6 +1,9 @@
 package hu.progmasters.webshop.ui;
 
+import hu.progmasters.webshop.domain.Product;
+import hu.progmasters.webshop.domain.ShoppingCart;
 import hu.progmasters.webshop.handlers.InputHandler;
+import hu.progmasters.webshop.handlers.OutputHandler;
 import hu.progmasters.webshop.ui.menuoptions.MenuOption;
 
 public abstract class Menu {
@@ -10,7 +13,7 @@ public abstract class Menu {
     protected MenuOption getMenu(MenuOption[] menuOptions) {
         int counter = 1;
         for (MenuOption menuOption : menuOptions) {
-            System.out.println(counter + ". " + menuOption);
+            OutputHandler.outputYellow(counter + ". " + menuOption);
             counter++;
         }
         System.out.print("Choose an option: ");
@@ -26,6 +29,10 @@ public abstract class Menu {
                 System.out.println("Wrong answer!");
             }
         } while (!answer.equals("yes") && !answer.equals("no"));
-        return answer.equals("yes") ? true : false;
+        return answer.equals("yes");
+    }
+
+    public void addProductToCart(ShoppingCart shoppingCart, Product product) {
+        shoppingCart.addProduct(product);
     }
 }

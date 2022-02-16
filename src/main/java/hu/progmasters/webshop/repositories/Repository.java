@@ -2,6 +2,7 @@ package hu.progmasters.webshop.repositories;
 
 import hu.progmasters.webshop.DatabaseConfig;
 import hu.progmasters.webshop.handlers.LogHandler;
+import hu.progmasters.webshop.handlers.OutputHandler;
 
 import java.sql.*;
 import java.util.Map;
@@ -13,7 +14,7 @@ public abstract class Repository {
             Statement statement = connection.createStatement();
             statement.execute(sql);
         } catch (SQLException e) {
-            e.printStackTrace();
+            OutputHandler.outputRed("Execute error!");
         }
     }
 
@@ -26,7 +27,7 @@ public abstract class Repository {
             preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Update error!");
+            OutputHandler.outputRed("Update error!");
         }
         LogHandler.addLog("Update " + table + " table, updated id: " + id + ", " + data.keySet());
     }
@@ -43,7 +44,7 @@ public abstract class Repository {
                 id = result.getInt(1);
             }
         } catch (SQLException e) {
-            System.out.println("Insert error!");
+            OutputHandler.outputRed("Insert error!");
             return id;
         }
         LogHandler.addLog("Insert " + table + " table, ID: " + id);

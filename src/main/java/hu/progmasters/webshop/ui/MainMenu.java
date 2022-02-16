@@ -9,11 +9,12 @@ import java.util.Optional;
 
 public class MainMenu extends Menu {
 
-    private final ProductsMenu productsMenu = new ProductsMenu();
-    private final CustomerMenu customerMenu = new CustomerMenu();
-    private final CategoryMenu categoryMenu = new CategoryMenu();
-    private final OrderMenu orderMenu = new OrderMenu();
     private final ShoppingCart shoppingCart = new ShoppingCart();
+    private final ProductsMenu productsMenu = new ProductsMenu(shoppingCart);
+    private final CustomerMenu customerMenu = new CustomerMenu();
+    private final CategoryMenu categoryMenu = new CategoryMenu(productsMenu.getProductRepository(),shoppingCart);
+    private final OrderMenu orderMenu = new OrderMenu();
+    private final CheckoutMenu checkout = new CheckoutMenu(shoppingCart);
 
 
     public void menuOptions() {
@@ -39,6 +40,9 @@ public class MainMenu extends Menu {
                     break;
                 case CATEGORIES:
                     categoryMenu.menuOptions();
+                    break;
+                case CHECKOUT:
+                    checkout.menuOptions();
                     break;
                 case ORDERS:
                     orderMenu.menuOptions();

@@ -20,8 +20,8 @@ public class CategoryRepository extends Repository {
     public Category getCategroyById(int id) {
         String sql = "SELECT name,vendor,price,sale_price,description,product_type,tax,on_sale,in_stock,product_id,category_name " +
                 "FROM products AS p " +
-                "JOIN categories AS c ON p.id = c.product_id " +
-                "JOIN categories_name AS cn ON c.category_id = cn.id " +
+                "RIGHT JOIN categories AS c ON p.id = c.product_id " +
+                "RIGHT JOIN categories_name AS cn ON c.category_id = cn.id " +
                 "WHERE cn.id = ?;";
 
         Category category = new Category();
@@ -34,7 +34,6 @@ public class CategoryRepository extends Repository {
             getProductList(result, category);
 
         } catch (SQLException e) {
-            e.printStackTrace();
             System.out.println("Not found category");
         }
         return category;
@@ -70,16 +69,18 @@ public class CategoryRepository extends Repository {
             if (category.getName() == null) {
                 category.setName(result.getString("category_name"));
             }
-            productList.add(new Product(
-                    result.getInt("product_id"),
-                    result.getString("name"),
-                    result.getString("vendor"),
-                    result.getInt("price"),
-                    result.getInt("sale_price"),
-                    result.getString("description"),
-                    result.getString("product_type"),
-                    Tax.valueOf(result.getString("tax")),
-                    result.getBoolean("in_stock")));
+            if (result.getInt("product_id") != 0) {
+                productList.add(new Product(
+                        result.getInt("product_id"),
+                        result.getString("name"),
+                        result.getString("vendor"),
+                        result.getInt("price"),
+                        result.getInt("sale_price"),
+                        result.getString("description"),
+                        result.getString("product_type"),
+                        Tax.valueOf(result.getString("tax")),
+                        result.getBoolean("in_stock")));
+            }
         }
     }
 
@@ -103,11 +104,13 @@ public class CategoryRepository extends Repository {
     private void printOutCategories(ResultSet result) throws SQLException {
         String line = "";
         int count = 0;
+        String separator = "\033[0;33m <|> \033[0m";
         while (result.next()) {
             count++;
-            line = line + "ID: " + result.getInt("id") + ", "
+
+            line = line + "\033[0;32m" + "ID: " + result.getInt("id") + ", "
                     + result.getString("category_name") + ", "
-                    + result.getInt("product_number") + " products <|> ";
+                    + result.getInt("product_number") + " products" + separator;
             if (count % 3 == 0) {
                 System.out.println(line);
                 line = "";

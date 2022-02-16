@@ -1,6 +1,5 @@
 package hu.progmasters.webshop.domain;
 
-import java.sql.SQLOutput;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -13,7 +12,7 @@ public class Product {
     private int salePrice;
     private String description;
     private String productType;
-    private Tax tax;
+    private final Tax tax;
     private boolean onSale;
     private boolean inStock;
 

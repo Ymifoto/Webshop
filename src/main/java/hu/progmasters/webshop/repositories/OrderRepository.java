@@ -22,20 +22,6 @@ public class OrderRepository extends Repository {
         createTable();
     }
 
-    public void getShippingMethods() {
-        try (Connection connection = DatabaseConfig.getConnection()) {
-            String sql = "SELECT * FROM shipping_methods";
-            Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(sql);
-            while (result.next()) {
-                System.out.println(result.getInt("id") + ". " + result.getString("name"));
-            }
-        } catch (SQLException e) {
-            System.out.println("No shipping methods");
-            e.printStackTrace();
-        }
-    }
-
     public List<Order> getAllOrders() {
         List<Order> orders = new ArrayList<>();
         try (Connection connection = DatabaseConfig.getConnection()) {
