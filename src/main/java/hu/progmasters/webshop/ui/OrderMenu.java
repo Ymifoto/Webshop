@@ -5,7 +5,11 @@ import hu.progmasters.webshop.ui.menuoptions.OrdersMenuOptions;
 
 public class OrderMenu extends Menu {
 
+
     private final OrderRepository orderRepository = new OrderRepository();
+
+    public OrderMenu() {
+    }
 
     public void menuOptions() {
         OrdersMenuOptions option;
@@ -18,7 +22,8 @@ public class OrderMenu extends Menu {
                     orderRepository.getAllOrders().forEach(System.out::println);
                     break;
                 case SEARCH:
-                    System.out.println("Search customer");
+                    System.out.print("Give a keyword: ");
+                    orderRepository.orderSearch("%" + inputHandler.getInputString() + "%").forEach(System.out::println);
                     break;
                 case BACK:
                     break;

@@ -37,10 +37,10 @@ public class ProductsMenu extends Menu {
                         updateProduct(id, getProductData());
                     }
                     break;
-                case ONSALE:
+                case ON_SALE:
                     productRepository.getStockOrDiscountProducts("on_sale").forEach(System.out::println);
                     break;
-                case INSTOCK:
+                case IN_STOCK:
                     productRepository.getStockOrDiscountProducts("in_stock").forEach(System.out::println);
                     break;
                 case SEARCH:

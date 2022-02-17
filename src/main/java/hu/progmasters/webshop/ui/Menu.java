@@ -11,13 +11,18 @@ public abstract class Menu {
     protected final InputHandler inputHandler = new InputHandler();
 
     protected MenuOption getMenu(MenuOption[] menuOptions) {
+        int option;
         int counter = 1;
         for (MenuOption menuOption : menuOptions) {
             OutputHandler.outputYellow(counter + ". " + menuOption);
             counter++;
         }
-        System.out.print("Choose an option: ");
-        return menuOptions[inputHandler.getInputNumber() - 1];
+        do {
+            System.out.print("Choose an option: ");
+            option = inputHandler.getInputNumber();
+
+        } while (option < 1 || option > menuOptions.length);
+        return menuOptions[option - 1];
     }
 
     protected boolean yesOrNo(String question) {

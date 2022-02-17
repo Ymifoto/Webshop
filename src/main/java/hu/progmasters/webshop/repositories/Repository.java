@@ -44,6 +44,7 @@ public abstract class Repository {
                 id = result.getInt(1);
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             OutputHandler.outputRed("Insert error!");
             return id;
         }

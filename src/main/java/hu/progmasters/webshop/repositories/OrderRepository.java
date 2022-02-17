@@ -6,16 +6,11 @@ import hu.progmasters.webshop.domain.Order;
 import hu.progmasters.webshop.domain.Product;
 import hu.progmasters.webshop.domain.Tax;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrderRepository extends Repository {
-
-    private static final String TABLE = "orders";
 
 
     public OrderRepository() {
@@ -25,40 +20,75 @@ public class OrderRepository extends Repository {
     public List<Order> getAllOrders() {
         List<Order> orders = new ArrayList<>();
         try (Connection connection = DatabaseConfig.getConnection()) {
-            String sql = "SELECT * FROM orders AS o" +
+            String sql = "SELECT * FROM orders AS o " +
                     "JOIN customers AS c ON c.id = o.customer_id " +
-                    "JOIN shipping_methods AS sm ON o.shipping_method = sm.id " +
+                    "JOIN shipping_methods AS sm ON o.shipping_method = sm.id "+
                     "JOIN payment_methods AS pm ON o.payment_method = pm.id;";
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(sql);
-            while (result.next()) {
-                int orderId = result.getInt(1);
-                Order order  = new Order(orderId
-                        , new Customer(result.getInt("customer_id")
-                        , result.getString("name")
-                        , result.getString("shipping_address")
-                        , result.getString("billing_address")
-                        , result.getString("email")
-                        , result.getString("company_name")
-                        , result.getBoolean("company")
-                        , result.getString("tax_number"))
-                        , result.getString("sm_name")
-                        , result.getInt("shipping_cost")
-                        , result.getInt("order_total")
-                        , result.getString("order_time"));
-                order.getOrderedProducts().addAll(getOrderedProducts(orderId));
-            }
+            getOrdersList(result,orders);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return orders;
     }
 
+    public List<Order> orderSearch(String keyword) {
+        List<Order> ordersList = new ArrayList<>();
+        String sql = "SELECT * FROM orders AS o "
+                + "JOIN customers AS c ON o.customer_id = c.id "
+                + "JOIN shipping_methods AS sm ON o.shipping_method = sm.id "
+                + "JOIN payment_methods AS pm ON o.payment_method = pm.id "
+                + "WHERE customer_id LIKE ? "
+                + "OR billing_address LIKE ? "
+                + "OR email LIKE ? "
+                + "OR name LIKE ? "
+                + "OR company_name LIKE ? "
+                + "OR shipping_address LIKE ?";
+
+        try (Connection connection = DatabaseConfig.getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, keyword);
+            preparedStatement.setString(2, keyword);
+            preparedStatement.setString(3, keyword);
+            preparedStatement.setString(4, keyword);
+            preparedStatement.setString(5, keyword);
+            preparedStatement.setString(6, keyword);
+            ResultSet result = preparedStatement.executeQuery();
+            getOrdersList(result, ordersList);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ordersList;
+    }
+
+    private void getOrdersList(ResultSet result, List<Order> ordersList) throws SQLException {
+        while (result.next()) {
+            Order order = new Order(result.getInt(1)
+                    ,new Customer(result.getInt("customer_id")
+                                    ,result.getString("name")
+                                    ,result.getString("shipping_address")
+                                    ,result.getString("billing_address")
+                                    ,result.getString("email")
+                                    ,result.getString("company_name")
+                                    ,Boolean.parseBoolean(result.getString("company"))
+                                    ,result.getString("tax_number"))
+                    ,result.getString("sm_name")
+                    ,result.getString("pm_name")
+                    ,result.getInt("shipping_cost")
+                    ,result.getInt("order_total")
+                    ,result.getString("order_time")
+            );
+            order.getOrderedProducts().addAll(getOrderedProducts(order.getId()));
+            ordersList.add(order);
+        }
+    }
+
     private List<Product> getOrderedProducts(int orderId) {
         List<Product> products = new ArrayList<>();
-        String sql = "SELECT * FROM ordered_products AS op " +
-                "JOIN products AS p ON p.id = op.id " +
-                "WHERE op.id = " + orderId;
+        String sql = "SELECT * FROM products AS p " +
+                "JOIN ordered_products AS op ON p.id = op.product_id " +
+                "WHERE op.order_id = " + orderId;
         try (Connection connection = DatabaseConfig.getConnection()) {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(sql);
@@ -105,6 +135,7 @@ public class OrderRepository extends Repository {
                 + "shipping_method INT NOT NULL,"
                 + "order_total INT UNSIGNED NOT NULL,"
                 + "shipping_cost INT UNSIGNED NOT NULL,"
+                + "shipped BOOLEAN DEFAULT 0,"
                 + "order_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,"
                 + "FOREIGN KEY (customer_id) REFERENCES customers(id),"
                 + "FOREIGN KEY (payment_method) REFERENCES payment_methods(id),"

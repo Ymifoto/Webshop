@@ -12,7 +12,7 @@ public class MainMenu extends Menu {
     private final ShoppingCart shoppingCart = new ShoppingCart();
     private final ProductsMenu productsMenu = new ProductsMenu(shoppingCart);
     private final CustomerMenu customerMenu = new CustomerMenu();
-    private final CategoryMenu categoryMenu = new CategoryMenu(productsMenu.getProductRepository(),shoppingCart);
+    private final CategoryMenu categoryMenu = new CategoryMenu(productsMenu.getProductRepository(), shoppingCart);
     private final OrderMenu orderMenu = new OrderMenu();
     private final CheckoutMenu checkout = new CheckoutMenu(shoppingCart);
 
@@ -63,6 +63,7 @@ public class MainMenu extends Menu {
         customer = customerMenu.getCustomerByEmail(email);
         if (customer.isPresent()) {
             shoppingCart.setCustomer(customer.get());
+            LogHandler.addLog("Customer logged in: " + customer.get().getId() + ", " + customer.get().getName() + ", " + customer.get().getEmail());
             System.out.println("Logged in");
         } else {
             System.out.println("Not found customer");

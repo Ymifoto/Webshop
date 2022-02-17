@@ -117,4 +117,8 @@ public class CustomerMenu extends Menu {
             customerRepository.updateCustomer(customer.get());
         }
     }
+
+    public CustomerRepository getCustomerRepository() {
+        return customerRepository;
+    }
 }

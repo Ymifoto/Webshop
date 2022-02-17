@@ -1,8 +1,7 @@
-package hu.progmasters.webshop.ui.menuoptions;
+package hu.progmasters.webshop.repositories;
 
 import hu.progmasters.webshop.DatabaseConfig;
 import hu.progmasters.webshop.handlers.OutputHandler;
-import hu.progmasters.webshop.repositories.Repository;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -39,16 +38,31 @@ public class CheckoutRepository extends Repository {
         return shippingMethods;
     }
 
+    public Map<Integer, String> getPaymentMethods() {
+        Map<Integer, String> paymentMethods = new TreeMap<>();
+        String sql = "SELECT * FROM payment_methods";
+        try (Connection connection = DatabaseConfig.getConnection()) {
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(sql);
+            while (result.next()) {
+                paymentMethods.put(result.getInt("id"), result.getString("pm_name"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return paymentMethods;
+    }
+
     public String getShippingMethodName(int methodId) {
         String sql = "SELECT sm_name FROM shipping_methods WHERE id = " + methodId;
         try (Connection connection = DatabaseConfig.getConnection()) {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(sql);
             if (result.next()) {
-                return result.getString(1);
+                return result.getString("sm_name");
             }
         } catch (SQLException e) {
-            System.out.println("No shipiing methods!");
+            System.out.println("No shipping methods!");
         }
         return null;
     }
