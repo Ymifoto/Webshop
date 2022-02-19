@@ -16,7 +16,6 @@ public class MainMenu extends Menu {
     private final OrderMenu orderMenu = new OrderMenu();
     private final CheckoutMenu checkout = new CheckoutMenu(shoppingCart);
 
-
     public void menuOptions() {
         Optional<Customer> customer;
         MainMenuOptions option;

@@ -14,9 +14,9 @@ public class Order {
     private final int orderTotal;
     private final String orderTime;
     private double taxAmount;
-    private boolean shipped;
+    private final boolean shipped;
 
-    public Order(int id, Customer customer, String shippingMethod, String paymentMethod, int shippingCost, int orderTotal, String orderTime) {
+    public Order(int id, Customer customer, String shippingMethod, String paymentMethod, int shippingCost, int orderTotal, String orderTime, boolean shipped) {
         this.id = id;
         this.customer = customer;
         this.shippingMethod = shippingMethod;
@@ -24,7 +24,7 @@ public class Order {
         this.shippingCost = shippingCost;
         this.orderTotal = orderTotal;
         this.orderTime = orderTime;
-        setTaxAmount();
+        this.shipped = shipped;
     }
 
     private void setTaxAmount() {
@@ -35,26 +35,19 @@ public class Order {
         return orderedProducts;
     }
 
-    public boolean isShipped() {
-        return shipped;
-    }
-
-    public void setShipped(boolean shipped) {
-        this.shipped = shipped;
-    }
-
     @Override
     public String toString() {
+        setTaxAmount();
         final StringBuilder sb = new StringBuilder();
         sb.append("ID: ").append(id).append(", ");
         sb.append("Customer: ").append(customer.getId() + ", " + customer.getName() + ", " + customer.getEmail()).append(System.lineSeparator());
-        sb.append("Ordered products: ").append(System.lineSeparator());
+        sb.append("Ordered products: ");
         orderedProducts.forEach(p -> sb.append(p.getName() + ", "));
-        sb.append("Shipping method: ").append(shippingMethod).append("Shipping cost: ").append(shippingCost).append(System.lineSeparator());
-        sb.append("Payment method: ").append(paymentMethod).append(System.lineSeparator());
-        sb.append("General total: ").append(orderTotal+shippingCost).append(", ");
+        sb.append(System.lineSeparator());
+        sb.append("Shipping method: ").append(shippingMethod).append(" Shipping cost: ").append(shippingCost).append(System.lineSeparator());
+        sb.append("Payment method: ").append(paymentMethod).append(" General total: ").append(orderTotal+shippingCost).append(", ");
         sb.append("Tax amount: ").append(taxAmount).append(System.lineSeparator());
-        sb.append("Order time: ").append(orderTime);
+        sb.append("Order time: ").append(orderTime).append(", Shipped: " + (shipped ? "yes" : "no"));
         return sb.toString();
     }
 

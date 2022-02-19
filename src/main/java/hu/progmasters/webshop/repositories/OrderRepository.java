@@ -12,7 +12,6 @@ import java.util.List;
 
 public class OrderRepository extends Repository {
 
-
     public OrderRepository() {
         createTable();
     }
@@ -31,6 +30,28 @@ public class OrderRepository extends Repository {
             e.printStackTrace();
         }
         return orders;
+    }
+
+    public List<Order> getInProgressOrders() {
+        List<Order> orders = new ArrayList<>();
+        try (Connection connection = DatabaseConfig.getConnection()) {
+            String sql = "SELECT * FROM orders AS o " +
+                    "JOIN customers AS c ON c.id = o.customer_id " +
+                    "JOIN shipping_methods AS sm ON o.shipping_method = sm.id "+
+                    "JOIN payment_methods AS pm ON o.payment_method = pm.id " +
+                    "WHERE o.shipped = 0;";
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(sql);
+            getOrdersList(result,orders);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orders;
+    }
+
+    public void setOrderShippedDone(int id) {
+            String sql = "UPDATE orders SET shipped = 1 WHERE id = " + id;
+            execute(sql);
     }
 
     public List<Order> orderSearch(String keyword) {
@@ -78,6 +99,7 @@ public class OrderRepository extends Repository {
                     ,result.getInt("shipping_cost")
                     ,result.getInt("order_total")
                     ,result.getString("order_time")
+                    ,result.getBoolean("shipped")
             );
             order.getOrderedProducts().addAll(getOrderedProducts(order.getId()));
             ordersList.add(order);

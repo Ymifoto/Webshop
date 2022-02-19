@@ -43,6 +43,13 @@ public class ProductsMenu extends Menu {
                 case IN_STOCK:
                     productRepository.getStockOrDiscountProducts("in_stock").forEach(System.out::println);
                     break;
+                case ADD_TO_CATEGORY:
+                    System.out.print("Product id: ");
+                    int product = inputHandler.getInputNumber();
+                    System.out.print("Category id: ");
+                    int category = inputHandler.getInputNumber();
+                    productRepository.addProductToCategory(product,category);
+                    break;
                 case SEARCH:
                     System.out.println("Product search");
                     productSearch();
@@ -57,6 +64,10 @@ public class ProductsMenu extends Menu {
         } while (option != ProductsMenuOptions.BACK);
     }
 
+    public ProductRepository getProductRepository() {
+        return productRepository;
+    }
+
     private void productSearch() {
         System.out.println("Search products");
         System.out.print("Give a keyword: ");
@@ -66,7 +77,7 @@ public class ProductsMenu extends Menu {
         System.out.println("Found " + founded.size() + " product");
     }
 
-    public Map<String, String> getProductData() {
+    private Map<String, String> getProductData() {
         Map<String, String> productData = new TreeMap<>();
         System.out.print("Give a product name: ");
         productData.put("name", inputHandler.getInputString());
@@ -92,10 +103,6 @@ public class ProductsMenu extends Menu {
             productData.put("in_stock", "0");
         }
         return productData;
-    }
-
-    public ProductRepository getProductRepository() {
-        return productRepository;
     }
 
     private void updateProduct(int id, Map<String, String> data) {

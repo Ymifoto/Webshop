@@ -30,7 +30,7 @@ public class CustomerMenu extends Menu {
                     if (yesOrNo("Update customer (yes/no): ")) {
                         System.out.print("Customer ID: ");
                         id = inputHandler.getInputNumber();
-                        updateCustomer(id, getCustomerData());
+                        updateCustomer(id, getDataForUpdateCustomer());
                     }
                     break;
                 case SEARCH:
@@ -50,40 +50,8 @@ public class CustomerMenu extends Menu {
         } while (option != CustomersMenuOptions.BACK);
     }
 
-    public Map<String, String> getCustomerData() {
-        Map<String, String> customerData = new TreeMap<>();
-        System.out.print("Give a name: ");
-        customerData.put("name", inputHandler.getInputString());
-
-        System.out.print("Give a email address: ");
-        customerData.put("email", inputHandler.getInputString());
-
-        System.out.print("Give a shipping address: ");
-        customerData.put("shipping_address", inputHandler.getInputString());
-
-        if (!yesOrNo("Billing and shipping address are the same? (yes or no): ")) {
-            System.out.print("Give a billing address: ");
-            customerData.put("billing_address", inputHandler.getInputString());
-        } else {
-            customerData.put("billing_address", customerData.get("shipping_address"));
-        }
-
-        if (yesOrNo("Corporate customer? (yes or no): ")) {
-            customerData.put("company", "1");
-            System.out.print("Give a company name: ");
-            customerData.put("company_name", inputHandler.getInputString());
-            System.out.print("Give a tax number: ");
-            customerData.put("tax_number", inputHandler.getInputString());
-        } else {
-            customerData.put("company", "0");
-            customerData.put("company_name", "null");
-            customerData.put("tax_number", "null");
-        }
-        return customerData;
-    }
-
     public int addNewUser() {
-        return customerRepository.addCustomer(getCustomerData());
+        return customerRepository.addCustomer(getDataForNewCustomer());
     }
 
     public Optional<Customer> getCustomerByEmail(String email) {
@@ -116,6 +84,63 @@ public class CustomerMenu extends Menu {
             customer.get().updateData(data);
             customerRepository.updateCustomer(customer.get());
         }
+    }
+
+    private Map<String, String> getDataForNewCustomer() {
+        Map<String, String> customerData = new TreeMap<>();
+        System.out.print("Give a name: ");
+        customerData.put("name", inputHandler.getInputString());
+
+        System.out.print("Give a email address: ");
+        customerData.put("email", inputHandler.getInputString());
+
+        System.out.print("Give a shipping address: ");
+        customerData.put("shipping_address", inputHandler.getInputString());
+
+        if (!yesOrNo("Billing and shipping address are the same? (yes or no): ")) {
+            System.out.print("Give a billing address: ");
+            customerData.put("billing_address", inputHandler.getInputString());
+        } else {
+            customerData.put("billing_address", customerData.get("shipping_address"));
+        }
+
+        if (yesOrNo("Corporate customer? (yes or no): ")) {
+            customerData.put("company", "1");
+            System.out.print("Give a company name: ");
+            customerData.put("company_name", inputHandler.getInputString());
+            System.out.print("Give a tax number: ");
+            customerData.put("tax_number", inputHandler.getInputString());
+        } else {
+            customerData.put("company", "0");
+            customerData.put("company_name", "null");
+            customerData.put("tax_number", "null");
+        }
+        return customerData;
+    }
+
+    private Map<String, String> getDataForUpdateCustomer() {
+        Map<String, String> customerData = new TreeMap<>();
+        System.out.print("Give a name: ");
+        customerData.put("name", inputHandler.getInputString());
+
+        System.out.print("Give a email address: ");
+        customerData.put("email", inputHandler.getInputString());
+
+        System.out.print("Give a shipping address: ");
+        customerData.put("shipping_address", inputHandler.getInputString());
+
+        System.out.print("Give a billing address: ");
+        customerData.put("billing_address", inputHandler.getInputString());
+
+        if (yesOrNo("Corporate customer? (yes or no): ")) {
+            customerData.put("company", "1");
+            System.out.print("Give a company name: ");
+            customerData.put("company_name", inputHandler.getInputString());
+            System.out.print("Give a tax number: ");
+            customerData.put("tax_number", inputHandler.getInputString());
+            return customerData;
+        }
+        return customerData;
     }
 
     public CustomerRepository getCustomerRepository() {

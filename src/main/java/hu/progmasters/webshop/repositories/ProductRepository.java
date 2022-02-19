@@ -106,7 +106,6 @@ public class ProductRepository extends Repository {
         data.put("category_id", String.valueOf(categoryId));
         update(TABLE, productId, data);
         updateCategoriesTable();
-
     }
 
     private void getProductList(ResultSet result, List<Product> productList) throws SQLException {

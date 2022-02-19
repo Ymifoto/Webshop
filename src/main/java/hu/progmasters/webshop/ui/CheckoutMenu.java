@@ -18,7 +18,7 @@ public class CheckoutMenu extends Menu {
     private int shippingCost;
     private int shippingMethodId;
     private int paymentMethodId;
-    private String paymetMethod;
+    private String paymentMethod;
     private int generalTotal;
     private final ShoppingCart shoppingCart;
     private final CheckoutRepository checkoutRepository = new CheckoutRepository();
@@ -74,8 +74,8 @@ public class CheckoutMenu extends Menu {
         Customer customer = shoppingCart.getCustomer();
         OutputHandler.outputYellow(customer != null ? customer.toString() : "Not logged in");
         OutputHandler.outputYellow("Total products price: " + generalTotal);
-        OutputHandler.outputYellow(shippingMethodId != 0 ? shippingMethod + " " + shippingCost : "");
-        OutputHandler.outputYellow(paymentMethodId != 0 ? paymetMethod : "");
+        OutputHandler.outputYellow(shippingMethodId != 0 ? shippingMethod + " " + shippingCost : "Not selected shipping method");
+        OutputHandler.outputYellow(paymentMethodId != 0 ? paymentMethod : "Not selected payment method");
         if (shoppingCart.getProductList().size() > 0) {
             shoppingCart.getProductList().forEach(p -> OutputHandler.outputCyan(p.toString()));
         }
@@ -97,7 +97,7 @@ public class CheckoutMenu extends Menu {
             paymentMethodId = inputHandler.getInputNumber();
 
         } while (paymentMethodId < 0 || paymentMethodId > paymentMethods.size());
-        paymetMethod = paymentMethods.get(paymentMethodId);
+        paymentMethod = paymentMethods.get(paymentMethodId);
     }
 
     private int getGeneralTotal() {
