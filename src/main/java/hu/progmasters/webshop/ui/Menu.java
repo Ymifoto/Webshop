@@ -14,7 +14,7 @@ public abstract class Menu {
         int option;
         int counter = 1;
         for (MenuOption menuOption : menuOptions) {
-            OutputHandler.outputYellow(counter + ". " + menuOption);
+            OutputHandler.outputYellow(counter + ". " + menuOption.getName());
             counter++;
         }
         do {
