@@ -6,36 +6,21 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
 public class LogHandler {
 
-    private static final List<String> EVENTS = new ArrayList<>();
     private static final String FILE = "src/main/java/hu/progmasters/webshop/log/webshop.txt";
 
     static {
         create();
     }
 
-    public static void writeLog() {
+    public static void addLog(String event) {
         try (BufferedWriter writer = Files.newBufferedWriter(Path.of(FILE), StandardCharsets.UTF_8, StandardOpenOption.APPEND)) {
-            for (String event : EVENTS) {
                 writer.write(event);
                 writer.newLine();
-            }
-            EVENTS.clear();
         } catch (IOException e) {
             System.out.println("CAN'T WRITE LOG FILE!");
-        }
-    }
-
-    public static void addLog(String event) {
-        EVENTS.add(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) + " - " + event);
-        if (EVENTS.size() >= 100) {
-            writeLog();
         }
     }
 

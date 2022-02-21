@@ -44,8 +44,8 @@ public class Order {
         sb.append("Ordered products: ");
         orderedProducts.forEach(p -> sb.append(p.getName() + ", "));
         sb.append(System.lineSeparator());
-        sb.append("Shipping method: ").append(shippingMethod).append(" Shipping cost: ").append(shippingCost).append(System.lineSeparator());
-        sb.append("Payment method: ").append(paymentMethod).append(" General total: ").append(orderTotal+shippingCost).append(", ");
+        sb.append("Shipping method: ").append(shippingMethod).append(", Shipping cost: ").append(shippingCost).append(System.lineSeparator());
+        sb.append("Payment method: ").append(paymentMethod).append(", General total: ").append(orderTotal+shippingCost).append(", ");
         sb.append("Tax amount: ").append(taxAmount).append(System.lineSeparator());
         sb.append("Order time: ").append(orderTime).append(", Shipped: " + (shipped ? "yes" : "no"));
         return sb.toString();
