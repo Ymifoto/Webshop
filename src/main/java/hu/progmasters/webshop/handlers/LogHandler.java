@@ -6,6 +6,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class LogHandler {
 
@@ -17,7 +19,7 @@ public class LogHandler {
 
     public static void addLog(String event) {
         try (BufferedWriter writer = Files.newBufferedWriter(Path.of(FILE), StandardCharsets.UTF_8, StandardOpenOption.APPEND)) {
-                writer.write(event);
+                writer.write(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) + " - " + event);
                 writer.newLine();
         } catch (IOException e) {
             System.out.println("CAN'T WRITE LOG FILE!");
