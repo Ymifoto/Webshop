@@ -135,21 +135,6 @@ public class OrderRepository extends Repository {
 
     private void createTable() {
 
-        String paymentMethodsTable = "CREATE TABLE IF NOT EXISTS payment_methods("
-                + "id INT PRIMARY KEY AUTO_INCREMENT,"
-                + "pm_name VARCHAR(10) NOT NULL UNIQUE);";
-
-        String shippingMethodsTable = "CREATE TABLE IF NOT EXISTS shipping_methods("
-                + "id INT PRIMARY KEY AUTO_INCREMENT,"
-                + "sm_name VARCHAR(20) NOT NULL UNIQUE);";
-
-        String shippingPriceTable = "CREATE TABLE IF NOT EXISTS shipping_price("
-                + "id INT PRIMARY KEY AUTO_INCREMENT,"
-                + "price INT UNSIGNED NOT NULL,"
-                + "amount_min INT UNSIGNED NOT NULL,"
-                + "amount_max INT UNSIGNED NOT NULL,"
-                + "shipping_method INT UNSIGNED NOT NULL);";
-
         String ordersTable = "CREATE TABLE IF NOT EXISTS orders("
                 + "id INT PRIMARY KEY AUTO_INCREMENT,"
                 + "customer_id INT NOT NULL,"
@@ -170,9 +155,7 @@ public class OrderRepository extends Repository {
                 + "FOREIGN KEY (product_id) REFERENCES products(id),"
                 + "FOREIGN KEY (order_id) REFERENCES orders(id));";
 
-        execute(paymentMethodsTable);
-        execute(shippingMethodsTable);
-        execute(shippingPriceTable);
+
         execute(ordersTable);
         execute(orderedProductsTable);
     }

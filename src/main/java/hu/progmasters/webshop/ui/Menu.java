@@ -38,6 +38,10 @@ public abstract class Menu {
     }
 
     public void addProductToCart(ShoppingCart shoppingCart, Product product) {
-        shoppingCart.addProduct(product);
+        if (product.isInStock()) {
+            shoppingCart.addProduct(product);
+        } else {
+            OutputHandler.outputRed("Product out of stock!");
+        }
     }
 }

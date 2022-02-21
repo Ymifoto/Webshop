@@ -106,5 +106,9 @@ public class Product {
         inStock = data.get("in_stock").equals("1");
         setOnSale();
     }
+
+    public boolean isInStock() {
+        return inStock;
+    }
 }
 

@@ -5,7 +5,10 @@ import hu.progmasters.webshop.handlers.LogHandler;
 import hu.progmasters.webshop.handlers.OutputHandler;
 
 import java.sql.*;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public abstract class Repository {
 
@@ -20,9 +23,9 @@ public abstract class Repository {
 
     protected void update(String table, int id, Map<String, String> data) {
         try (Connection connection = DatabaseConfig.getConnection()) {
-            String sql = "UPDATE " + table + " SET " + getColumsName(true, data) + " WHERE id = ?;";
+            String sql = "UPDATE " + table + " SET " + data.keySet().stream().collect(Collectors.joining(" = ?,")) + " = ? WHERE id = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            setMapValues(preparedStatement, data);
+            setMapValues(preparedStatement, new LinkedList<>(data.values()));
             preparedStatement.setInt(data.size() + 1, id);
             preparedStatement.execute();
         } catch (SQLException e) {
@@ -35,9 +38,9 @@ public abstract class Repository {
     protected int insert(String table, Map<String, String> datas) {
         int id = -1;
         try (Connection connection = DatabaseConfig.getConnection()) {
-            String sql = "INSERT INTO " + table + "(" + getColumsName(false,datas) + ") VALUES(" + getPlaceHolders(datas.size()) + ");";
+            String sql = "INSERT INTO " + table + "(" + datas.keySet().stream().collect(Collectors.joining(", ")) + ") VALUES(" + getPlaceHolders(datas.size()) + ");";
             PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-            setMapValues(preparedStatement, datas);
+            setMapValues(preparedStatement, new LinkedList<>(datas.values()));
             preparedStatement.execute();
             ResultSet result = preparedStatement.getGeneratedKeys();
             if (result.next()) {
@@ -52,20 +55,6 @@ public abstract class Repository {
         return id;
     }
 
-    private String getColumsName(boolean update, Map<String, String> datas) {
-        String setColumns = "";
-        int counter = 1;
-        for (Map.Entry<String, String> entry : datas.entrySet()) {
-            if (update) {
-                setColumns = counter != datas.size() ? setColumns + entry.getKey() + " = ?," : setColumns + entry.getKey() + " = ?";
-            } else {
-                setColumns = counter != datas.size() ? setColumns + entry.getKey() + "," : setColumns + entry.getKey();
-            }
-            counter++;
-        }
-        return setColumns;
-    }
-
     private String getPlaceHolders(int count) {
         String placeHolders = "";
         for (int i = 0; i < count; i++) {
@@ -74,10 +63,10 @@ public abstract class Repository {
         return placeHolders;
     }
 
-    private void setMapValues(PreparedStatement preparedStatement, Map<String, String> datas) throws SQLException {
+    private void setMapValues(PreparedStatement preparedStatement, List<String> datas) throws SQLException {
         int counter = 1;
-        for (Map.Entry<String, String> entry : datas.entrySet()) {
-            preparedStatement.setString(counter, entry.getValue());
+        for (String data : datas) {
+            preparedStatement.setString(counter, data);
             counter++;
         }
     }

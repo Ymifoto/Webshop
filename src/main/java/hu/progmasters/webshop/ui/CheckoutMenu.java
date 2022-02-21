@@ -65,6 +65,7 @@ public class CheckoutMenu extends Menu {
         order.put("shipping_method", String.valueOf(shippingMethodId));
         order.put("shipping_cost", String.valueOf(shippingCost));
         order.put("order_total", String.valueOf(generalTotal + shippingCost));
+        order.put("payment_method",String.valueOf(paymentMethodId));
         checkoutRepository.saveOrder(order, getOrderedProductsId());
         shoppingCart.getProductList().clear();
     }
