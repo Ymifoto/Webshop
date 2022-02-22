@@ -152,7 +152,7 @@ public class OrderRepository extends Repository {
                 + "id INT PRIMARY KEY AUTO_INCREMENT,"
                 + "product_id INT NOT NULL,"
                 + "order_id INT NOT NULL,"
-                + "FOREIGN KEY (product_id) REFERENCES products(id),"
+                + "FOREIGN KEY (product_id) REFERENCES products(id), "
                 + "FOREIGN KEY (order_id) REFERENCES orders(id));";
 
 

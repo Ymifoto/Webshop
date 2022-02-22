@@ -89,12 +89,13 @@ public class CheckoutRepository extends Repository {
                 + "id INT PRIMARY KEY AUTO_INCREMENT,"
                 + "sm_name VARCHAR(30) NOT NULL UNIQUE);";
 
-        String shippingPriceTable = "CREATE TABLE IF NOT EXISTS shipping_price("
-                + "id INT PRIMARY KEY AUTO_INCREMENT,"
-                + "price INT UNSIGNED NOT NULL,"
-                + "amount_min INT UNSIGNED NOT NULL,"
-                + "amount_max INT UNSIGNED NOT NULL,"
-                + "shipping_method INT UNSIGNED NOT NULL);";
+        String shippingPriceTable = "CREATE TABLE IF NOT EXISTS shipping_price( "
+                + "id INT PRIMARY KEY AUTO_INCREMENT, "
+                + "price INT UNSIGNED NOT NULL, "
+                + "amount_min INT UNSIGNED NOT NULL, "
+                + "amount_max INT UNSIGNED NOT NULL, "
+                + "shipping_method INT NOT NULL, "
+                + "FOREIGN KEY (shipping_method) REFERENCES shipping_methods(id));";
 
         execute(paymentMethodsTable);
         execute(shippingMethodsTable);

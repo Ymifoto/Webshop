@@ -17,7 +17,7 @@ public abstract class Repository {
             Statement statement = connection.createStatement();
             statement.execute(sql);
         } catch (SQLException e) {
-            OutputHandler.outputRed("Execute error!");
+            OutputHandler.outputRed("Execute error!" + e.getMessage());
         }
     }
 
@@ -30,7 +30,7 @@ public abstract class Repository {
             preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
-            OutputHandler.outputRed("Update error!");
+            OutputHandler.outputRed("Update error!" + e.getMessage());
         }
         LogHandler.addLog("Update " + table + " table, updated id: " + id + ", " + data.keySet());
     }
@@ -48,7 +48,7 @@ public abstract class Repository {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            OutputHandler.outputRed("Insert error!");
+            OutputHandler.outputRed("Insert error!" + e.getMessage());
             return id;
         }
         LogHandler.addLog("Insert " + table + " table, ID: " + id);
