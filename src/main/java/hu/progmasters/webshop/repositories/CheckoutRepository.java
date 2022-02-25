@@ -19,8 +19,10 @@ public class CheckoutRepository extends Repository {
         createTable();
     }
 
-    public void saveOrder(Map<String, String> order, List<Integer> orderedProductsId) {
-        updateOrderedProductsTable(insert(TABLE, order), orderedProductsId);
+    public int saveOrder(Map<String, String> order, List<Integer> orderedProductsId) {
+        int id = insert(TABLE, order);
+        updateOrderedProductsTable(id, orderedProductsId);
+        return id;
     }
 
     public Map<Integer, Integer> getShippingMethods(int orderTotal) {

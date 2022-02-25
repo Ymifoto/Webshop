@@ -32,6 +32,10 @@ public class Category {
         return products;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();

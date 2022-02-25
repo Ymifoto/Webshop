@@ -7,10 +7,17 @@ import hu.progmasters.webshop.handlers.OutputHandler;
 import hu.progmasters.webshop.repositories.CheckoutRepository;
 import hu.progmasters.webshop.ui.menuoptions.CheckoutMenuOptions;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 public class CheckoutMenu extends Menu {
 
@@ -53,8 +60,12 @@ public class CheckoutMenu extends Menu {
                         finalizeOrder();
                     }
                     break;
-                case BACK:
+                case REMOVE:
+                    System.out.print("Give a product ID: ");
+                    removeProduct(inputHandler.getInputNumber());
                     break;
+                case BACK:
+
             }
         } while (option != CheckoutMenuOptions.BACK);
     }
@@ -65,9 +76,32 @@ public class CheckoutMenu extends Menu {
         order.put("shipping_method", String.valueOf(shippingMethodId));
         order.put("shipping_cost", String.valueOf(shippingCost));
         order.put("order_total", String.valueOf(generalTotal + shippingCost));
-        order.put("payment_method",String.valueOf(paymentMethodId));
-        checkoutRepository.saveOrder(order, getOrderedProductsId());
+        order.put("payment_method", String.valueOf(paymentMethodId));
+        int id = checkoutRepository.saveOrder(order, getOrderedProductsId());
+        saveOrderToFile(id);
         shoppingCart.getProductList().clear();
+    }
+
+
+    private void saveOrderToFile(int id) {
+        String dateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss"));
+        Path path = Path.of("src/main/java/hu/progmasters/webshop/orders/order-" + id + "-" + dateTime + ".txt");
+        try (BufferedWriter bufferedWriter = Files.newBufferedWriter(path)) {
+            bufferedWriter.write("Order ID: " + id + " " + "Order date: " + dateTime);
+            bufferedWriter.newLine();
+            bufferedWriter.write("Shipping method: " + shippingMethod + " " + "Payment method: " + paymentMethod);
+            bufferedWriter.newLine();
+            bufferedWriter.write("Customer: " + shoppingCart.getCustomer().getName() + " " + shoppingCart.getCustomer().getEmail());
+            bufferedWriter.newLine();
+            for (Product product : shoppingCart.getProductList()) {
+                bufferedWriter.write(product.getId() + " " + product.getName() + " " + product.getPrice());
+                bufferedWriter.newLine();
+            }
+            bufferedWriter.write("General total: " + generalTotal + " Shipping cost: " + shippingCost + " Order total: " + (generalTotal + shippingCost));
+
+        } catch (IOException e) {
+            OutputHandler.outputRed("Can write file! " + e.getMessage());
+        }
     }
 
     private void checkoutInformation() {
@@ -77,17 +111,19 @@ public class CheckoutMenu extends Menu {
         OutputHandler.outputYellow("Total products price: " + generalTotal);
         OutputHandler.outputYellow(shippingMethodId != 0 ? shippingMethod + " " + shippingCost : "Not selected shipping method");
         OutputHandler.outputYellow(paymentMethodId != 0 ? paymentMethod : "Not selected payment method");
-        if (shoppingCart.getProductList().size() > 0) {
-            shoppingCart.getProductList().forEach(p -> OutputHandler.outputCyan(p.toString()));
-        }
+        getCart().forEach((k,v) -> System.out.println(v.size() + "x " + v.get(0).getName() + " [" + k + "]"));
     }
 
     private void chooseShippingMethod() {
         Map<Integer, Integer> shippingMethods = checkoutRepository.getShippingMethods(generalTotal);
-        System.out.print("Choose shipping method: ");
-        shippingMethodId = inputHandler.getInputNumber();
-        shippingMethod = checkoutRepository.getShippingMethodName(shippingMethodId);
-        shippingCost = shippingMethods.get(shippingMethodId);
+        if (shippingMethods.size() > 0) {
+            System.out.print("Choose shipping method: ");
+            shippingMethodId = inputHandler.getInputNumber();
+            shippingMethod = checkoutRepository.getShippingMethodName(shippingMethodId);
+            shippingCost = shippingMethods.get(shippingMethodId);
+        } else {
+            OutputHandler.outputRed("No products in cart");
+        }
     }
 
     private void choosePaymentMethod() {
@@ -109,5 +145,14 @@ public class CheckoutMenu extends Menu {
         List<Integer> orderedProducts = new ArrayList<>();
         shoppingCart.getProductList().forEach(p -> orderedProducts.add(p.getId()));
         return orderedProducts;
+    }
+
+    private void removeProduct(int id) {
+        shoppingCart.getProductList().remove(shoppingCart.getProductList().stream().filter(p -> p.getId() == id).findFirst().get());
+    }
+
+    private Map<Integer,List<Product>> getCart() {
+        return shoppingCart.getProductList().stream()
+                .collect(Collectors.groupingBy(Product::getId));
     }
 }

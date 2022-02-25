@@ -3,6 +3,7 @@ package hu.progmasters.webshop.ui;
 import hu.progmasters.webshop.domain.Customer;
 import hu.progmasters.webshop.domain.ShoppingCart;
 import hu.progmasters.webshop.handlers.LogHandler;
+import hu.progmasters.webshop.handlers.OutputHandler;
 import hu.progmasters.webshop.ui.menuoptions.MainMenuOptions;
 
 import java.util.Optional;
@@ -21,7 +22,7 @@ public class MainMenu extends Menu {
         MainMenuOptions option;
         do {
             customer = Optional.ofNullable(shoppingCart.getCustomer());
-            System.out.println(customer.map(value -> "Logged in: " + value.getName() + " " + value.getEmail()).orElse("Not selected customer"));
+            OutputHandler.outputGreen(customer.map(value -> "Logged in: " + value.getName() + " " + value.getEmail()).orElse("Not selected customer"));
             option = (MainMenuOptions) getMenu(MainMenuOptions.values());
             switch (option) {
                 case LOGIN:
@@ -29,7 +30,7 @@ public class MainMenu extends Menu {
                     break;
                 case REGISTER:
                     int id = customerMenu.addNewUser();
-                    shoppingCart.setCustomer(customerMenu.getCustomerById(id).get());
+                    shoppingCart.setCustomer(customerMenu.getCustomerById(id).orElse(null));
                     break;
                 case PRODUCTS:
                     productsMenu.menuOptions();
