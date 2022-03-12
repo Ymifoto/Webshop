@@ -16,21 +16,14 @@ public class ProductRepository extends Repository {
     }
 
     public Product getProductById(int id) {
-        try (Connection connection = DatabaseConfig.getConnection()) {
-            String sql = "SELECT * FROM products WHERE id = ?;";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        String sql = "SELECT * FROM products AS p JOIN product_types AS pt ON pt.id = p.product_type WHERE p.id = ?;";
+        try (Connection connection = DatabaseConfig.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ) {
             preparedStatement.setInt(1, id);
             ResultSet result = preparedStatement.executeQuery();
             if (result.next()) {
-                return new Product(result.getInt("id")
-                        , result.getString("name")
-                        , result.getString("vendor")
-                        , result.getInt("price")
-                        , result.getInt("sale_price")
-                        , result.getString("description")
-                        , result.getString("product_type")
-                        , Tax.valueOf(result.getString("tax"))
-                        , result.getBoolean("in_stock"));
+                return createProduct(result);
             }
         } catch (SQLException e) {
             System.out.println("Not find product!");
@@ -40,50 +33,39 @@ public class ProductRepository extends Repository {
 
     public List<Product> productSearch(String keyword) {
         List<Product> productList = new ArrayList<>();
-        String sql = "SELECT * FROM products " +
+        String sql = "SELECT * FROM products AS p JOIN product_types AS pt ON pt.id = p.product_type " +
                 "WHERE name LIKE ? " +
                 "OR vendor LIKE ? " +
-                "OR product_type LIKE ? " +
+                "OR product_type_name LIKE ? " +
                 "OR description LIKE ?;";
-        try(Connection connection = DatabaseConfig.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1,keyword);
-            preparedStatement.setString(2,keyword);
-            preparedStatement.setString(3,keyword);
-            preparedStatement.setString(4,keyword);
+        try (Connection connection = DatabaseConfig.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ) {
+            preparedStatement.setString(1, keyword);
+            preparedStatement.setString(2, keyword);
+            preparedStatement.setString(3, keyword);
+            preparedStatement.setString(4, keyword);
             ResultSet result = preparedStatement.executeQuery();
-            getProductList(result,productList);
+
+            while (result.next()) {
+                productList.add(createProduct(result));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return productList;
     }
 
-    public List<Product> getAllProduct() {
-        List<Product> productList = new ArrayList<>();
-        try (Connection connection = DatabaseConfig.getConnection()) {
-            String sql = "SELECT * FROM products;";
-            Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(sql);
-
-            getProductList(result, productList);
-
-            return productList;
-        } catch (SQLException e) {
-            System.out.println("Can't open database!");
-            return productList;
-        }
-    }
-
     public List<Product> getStockOrDiscountProducts(String option) {
         List<Product> productList = new ArrayList<>();
-        try (Connection connection = DatabaseConfig.getConnection()) {
-            String sql = "SELECT * FROM products WHERE " + option + " = 1;";
-            Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(sql);
-
-            getProductList(result, productList);
-
+        String sql = "SELECT * FROM products AS p JOIN product_types AS pt ON pt.id = p.product_type WHERE " + option + " = 1;";
+        try (Connection connection = DatabaseConfig.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery(sql)
+        ) {
+            while (result.next()) {
+                productList.add(createProduct(result));
+            }
             return productList;
         } catch (SQLException e) {
             System.out.println("Can't open database!");
@@ -97,7 +79,9 @@ public class ProductRepository extends Repository {
     }
 
     public void updateProduct(Product product) {
-        update(TABLE, product.getId(), product.getData());
+        Map<String, String> productData = product.getData();
+        checkProductType(productData);
+        update(TABLE, product.getId(), productData);
         updateCategoriesTable();
     }
 
@@ -108,18 +92,56 @@ public class ProductRepository extends Repository {
         updateCategoriesTable();
     }
 
-    private void getProductList(ResultSet result, List<Product> productList) throws SQLException {
-        while (result.next()) {
-            productList.add(new Product(result.getInt("id")
-                    , result.getString("name")
-                    , result.getString("vendor")
-                    , result.getInt("price")
-                    , result.getInt("sale_price")
-                    , result.getString("description")
-                    , result.getString("product_type")
-                    , Tax.valueOf(result.getString("tax"))
-                    , result.getBoolean("in_stock")));
+    public Map<Integer, String> getProductTypes() {
+        Map<Integer, String> productTypes = new TreeMap<>();
+        String sql = "SELECT * FROM product_types;";
+        try (Connection connection = DatabaseConfig.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery(sql)) {
+            while (result.next()) {
+                productTypes.put(result.getInt("id"), result.getString("product_type_name"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return productTypes;
+    }
+
+    public int getProductTypeByName(String productTypeName) {
+        String sql = "SELECT id FROM product_types WHERE  product_type_name LIKE  '" + productTypeName + "';";
+        try (Connection connection = DatabaseConfig.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery(sql)) {
+            if (result.next()) {
+                return result.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    private void checkProductType(Map<String, String> productData) {
+        int productTypeId = getProductTypeByName(productData.get("product_type"));
+
+        if (productTypeId != 0) {
+            productData.replace("product_type",String.valueOf(productTypeId));
+        } else {
+            productData.remove("product_type");
+        }
+    }
+
+    private Product createProduct(ResultSet result) throws SQLException {
+        return new Product(result.getInt("id")
+                , result.getString("name")
+                , result.getString("vendor")
+                , result.getInt("price")
+                , result.getInt("sale_price")
+                , result.getString("description")
+                , result.getString("product_type_name")
+                , Tax.valueOf(result.getString("tax"))
+                , result.getBoolean("in_stock"));
     }
 
     private void createTable() {
@@ -129,7 +151,7 @@ public class ProductRepository extends Repository {
 
         String product_types = "CREATE TABLE IF NOT EXISTS product_types("
                 + "id INT PRIMARY KEY AUTO_INCREMENT,"
-                + "product_type_name VARCHAR(20) NOT NULL UNIQUE);";
+                + "product_type_name VARCHAR(40) NOT NULL UNIQUE);";
 
         String productsTable = "CREATE TABLE IF NOT EXISTS products("
                 + "id INT PRIMARY KEY AUTO_INCREMENT,"
@@ -138,12 +160,15 @@ public class ProductRepository extends Repository {
                 + "price INT UNSIGNED NOT NULL,"
                 + "sale_price INT UNSIGNED DEFAULT 0,"
                 + "description VARCHAR(255),"
-                + "product_type VARCHAR(50) NOT NULL,"
+                + "product_type INT UNSIGNED NOT NULL,"
                 + "tax VARCHAR(10) NOT NULL,"
                 + "category_id INT UNSIGNED,"
                 + "on_sale BOOLEAN NOT NULL DEFAULT 0,"
-                + "in_stock BOOLEAN NOT NULL DEFAULT 1);";
+                + "in_stock BOOLEAN NOT NULL DEFAULT 1, "
+                + "FOREIGN KEY (product_type) REFERENCES product_types(id));";
 
+        execute(vendors);
+        execute(product_types);
         execute(productsTable);
     }
 }

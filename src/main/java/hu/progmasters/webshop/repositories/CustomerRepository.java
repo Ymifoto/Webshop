@@ -20,8 +20,9 @@ public class CustomerRepository extends Repository {
                 "OR email LIKE ? " +
                 "OR shipping_address LIKE ? " +
                 "OR billing_address LIKE ?;";
-        try (Connection connection = DatabaseConfig.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        try (Connection connection = DatabaseConfig.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ) {
             preparedStatement.setString(1, keyword);
             preparedStatement.setString(2, keyword);
             preparedStatement.setString(3, keyword);
@@ -35,9 +36,10 @@ public class CustomerRepository extends Repository {
     }
 
     public Optional<Customer> getCustomerByEmail(String email) {
-        try (Connection connection = DatabaseConfig.getConnection()) {
-            String sql = "SELECT * FROM customers WHERE email LIKE ?;";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        String sql = "SELECT * FROM customers WHERE email LIKE ?;";
+        try (Connection connection = DatabaseConfig.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ) {
             preparedStatement.setString(1, email);
             ResultSet result = preparedStatement.executeQuery();
 
@@ -50,9 +52,10 @@ public class CustomerRepository extends Repository {
     }
 
     public Optional<Customer> getCustomerById(int id) {
-        try (Connection connection = DatabaseConfig.getConnection()) {
-            String sql = "SELECT * FROM customers WHERE id = ?;";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        String sql = "SELECT * FROM customers WHERE id = ?;";
+        try (Connection connection = DatabaseConfig.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ) {
             preparedStatement.setInt(1, id);
             ResultSet result = preparedStatement.executeQuery();
 
@@ -65,10 +68,11 @@ public class CustomerRepository extends Repository {
     }
 
     public List<Customer> getAllCustomer() {
-        try (Connection connection = DatabaseConfig.getConnection()) {
-            String sql = "SELECT * FROM customers;";
-            Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(sql);
+        String sql = "SELECT * FROM customers;";
+        try (Connection connection = DatabaseConfig.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery(sql)
+        ) {
             return getCustomers(result);
 
         } catch (SQLException e) {

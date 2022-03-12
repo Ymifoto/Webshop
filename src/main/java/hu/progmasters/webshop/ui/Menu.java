@@ -37,6 +37,11 @@ public abstract class Menu {
         return answer.equals("yes");
     }
 
+    protected boolean optionChecker(int option, int max) {
+        return option > 0 && option <= max;
+    }
+
+
     public void addProductToCart(ShoppingCart shoppingCart, Product product) {
         if (product.isInStock()) {
             shoppingCart.addProduct(product);

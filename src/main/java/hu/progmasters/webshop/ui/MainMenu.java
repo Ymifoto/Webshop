@@ -22,7 +22,7 @@ public class MainMenu extends Menu {
         MainMenuOptions option;
         do {
             customer = Optional.ofNullable(shoppingCart.getCustomer());
-            OutputHandler.outputGreen(customer.map(value -> "Logged in: " + value.getName() + " " + value.getEmail()).orElse("Not selected customer"));
+            OutputHandler.outputGreen(customer.map(value -> "Logged in: " + value.getName() + " " + value.getEmail()).orElse("You are not logged in"));
             option = (MainMenuOptions) getMenu(MainMenuOptions.values());
             switch (option) {
                 case LOGIN:

@@ -29,26 +29,6 @@ public class Product {
         setOnSale();
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getPrice() {
-        return onSale ? salePrice : price;
-    }
-
-    public Tax getTax() {
-        return tax;
-    }
-
-    private void setOnSale() {
-        onSale = salePrice > 0;
-    }
-
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
@@ -109,6 +89,46 @@ public class Product {
 
     public boolean isInStock() {
         return inStock;
+    }
+
+    public String getVendor() {
+        return vendor;
+    }
+
+    public String getProductType() {
+        return productType;
+    }
+
+    public int getSalePrice() {
+        return salePrice;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getPrice() {
+        return onSale ? salePrice : price;
+    }
+
+    public int getBasicPrice() {
+        return price;
+    }
+
+    public Tax getTax() {
+        return tax;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    private void setOnSale() {
+        onSale = salePrice > 0;
     }
 }
 

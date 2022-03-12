@@ -18,14 +18,15 @@ public class OrderRepository extends Repository {
 
     public List<Order> getAllOrders() {
         List<Order> orders = new ArrayList<>();
-        try (Connection connection = DatabaseConfig.getConnection()) {
-            String sql = "SELECT * FROM orders AS o " +
-                    "JOIN customers AS c ON c.id = o.customer_id " +
-                    "JOIN shipping_methods AS sm ON o.shipping_method = sm.id "+
-                    "JOIN payment_methods AS pm ON o.payment_method = pm.id;";
-            Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(sql);
-            getOrdersList(result,orders);
+        String sql = "SELECT * FROM orders AS o " +
+                "JOIN customers AS c ON c.id = o.customer_id " +
+                "JOIN shipping_methods AS sm ON o.shipping_method = sm.id " +
+                "JOIN payment_methods AS pm ON o.payment_method = pm.id;";
+        try (Connection connection = DatabaseConfig.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery(sql)
+        ) {
+            getOrdersList(result, orders);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -34,15 +35,16 @@ public class OrderRepository extends Repository {
 
     public List<Order> getInProgressOrders() {
         List<Order> orders = new ArrayList<>();
-        try (Connection connection = DatabaseConfig.getConnection()) {
-            String sql = "SELECT * FROM orders AS o " +
-                    "JOIN customers AS c ON c.id = o.customer_id " +
-                    "JOIN shipping_methods AS sm ON o.shipping_method = sm.id "+
-                    "JOIN payment_methods AS pm ON o.payment_method = pm.id " +
-                    "WHERE o.shipped = 0;";
-            Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(sql);
-            getOrdersList(result,orders);
+        String sql = "SELECT * FROM orders AS o " +
+                "JOIN customers AS c ON c.id = o.customer_id " +
+                "JOIN shipping_methods AS sm ON o.shipping_method = sm.id " +
+                "JOIN payment_methods AS pm ON o.payment_method = pm.id " +
+                "WHERE o.shipped = 0;";
+        try (Connection connection = DatabaseConfig.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery(sql)
+        ) {
+            getOrdersList(result, orders);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -50,8 +52,8 @@ public class OrderRepository extends Repository {
     }
 
     public void setOrderShippedDone(int id) {
-            String sql = "UPDATE orders SET shipped = 1 WHERE id = " + id;
-            execute(sql);
+        String sql = "UPDATE orders SET shipped = 1 WHERE id = " + id;
+        execute(sql);
     }
 
     public List<Order> orderSearch(String keyword) {
@@ -67,8 +69,9 @@ public class OrderRepository extends Repository {
                 + "OR company_name LIKE ? "
                 + "OR shipping_address LIKE ?";
 
-        try (Connection connection = DatabaseConfig.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        try (Connection connection = DatabaseConfig.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ) {
             preparedStatement.setString(1, keyword);
             preparedStatement.setString(2, keyword);
             preparedStatement.setString(3, keyword);
@@ -86,20 +89,20 @@ public class OrderRepository extends Repository {
     private void getOrdersList(ResultSet result, List<Order> ordersList) throws SQLException {
         while (result.next()) {
             Order order = new Order(result.getInt(1)
-                    ,new Customer(result.getInt("customer_id")
-                                    ,result.getString("name")
-                                    ,result.getString("shipping_address")
-                                    ,result.getString("billing_address")
-                                    ,result.getString("email")
-                                    ,result.getString("company_name")
-                                    ,Boolean.parseBoolean(result.getString("company"))
-                                    ,result.getString("tax_number"))
-                    ,result.getString("sm_name")
-                    ,result.getString("pm_name")
-                    ,result.getInt("shipping_cost")
-                    ,result.getInt("order_total")
-                    ,result.getString("order_time")
-                    ,result.getBoolean("shipped")
+                    , new Customer(result.getInt("customer_id")
+                    , result.getString("name")
+                    , result.getString("shipping_address")
+                    , result.getString("billing_address")
+                    , result.getString("email")
+                    , result.getString("company_name")
+                    , Boolean.parseBoolean(result.getString("company"))
+                    , result.getString("tax_number"))
+                    , result.getString("sm_name")
+                    , result.getString("pm_name")
+                    , result.getInt("shipping_cost")
+                    , result.getInt("order_total")
+                    , result.getString("order_time")
+                    , result.getBoolean("shipped")
             );
             order.getOrderedProducts().addAll(getOrderedProducts(order.getId()));
             ordersList.add(order);
@@ -111,10 +114,10 @@ public class OrderRepository extends Repository {
         String sql = "SELECT * FROM products AS p " +
                 "JOIN ordered_products AS op ON p.id = op.product_id " +
                 "WHERE op.order_id = " + orderId;
-        try (Connection connection = DatabaseConfig.getConnection()) {
-            Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(sql);
-
+        try (Connection connection = DatabaseConfig.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery(sql)
+        ) {
             while (result.next()) {
                 products.add(new Product(result.getInt("product_id")
                         , result.getString("name")

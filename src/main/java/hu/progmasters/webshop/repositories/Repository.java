@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 public abstract class Repository {
 
     protected void execute(String sql) {
-        try (Connection connection = DatabaseConfig.getConnection()) {
-            Statement statement = connection.createStatement();
+        try (Connection connection = DatabaseConfig.getConnection();
+             Statement statement = connection.createStatement()) {
             statement.execute(sql);
         } catch (SQLException e) {
             OutputHandler.outputRed("Execute error!" + e.getMessage());
@@ -22,9 +22,9 @@ public abstract class Repository {
     }
 
     protected void update(String table, int id, Map<String, String> data) {
-        try (Connection connection = DatabaseConfig.getConnection()) {
-            String sql = "UPDATE " + table + " SET " + data.keySet().stream().collect(Collectors.joining(" = ?,")) + " = ? WHERE id = ?;";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        String sql = "UPDATE " + table + " SET " + String.join(" = ?,", data.keySet()) + " = ? WHERE id = ?;";
+        try (Connection connection = DatabaseConfig.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             setMapValues(preparedStatement, new LinkedList<>(data.values()));
             preparedStatement.setInt(data.size() + 1, id);
             preparedStatement.execute();
@@ -37,9 +37,9 @@ public abstract class Repository {
 
     protected int insert(String table, Map<String, String> datas) {
         int id = -1;
-        try (Connection connection = DatabaseConfig.getConnection()) {
-            String sql = "INSERT INTO " + table + "(" + datas.keySet().stream().collect(Collectors.joining(", ")) + ") VALUES(" + getPlaceHolders(datas.size()) + ");";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+        String sql = "INSERT INTO " + table + "(" + String.join(", ", datas.keySet()) + ") VALUES(" + getPlaceHolders(datas.size()) + ");";
+        try (Connection connection = DatabaseConfig.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             setMapValues(preparedStatement, new LinkedList<>(datas.values()));
             preparedStatement.execute();
             ResultSet result = preparedStatement.getGeneratedKeys();

@@ -13,10 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CheckoutMenu extends Menu {
@@ -138,7 +135,8 @@ public class CheckoutMenu extends Menu {
     }
 
     private int getGeneralTotal() {
-        return shoppingCart.getProductList().stream().mapToInt(Product::getPrice).sum();
+                return shoppingCart.getProductList().stream().mapToInt(Product::getPrice).sum();
+
     }
 
     private List<Integer> getOrderedProductsId() {
@@ -148,7 +146,8 @@ public class CheckoutMenu extends Menu {
     }
 
     private void removeProduct(int id) {
-        shoppingCart.getProductList().remove(shoppingCart.getProductList().stream().filter(p -> p.getId() == id).findFirst().get());
+        Optional<Product> product = shoppingCart.getProductList().stream().filter(p -> p.getId() == id).findFirst();
+        product.ifPresent(value -> shoppingCart.getProductList().remove(value));
     }
 
     private Map<Integer,List<Product>> getCart() {
