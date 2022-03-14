@@ -4,10 +4,13 @@ import hu.progmasters.webshop.DatabaseConfig;
 import hu.progmasters.webshop.domain.Category;
 import hu.progmasters.webshop.domain.Product;
 import hu.progmasters.webshop.domain.Tax;
+import hu.progmasters.webshop.handlers.OutputHandler;
 
 import java.sql.*;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class CategoryRepository extends Repository {
 
@@ -39,6 +42,8 @@ public class CategoryRepository extends Repository {
     }
 
     public void getCategoryList() {
+        Map<String, String> data = new TreeMap<>(Comparator.comparingInt(Integer::parseInt));
+
         String sql = "SELECT cn.id,category_name, COUNT(c.product_id) AS product_number " +
                 "FROM categories_name AS cn " +
                 "LEFT JOIN categories AS c ON c.category_id = cn.id " +
@@ -48,7 +53,10 @@ public class CategoryRepository extends Repository {
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(sql)
         ) {
-            printOutCategories(result);
+            while (result.next()) {
+                data.put(String.valueOf(result.getInt("id")), result.getString("category_name") + " (" + result.getInt("product_number") + " products)");
+            }
+            OutputHandler.printMap(data, "ID", "Categories");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -83,17 +91,4 @@ public class CategoryRepository extends Repository {
             }
         }
     }
-
-    private void printOutCategories(ResultSet result) throws SQLException {
-        int counter = 0;
-        String separator = "\033[0;33m <|> \033[0m";
-        while (result.next()) {
-            counter++;
-            System.out.print("\033[0;32m" + "ID: " + result.getInt("id") + " - "
-                    + result.getString("category_name") + ", "
-                    + result.getInt("product_number") + " products" + separator);
-            System.out.print(counter % 3 == 0 ? System.lineSeparator() : "");
-            }
-        }
-
 }

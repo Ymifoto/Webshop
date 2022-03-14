@@ -29,6 +29,10 @@ public class Product {
         setOnSale();
     }
 
+    public String getValuesForList() {
+        return name + ", Sale price: " + getPrice() + ", " + (onSale ? "On Sale! Original price: " + price : "") + ", " + (inStock ? "In stock" : "Out of stock");
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();

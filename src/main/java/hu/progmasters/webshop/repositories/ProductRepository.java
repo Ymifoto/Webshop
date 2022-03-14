@@ -97,19 +97,20 @@ public class ProductRepository extends Repository {
         updateCategoriesTable();
     }
 
-    public Map<Integer, String> getProductTypes() {
-        Map<Integer, String> productTypes = new TreeMap<>();
+    public List<String> getProductTypes() {
+        List<String> productTypes = new ArrayList<>();
         String sql = "SELECT * FROM product_types;";
         try (Connection connection = DatabaseConfig.getConnection();
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(sql)) {
             while (result.next()) {
-                productTypes.put(result.getInt("id"), result.getString("product_type_name"));
+                productTypes.add(result.getString("product_type_name"));
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        Collections.sort(productTypes);
         return productTypes;
     }
 

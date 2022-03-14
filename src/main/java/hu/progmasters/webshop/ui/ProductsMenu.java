@@ -2,9 +2,11 @@ package hu.progmasters.webshop.ui;
 
 import hu.progmasters.webshop.domain.Product;
 import hu.progmasters.webshop.domain.ShoppingCart;
+import hu.progmasters.webshop.handlers.OutputHandler;
 import hu.progmasters.webshop.repositories.ProductRepository;
 import hu.progmasters.webshop.ui.menuoptions.ProductsMenuOptions;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -36,10 +38,14 @@ public class ProductsMenu extends Menu {
                         updateProduct(getProductData(true));
                     break;
                 case ON_SALE:
-                    productRepository.getStockOrDiscountProducts("on_sale").forEach(System.out::println);
+                    Map<String,String> onSaleProductList = new TreeMap<>(Comparator.comparingInt(Integer::parseInt));
+                    productRepository.getStockOrDiscountProducts("on_sale").forEach(product -> onSaleProductList.put(String.valueOf(product.getId()),product.getValuesForList()));
+                    OutputHandler.printMap(onSaleProductList,"ID","Products");
                     break;
                 case IN_STOCK:
-                    productRepository.getStockOrDiscountProducts("in_stock").forEach(System.out::println);
+                    Map<String,String> inStockProductList = new TreeMap<>(Comparator.comparingInt(Integer::parseInt));
+                    productRepository.getStockOrDiscountProducts("in_stock").forEach(product -> inStockProductList.put(String.valueOf(product.getId()),product.getValuesForList()));
+                    OutputHandler.printMap(inStockProductList,"ID","Products");
                     break;
                 case ADD_TO_CATEGORY:
                     System.out.print("Product id: ");
@@ -53,7 +59,7 @@ public class ProductsMenu extends Menu {
                     productSearch();
                     break;
                 case LIST_PRODUCT_TYPES:
-                    printProductTypes();
+                    OutputHandler.printList(productRepository.getProductTypes(), "Product types");
                     break;
                 case ADD_TO_CART:
                     System.out.print("Give a product id: ");
@@ -74,8 +80,11 @@ public class ProductsMenu extends Menu {
         System.out.print("Give a keyword: ");
         String keyword = "%" + inputHandler.getInputString() + "%";
         List<Product> founded = productRepository.productSearch(keyword);
-        founded.forEach(System.out::println);
-        System.out.println("Found " + founded.size() + " product");
+
+        System.out.println(System.lineSeparator() + "Found " + founded.size() + " product");
+        Map<String,String> productsList = new TreeMap<>();
+        founded.forEach(product -> productsList.put(String.valueOf(product.getId()), product.getValuesForList()));
+        OutputHandler.printMap(productsList,"ID","Products");
     }
 
     private Map<String, String> getProductData(boolean update) {
@@ -116,17 +125,6 @@ public class ProductsMenu extends Menu {
         if (updatingProduct != null) {
             updatingProduct.updateData(data);
             productRepository.updateProduct(updatingProduct);
-        }
-    }
-
-    private void printProductTypes() {
-        Map<Integer,String> productTypes = productRepository.getProductTypes();
-        String separator = "\033[0;33m <|> \033[0m";
-        int counter = 0;
-        for (Map.Entry<Integer, String> entry : productTypes.entrySet()) {
-            counter++;
-            System.out.print("\033[0;32m" + entry.getKey() + ". " + entry.getValue() + " " + separator);
-            System.out.print(counter % 4 == 0 ? System.lineSeparator() : "");
         }
     }
 }
