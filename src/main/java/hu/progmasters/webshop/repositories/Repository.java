@@ -4,35 +4,35 @@ import hu.progmasters.webshop.DatabaseConfig;
 import hu.progmasters.webshop.handlers.LogHandler;
 import hu.progmasters.webshop.handlers.OutputHandler;
 
-import java.sql.*;
-import java.util.LinkedList;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public abstract class Repository {
 
     protected void execute(String sql) {
         try (Connection connection = DatabaseConfig.getConnection();
-             Statement statement = connection.createStatement()) {
-            statement.execute(sql);
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.execute();
         } catch (SQLException e) {
             OutputHandler.outputRed("Execute error!" + e.getMessage());
         }
     }
 
-    protected void update(String table, int id, Map<String, String> data) {
-        String sql = "UPDATE " + table + " SET " + String.join(" = ?,", data.keySet()) + " = ? WHERE id = ?;";
+    protected void update(String table, int id, Map<String, String> datas) {
+        String sql = "UPDATE " + table + " SET " + String.join(" = ?,", datas.keySet()) + " = ? WHERE id = ?;";
         try (Connection connection = DatabaseConfig.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            setMapValues(preparedStatement, new LinkedList<>(data.values()));
-            preparedStatement.setInt(data.size() + 1, id);
+            setMapValues(preparedStatement, datas);
+            preparedStatement.setInt(datas.size() + 1, id);
             preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
             OutputHandler.outputRed("Update error!" + e.getMessage());
         }
-        LogHandler.addLog("Update " + table + " table, updated id: " + id + ", " + data.keySet());
+        LogHandler.addLog("Update " + table + " table, updated id: " + id + ", " + datas.keySet());
     }
 
     protected int insert(String table, Map<String, String> datas) {
@@ -40,7 +40,7 @@ public abstract class Repository {
         String sql = "INSERT INTO " + table + "(" + String.join(", ", datas.keySet()) + ") VALUES(" + getPlaceHolders(datas.size()) + ");";
         try (Connection connection = DatabaseConfig.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-            setMapValues(preparedStatement, new LinkedList<>(datas.values()));
+            setMapValues(preparedStatement, datas);
             preparedStatement.execute();
             ResultSet result = preparedStatement.getGeneratedKeys();
             if (result.next()) {
@@ -63,10 +63,10 @@ public abstract class Repository {
         return placeHolders;
     }
 
-    private void setMapValues(PreparedStatement preparedStatement, List<String> datas) throws SQLException {
+    private void setMapValues(PreparedStatement preparedStatement, Map<String, String> datas) throws SQLException {
         int counter = 1;
-        for (String data : datas) {
-            preparedStatement.setString(counter, data);
+        for (Map.Entry<String, String> entry : datas.entrySet()) {
+            preparedStatement.setString(counter, entry.getValue());
             counter++;
         }
     }

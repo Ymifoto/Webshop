@@ -15,10 +15,6 @@ public class CheckoutRepository extends Repository {
 
     private static final String TABLE = "orders";
 
-    public CheckoutRepository() {
-        createTable();
-    }
-
     public int saveOrder(Map<String, String> order, List<Integer> orderedProductsId) {
         int id = insert(TABLE, order);
         updateOrderedProductsTable(id, orderedProductsId);
@@ -82,28 +78,5 @@ public class CheckoutRepository extends Repository {
             datas.put("product_id", productId.toString());
             insert("ordered_products", datas);
         }
-    }
-
-    private void createTable() {
-
-        String paymentMethodsTable = "CREATE TABLE IF NOT EXISTS payment_methods("
-                + "id INT PRIMARY KEY AUTO_INCREMENT,"
-                + "pm_name VARCHAR(30) NOT NULL UNIQUE);";
-
-        String shippingMethodsTable = "CREATE TABLE IF NOT EXISTS shipping_methods("
-                + "id INT PRIMARY KEY AUTO_INCREMENT,"
-                + "sm_name VARCHAR(30) NOT NULL UNIQUE);";
-
-        String shippingPriceTable = "CREATE TABLE IF NOT EXISTS shipping_price( "
-                + "id INT PRIMARY KEY AUTO_INCREMENT, "
-                + "price INT UNSIGNED NOT NULL, "
-                + "amount_min INT UNSIGNED NOT NULL, "
-                + "amount_max INT UNSIGNED NOT NULL, "
-                + "shipping_method INT NOT NULL, "
-                + "FOREIGN KEY (shipping_method) REFERENCES shipping_methods(id));";
-
-        execute(paymentMethodsTable);
-        execute(shippingMethodsTable);
-        execute(shippingPriceTable);
     }
 }

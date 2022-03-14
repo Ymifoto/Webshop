@@ -13,16 +13,13 @@ public class CategoryRepository extends Repository {
 
     private static final String TABLE = "categories_name";
 
-    public CategoryRepository() {
-        createTable();
-    }
-
     public Category getCategroyById(int id) {
-        String sql = "SELECT name,vendor,price,sale_price,description,product_type_name,tax,on_sale,in_stock,product_id,category_name " +
+        String sql = "SELECT name,vendor_name,price,sale_price,description,product_type_name,tax,on_sale,in_stock,product_id,category_name " +
                 "FROM products AS p " +
                 "RIGHT JOIN categories AS c ON p.id = c.product_id " +
                 "RIGHT JOIN categories_name AS cn ON c.category_id = cn.id " +
                 "RIGHT JOIN product_types AS pt ON p.product_type = pt.id " +
+                "RIGHT JOIN vendors AS v ON p.vendor = v.id " +
                 "WHERE cn.id = ?;";
 
         Category category = new Category();
@@ -76,7 +73,7 @@ public class CategoryRepository extends Repository {
                 productList.add(new Product(
                         result.getInt("product_id"),
                         result.getString("name"),
-                        result.getString("vendor"),
+                        result.getString("vendor_name"),
                         result.getInt("price"),
                         result.getInt("sale_price"),
                         result.getString("description"),
@@ -85,23 +82,6 @@ public class CategoryRepository extends Repository {
                         result.getBoolean("in_stock")));
             }
         }
-    }
-
-    private void createTable() {
-        String categoriesNameTable = "CREATE TABLE IF NOT EXISTS categories_name("
-                + "id INT PRIMARY KEY AUTO_INCREMENT,"
-                + "category_name VARCHAR(50) NOT NULL UNIQUE,"
-                + "category_desc VARCHAR(100));";
-
-        String categoriesTable = "CREATE TABLE IF NOT EXISTS categories("
-                + "id INT PRIMARY KEY AUTO_INCREMENT,"
-                + "product_id INT NOT NULL UNIQUE,"
-                + "category_id INT NOT NULL,"
-                + "FOREIGN KEY (product_id) REFERENCES products(id),"
-                + "FOREIGN KEY (category_id) REFERENCES categories_name(id));";
-
-        execute(categoriesNameTable);
-        execute(categoriesTable);
     }
 
     private void printOutCategories(ResultSet result) throws SQLException {

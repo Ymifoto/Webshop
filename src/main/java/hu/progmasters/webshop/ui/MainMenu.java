@@ -16,6 +16,7 @@ public class MainMenu extends Menu {
     private final CategoryMenu categoryMenu = new CategoryMenu(productsMenu.getProductRepository(), shoppingCart);
     private final CheckoutMenu checkout = new CheckoutMenu(shoppingCart);
     private final OrderMenu orderMenu = new OrderMenu();
+    private final AdminMenu adminMenu = new AdminMenu();
 
     public void menuOptions() {
         Optional<Customer> customer;
@@ -49,6 +50,9 @@ public class MainMenu extends Menu {
                     break;
                 case LOGOUT:
                     shoppingCart.setCustomer(null);
+                    break;
+                case ADMIN:
+                    adminMenu.menuOptions();
                     break;
                 case QUIT:
             }

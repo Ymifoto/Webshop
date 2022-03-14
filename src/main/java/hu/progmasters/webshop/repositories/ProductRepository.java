@@ -11,12 +11,11 @@ public class ProductRepository extends Repository {
 
     private static final String TABLE = "products";
 
-    public ProductRepository() {
-        createTable();
-    }
-
     public Product getProductById(int id) {
-        String sql = "SELECT * FROM products AS p JOIN product_types AS pt ON pt.id = p.product_type WHERE p.id = ?;";
+        String sql = "SELECT * FROM products AS p " +
+                "JOIN product_types AS pt ON pt.id = p.product_type " +
+                "JOIN vendors AS v ON v.id = p.vendor " +
+                "WHERE p.id = ?;";
         try (Connection connection = DatabaseConfig.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
@@ -33,9 +32,11 @@ public class ProductRepository extends Repository {
 
     public List<Product> productSearch(String keyword) {
         List<Product> productList = new ArrayList<>();
-        String sql = "SELECT * FROM products AS p JOIN product_types AS pt ON pt.id = p.product_type " +
+        String sql = "SELECT * FROM products AS p " +
+                "JOIN product_types AS pt ON pt.id = p.product_type " +
+                "JOIN vendors AS v ON v.id = p.vendor " +
                 "WHERE name LIKE ? " +
-                "OR vendor LIKE ? " +
+                "OR vendor_name LIKE ? " +
                 "OR product_type_name LIKE ? " +
                 "OR description LIKE ?;";
         try (Connection connection = DatabaseConfig.getConnection();
@@ -58,7 +59,10 @@ public class ProductRepository extends Repository {
 
     public List<Product> getStockOrDiscountProducts(String option) {
         List<Product> productList = new ArrayList<>();
-        String sql = "SELECT * FROM products AS p JOIN product_types AS pt ON pt.id = p.product_type WHERE " + option + " = 1;";
+        String sql = "SELECT * FROM products AS p " +
+                "JOIN product_types AS pt ON pt.id = p.product_type " +
+                "JOIN vendors AS v ON v.id = p.vendor " +
+                "WHERE " + option + " = 1;";
         try (Connection connection = DatabaseConfig.getConnection();
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(sql)
@@ -80,7 +84,8 @@ public class ProductRepository extends Repository {
 
     public void updateProduct(Product product) {
         Map<String, String> productData = product.getData();
-        checkProductType(productData);
+        checkData(productData, "product_type", getValueIdByName(productData.get("product_type"), "product_types", "product_type_name"));
+        checkData(productData, "vendor", getValueIdByName(productData.get("vendor"), "vendors", "vendor_name"));
         update(TABLE, product.getId(), productData);
         updateCategoriesTable();
     }
@@ -108,8 +113,8 @@ public class ProductRepository extends Repository {
         return productTypes;
     }
 
-    public int getProductTypeByName(String productTypeName) {
-        String sql = "SELECT id FROM product_types WHERE  product_type_name LIKE  '" + productTypeName + "';";
+    private int getValueIdByName(String valueName, String table, String column) {
+        String sql = "SELECT id FROM " + table + " WHERE " + column + " LIKE  '" + valueName + "';";
         try (Connection connection = DatabaseConfig.getConnection();
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(sql)) {
@@ -122,53 +127,23 @@ public class ProductRepository extends Repository {
         return 0;
     }
 
-    private void checkProductType(Map<String, String> productData) {
-        int productTypeId = getProductTypeByName(productData.get("product_type"));
-
-        if (productTypeId != 0) {
-            productData.replace("product_type",String.valueOf(productTypeId));
+    private void checkData(Map<String, String> productData, String key, int value) {
+        if (value != 0) {
+            productData.replace(key, String.valueOf(value));
         } else {
-            productData.remove("product_type");
+            productData.remove(key);
         }
     }
 
     private Product createProduct(ResultSet result) throws SQLException {
         return new Product(result.getInt("id")
                 , result.getString("name")
-                , result.getString("vendor")
+                , result.getString("vendor_name")
                 , result.getInt("price")
                 , result.getInt("sale_price")
                 , result.getString("description")
                 , result.getString("product_type_name")
                 , Tax.valueOf(result.getString("tax"))
                 , result.getBoolean("in_stock"));
-    }
-
-    private void createTable() {
-        String vendors = "CREATE TABLE IF NOT EXISTS vendors("
-                + "id INT PRIMARY KEY AUTO_INCREMENT,"
-                + "vendor_name VARCHAR(20) NOT NULL UNIQUE);";
-
-        String product_types = "CREATE TABLE IF NOT EXISTS product_types("
-                + "id INT PRIMARY KEY AUTO_INCREMENT,"
-                + "product_type_name VARCHAR(40) NOT NULL UNIQUE);";
-
-        String productsTable = "CREATE TABLE IF NOT EXISTS products("
-                + "id INT PRIMARY KEY AUTO_INCREMENT,"
-                + "name VARCHAR(100) NOT NULL,"
-                + "vendor VARCHAR(20) NOT NULL,"
-                + "price INT UNSIGNED NOT NULL,"
-                + "sale_price INT UNSIGNED DEFAULT 0,"
-                + "description VARCHAR(255),"
-                + "product_type INT UNSIGNED NOT NULL,"
-                + "tax VARCHAR(10) NOT NULL,"
-                + "category_id INT UNSIGNED,"
-                + "on_sale BOOLEAN NOT NULL DEFAULT 0,"
-                + "in_stock BOOLEAN NOT NULL DEFAULT 1, "
-                + "FOREIGN KEY (product_type) REFERENCES product_types(id));";
-
-        execute(vendors);
-        execute(product_types);
-        execute(productsTable);
     }
 }

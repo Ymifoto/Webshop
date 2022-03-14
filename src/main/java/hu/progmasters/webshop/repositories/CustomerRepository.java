@@ -10,10 +10,6 @@ public class CustomerRepository extends Repository {
 
     private static final String TABLE = "customers";
 
-    public CustomerRepository() {
-        createTable();
-    }
-
     public List<Customer> customerSearch(String keyword) {
         String sql = "SELECT * FROM customers " +
                 "WHERE name LIKE ? " +
@@ -102,18 +98,5 @@ public class CustomerRepository extends Repository {
                     , result.getString("tax_number")));
         }
         return customerList;
-    }
-
-    private void createTable() {
-        String customers = "CREATE TABLE IF NOT EXISTS customers("
-                + "id INT PRIMARY KEY AUTO_INCREMENT,"
-                + "name VARCHAR(30) NOT NULL,"
-                + "shipping_address VARCHAR(100) NOT NULL,"
-                + "billing_address VARCHAR(100) DEFAULT '',"
-                + "email VARCHAR(20) NOT NULL,"
-                + "company BOOLEAN DEFAULT 0,"
-                + "company_name VARCHAR(100) DEFAULT '',"
-                + "tax_number VARCHAR(14));";
-        execute(customers);
     }
 }
