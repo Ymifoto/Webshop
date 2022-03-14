@@ -34,13 +34,15 @@ public class OutputHandler {
     }
 
     public static void printList(List<String> data, String head) {
-        int longestValue = Math.max(head.length(), data.stream().mapToInt(String::length).max().getAsInt());
-        System.out.println("-".repeat(longestValue + VERTICAL_LINE_DIFFERENT));
-        System.out.println("| " + head + " ".repeat(longestValue - head.length()) + " |");
-        System.out.println("-".repeat(longestValue + VERTICAL_LINE_DIFFERENT));
-        data.forEach(value -> System.out.println("| " + value + " ".repeat(longestValue - value.length()) + " |"));
-        System.out.println("-".repeat(longestValue + VERTICAL_LINE_DIFFERENT));
+        if (data.size() > 0) {
+            int longestValue = Math.max(head.length(), data.stream().mapToInt(String::length).max().getAsInt());
 
+            System.out.println("-".repeat(longestValue + VERTICAL_LINE_DIFFERENT));
+            System.out.println("| " + head + " ".repeat(longestValue - head.length()) + " |");
+            System.out.println("-".repeat(longestValue + VERTICAL_LINE_DIFFERENT));
+            data.forEach(value -> System.out.println("| " + value + " ".repeat(longestValue - value.length()) + " |"));
+            System.out.println("-".repeat(longestValue + VERTICAL_LINE_DIFFERENT));
+        }
     }
 
     public static void printMap(Map<String, String> data, String firstColumn, String secondColumn) {
