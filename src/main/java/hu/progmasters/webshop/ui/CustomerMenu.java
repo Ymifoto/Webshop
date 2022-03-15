@@ -1,13 +1,12 @@
 package hu.progmasters.webshop.ui;
 
+import hu.progmasters.webshop.domain.Address;
 import hu.progmasters.webshop.domain.Customer;
+import hu.progmasters.webshop.handlers.OutputHandler;
 import hu.progmasters.webshop.repositories.CustomerRepository;
 import hu.progmasters.webshop.ui.menuoptions.CustomersMenuOptions;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.TreeMap;
+import java.util.*;
 
 public class CustomerMenu extends Menu {
 
@@ -27,14 +26,13 @@ public class CustomerMenu extends Menu {
                     break;
                 case UPDATE:
                     customerSearch();
-                    if (yesOrNo("Update customer (yes/no): ")) {
+                    if (yesOrNo("Update customer (y/n): ")) {
                         System.out.print("Customer ID: ");
                         id = inputHandler.getInputNumber();
-                        updateCustomer(id, getDataForUpdateCustomer());
+                        updateCustomer(id);
                     }
                     break;
                 case SEARCH:
-                    System.out.println("Search customer");
                     customerSearch();
                     break;
                 case SEARCH_BYID:
@@ -66,9 +64,10 @@ public class CustomerMenu extends Menu {
         System.out.println("Search customers");
         System.out.print("Give a keyword: ");
         String keyword = "%" + inputHandler.getInputString() + "%";
-        List<Customer> founded = customerRepository.customerSearch(keyword);
-        founded.forEach(System.out::println);
+        Set<Customer> founded = customerRepository.customerSearch(keyword);
         System.out.println("Found " + founded.size() + " customer");
+        System.out.println();
+        founded.forEach(c -> OutputHandler.outputCyan(c.toString()));
     }
 
     private void customerSearchById() {
@@ -78,59 +77,87 @@ public class CustomerMenu extends Menu {
         System.out.println(customer != null ? customer : "Not found!");
     }
 
-    private void updateCustomer(int id, Map<String, String> data) {
+    private void updateCustomer(int id) {
         Optional<Customer> customer = getCustomerById(id);
         if (customer.isPresent()) {
-            customer.get().updateData(data);
+            getDataForUpdateCustomer(customer.get());
             customerRepository.updateCustomer(customer.get());
         }
     }
 
-    private Map<String, String> getDataForNewCustomer() {
-        Map<String, String> customerData = new TreeMap<>();
+    private Customer getDataForNewCustomer() {
+        Address shippingAddress = new Address();
+        Address billingAddress = new Address();
+
         System.out.print("Give a name: ");
-        customerData.put("name", inputHandler.getInputString());
+        String name = inputHandler.getInputString();
 
         System.out.print("Give a email address: ");
-        customerData.put("email", inputHandler.getInputString());
+        String email = inputHandler.getInputString();
 
-        System.out.print("Give a shipping address: ");
-        customerData.put("shipping_address", inputHandler.getInputString());
+        System.out.print("Give a zip code: ");
+        shippingAddress.setZip(inputHandler.getInputNumber());
 
-        if (!yesOrNo("Billing and shipping address are the same? (yes or no): ")) {
-            System.out.print("Give a billing address: ");
-            customerData.put("billing_address", inputHandler.getInputString());
+        System.out.print("Give a city: ");
+        shippingAddress.setCity(inputHandler.getInputString());
+
+        System.out.print("Give a address: ");
+        shippingAddress.setStreet(inputHandler.getInputString());
+
+        if (!yesOrNo("Billing and shipping address are the same? (y/n): ")) {
+            System.out.print("Give a zip code: ");
+            billingAddress.setZip(inputHandler.getInputNumber());
+            System.out.print("Give a city: ");
+            billingAddress.setCity(inputHandler.getInputString());
+            System.out.print("Give a address: ");
+            billingAddress.setStreet(inputHandler.getInputString());
+            billingAddress.setBillingAddress(true);
         } else {
-            customerData.put("billing_address", customerData.get("shipping_address"));
+                billingAddress = shippingAddress.copy();
+                billingAddress.setBillingAddress(true);
         }
 
-        if (yesOrNo("Corporate customer? (yes or no): ")) {
-            customerData.put("company", "1");
+        if (yesOrNo("Corporate customer? (y/n): ")) {
             System.out.print("Give a company name: ");
-            customerData.put("company_name", inputHandler.getInputString());
+            String companyName = inputHandler.getInputString();
             System.out.print("Give a tax number: ");
-            customerData.put("tax_number", inputHandler.getInputString());
-        } else {
-            customerData.put("company", "0");
+            String taxNumber = inputHandler.getInputString();
+            return new Customer(name, shippingAddress, billingAddress, email, companyName, true, taxNumber);
         }
-        return customerData;
+        return new Customer(name, shippingAddress, billingAddress, email, "", false, "");
     }
 
-    private Map<String, String> getDataForUpdateCustomer() {
+    private Map<String, String> getDataForUpdateCustomer(Customer customer) {
         Map<String, String> customerData = new TreeMap<>();
-        System.out.print("Name: ");
+        Map<String, String> customerAddress = new TreeMap<>();
+
+        System.out.print("(" + customer.getName() + ") Name: ");
         customerData.put("name", inputHandler.getInputString());
 
-        System.out.print("Email address: ");
+        System.out.print("(" + customer.getEmail() + ") Email address: ");
         customerData.put("email", inputHandler.getInputString());
 
-        System.out.print("Shipping address: ");
-        customerData.put("shipping_address", inputHandler.getInputString());
+        if (!yesOrNo("Update address? (y/n): ")) {
+            System.out.print("Give a zip code: ");
+            customerAddress.put("zip", String.valueOf(inputHandler.getInputNumber()));
+            System.out.print("Give a city: ");
+            customerAddress.put("city", inputHandler.getInputString());
+            System.out.print("Give a address: ");
+            customerAddress.put("street", inputHandler.getInputString());
+            customer.getShippingAddress().updateData(customerAddress);
+            if (!yesOrNo("Billing and shipping address are the same? (y/n): ")) {
+                System.out.print("Give a zip code: ");
+                customerAddress.put("zip", inputHandler.getInputString());
+                System.out.print("Give a city: ");
+                customerAddress.put("city", inputHandler.getInputString());
+                System.out.print("Give a address: ");
+                customerAddress.put("street", inputHandler.getInputString());
+                customer.getBillingAddress().updateData(customerAddress);
+            }
+            customer.getBillingAddress().updateData(customerAddress);
+        }
 
-        System.out.print("Billing address: ");
-        customerData.put("billing_address", inputHandler.getInputString());
-
-        if (yesOrNo("Corporate customer? (yes or no): ")) {
+        if (yesOrNo("Corporate customer? (y/n): ")) {
             customerData.put("company", "1");
             System.out.print("Company name: ");
             customerData.put("company_name", inputHandler.getInputString());

@@ -1,21 +1,32 @@
 package hu.progmasters.webshop.domain;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
-public class Customer {
+public class Customer implements Comparable<Customer> {
 
-    private final int id;
+    private int id;
     private String name;
-    private String shippingAddress;
-    private String billingAddress;
+    private final Address shippingAddress;
+    private final Address billingAddress;
     private String email;
     private String companyName;
     private boolean company;
     private String taxNumber;
 
-    public Customer(int id, String name, String shippingAddress, String billingAddress, String email, String companyName, boolean company, String taxNumber) {
+    public Customer(int id, String name, Address shippingAddress, Address billingAddress, String email, String companyName, boolean company, String taxNumber) {
         this.id = id;
+        this.name = name;
+        this.shippingAddress = shippingAddress;
+        this.billingAddress = billingAddress;
+        this.email = email;
+        this.companyName = companyName;
+        this.company = company;
+        this.taxNumber = taxNumber;
+    }
+
+    public Customer(String name, Address shippingAddress, Address billingAddress, String email, String companyName, boolean company, String taxNumber) {
         this.name = name;
         this.shippingAddress = shippingAddress;
         this.billingAddress = billingAddress;
@@ -53,8 +64,6 @@ public class Customer {
     public Map<String, String> getData() {
         Map<String, String> data = new TreeMap<>();
         data.put("name", name);
-        data.put("shipping_address", shippingAddress);
-        data.put("billing_address", billingAddress);
         data.put("email",email);
         data.put("company_name",companyName);
         data.put("company",company ? "1" : "0");
@@ -69,14 +78,6 @@ public class Customer {
         if (data.get("email").length() > 0) {
             email = data.get("email");
         }
-        if (data.get("shipping_address").length() > 0) {
-            shippingAddress = data.get("shipping_address");
-        }
-        if (data.containsKey("billing_address") && data.get("billing_address").length() > 0) {
-            billingAddress = data.get("billing_address");
-        } else {
-            billingAddress = shippingAddress;
-        }
         if (data.get("company").equals("1")) {
             company = true;
             if (data.get("company_name").length() > 0) {
@@ -90,5 +91,31 @@ public class Customer {
             taxNumber = null;
             companyName = null;
         }
+    }
+
+    public Address getShippingAddress() {
+        return shippingAddress;
+    }
+
+    public Address getBillingAddress() {
+        return billingAddress;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Customer)) return false;
+        Customer customer = (Customer) o;
+        return id == customer.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public int compareTo(Customer o) {
+        return id - o.getId();
     }
 }

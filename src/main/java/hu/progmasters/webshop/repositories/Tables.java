@@ -28,11 +28,9 @@ public enum Tables {
     CUSTOMERS("CREATE TABLE IF NOT EXISTS customers("
             + "id INT PRIMARY KEY AUTO_INCREMENT,"
             + "name VARCHAR(30) NOT NULL,"
-            + "shipping_address VARCHAR(100) NOT NULL,"
-            + "billing_address VARCHAR(100) DEFAULT '',"
             + "email VARCHAR(20) NOT NULL,"
             + "company BOOLEAN DEFAULT 0,"
-            + "company_name VARCHAR(100) DEFAULT '',"
+            + "company_name VARCHAR(100),"
             + "tax_number VARCHAR(14));"),
 
     CATEGORIES_NAME("CREATE TABLE IF NOT EXISTS categories_name("
@@ -81,8 +79,16 @@ public enum Tables {
             + "product_id INT NOT NULL,"
             + "order_id INT NOT NULL,"
             + "FOREIGN KEY (product_id) REFERENCES products(id), "
-            + "FOREIGN KEY (order_id) REFERENCES orders(id));");
+            + "FOREIGN KEY (order_id) REFERENCES orders(id));"),
 
+    ADDRESS( "CREATE TABLE IF NOT EXISTS address("
+            + "id INT PRIMARY KEY AUTO_INCREMENT,"
+            + "customer_id INT NOT NULL,"
+            + "zip INT UNSIGNED NOT NULL,"
+            + "city VARCHAR(30) NOT NULL,"
+            + "street VARCHAR(100) NOT NULL,"
+            + "billing_address BOOLEAN DEFAULT 0, "
+            + "FOREIGN KEY (customer_id) REFERENCES customers(id));");
 
 
     private final String sql;

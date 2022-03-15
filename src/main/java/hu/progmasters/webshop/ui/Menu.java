@@ -30,11 +30,11 @@ public abstract class Menu {
         do {
             System.out.print(question);
             answer = inputHandler.getInputString().toLowerCase();
-            if (!answer.equals("yes") && !answer.equals("no")) {
-                System.out.println("Wrong answer!");
+            if (!answer.equals("y") && !answer.equals("n")) {
+                System.out.println("Wrong choice!");
             }
-        } while (!answer.equals("yes") && !answer.equals("no"));
-        return answer.equals("yes");
+        } while (!answer.equals("y") && !answer.equals("n"));
+        return answer.equals("y");
     }
 
     protected boolean optionChecker(int option, int max) {
