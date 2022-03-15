@@ -56,7 +56,7 @@ public class CategoryRepository extends Repository {
             while (result.next()) {
                 data.put(String.valueOf(result.getInt("id")), result.getString("category_name") + " (" + result.getInt("product_number") + " products)");
             }
-            OutputHandler.printMap(data, "ID", "Categories");
+            OutputHandler.printMapStringKey(data, "ID", "Categories");
         } catch (SQLException e) {
             e.printStackTrace();
         }

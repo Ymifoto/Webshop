@@ -2,6 +2,7 @@ package hu.progmasters.webshop.handlers;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class OutputHandler {
 
@@ -46,7 +47,19 @@ public class OutputHandler {
         }
     }
 
-    public static void printMap(Map<String, String> data, String firstColumn, String secondColumn) {
+    public static void printList(Set<String> data, String head) {
+        if (data.size() > 0) {
+            int longestValue = Math.max(head.length(), data.stream().mapToInt(String::length).max().getAsInt());
+
+            outputYellow("-".repeat(longestValue + VERTICAL_LINE_DIFFERENT_LIST));
+            outputYellow("| " + head + " ".repeat(longestValue - head.length()) + " |");
+            outputYellow("-".repeat(longestValue + VERTICAL_LINE_DIFFERENT_LIST));
+            data.forEach(value -> outputCyan("| " + value + " ".repeat(longestValue - value.length()) + " |"));
+            outputCyan("-".repeat(longestValue + VERTICAL_LINE_DIFFERENT_LIST));
+        }
+    }
+
+    public static void printMapStringKey(Map<String, String> data, String firstColumn, String secondColumn) {
         int longestKeyWidth;
         int longestValueWidth;
 
@@ -60,6 +73,24 @@ public class OutputHandler {
             outputYellow("| " + firstColumn + " ".repeat(longestKeyWidth - firstColumn.length()) + " | " + secondColumn + " ".repeat(longestValueWidth - secondColumn.length()) + " |");
             outputYellow("-".repeat(longestKeyWidth + longestValueWidth + VERTICAL_LINE_DIFFERENT_MAP));
             data.forEach((key, value) -> outputCyan("| " + key + " ".repeat(longestKeyWidth - key.length()) + " | " + value + " ".repeat(longestValueWidth - value.length()) + " |"));
+            outputCyan("-".repeat(longestKeyWidth + longestValueWidth + VERTICAL_LINE_DIFFERENT_MAP));
+        }
+    }
+
+    public static void printMapIntegerKey(Map<Integer, String> data, String firstColumn, String secondColumn) {
+        int longestKeyWidth;
+        int longestValueWidth;
+
+        if (data.size() > 0) {
+            longestKeyWidth = Math.max(firstColumn.length(),
+                    data.keySet().stream().mapToInt(k -> k.toString().length()).max().getAsInt());
+            longestValueWidth = Math.max(secondColumn.length(),
+                    data.values().stream().mapToInt(String::length).max().getAsInt());
+
+            outputYellow("-".repeat(longestKeyWidth + longestValueWidth + VERTICAL_LINE_DIFFERENT_MAP));
+            outputYellow("| " + firstColumn + " ".repeat(longestKeyWidth - firstColumn.length()) + " | " + secondColumn + " ".repeat(longestValueWidth - secondColumn.length()) + " |");
+            outputYellow("-".repeat(longestKeyWidth + longestValueWidth + VERTICAL_LINE_DIFFERENT_MAP));
+            data.forEach((key, value) -> outputCyan("| " + key + " ".repeat(longestKeyWidth - key.toString().length()) + " | " + value + " ".repeat(longestValueWidth - value.length()) + " |"));
             outputCyan("-".repeat(longestKeyWidth + longestValueWidth + VERTICAL_LINE_DIFFERENT_MAP));
         }
     }

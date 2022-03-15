@@ -6,7 +6,7 @@ import java.util.TreeMap;
 
 public class Customer implements Comparable<Customer> {
 
-    private int id;
+    private final Integer id;
     private String name;
     private final Address shippingAddress;
     private final Address billingAddress;
@@ -15,18 +15,8 @@ public class Customer implements Comparable<Customer> {
     private boolean company;
     private String taxNumber;
 
-    public Customer(int id, String name, Address shippingAddress, Address billingAddress, String email, String companyName, boolean company, String taxNumber) {
+    public Customer(Integer id, String name, Address shippingAddress, Address billingAddress, String email, String companyName, boolean company, String taxNumber) {
         this.id = id;
-        this.name = name;
-        this.shippingAddress = shippingAddress;
-        this.billingAddress = billingAddress;
-        this.email = email;
-        this.companyName = companyName;
-        this.company = company;
-        this.taxNumber = taxNumber;
-    }
-
-    public Customer(String name, Address shippingAddress, Address billingAddress, String email, String companyName, boolean company, String taxNumber) {
         this.name = name;
         this.shippingAddress = shippingAddress;
         this.billingAddress = billingAddress;
@@ -51,13 +41,11 @@ public class Customer implements Comparable<Customer> {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
-        sb.append("ID: ").append(id).append(", ");
-        sb.append("Name:").append(name).append(", ");
-        sb.append("Email: ").append(email).append(System.lineSeparator());
-        sb.append("Shipping address: ").append(shippingAddress).append(", ");
-        sb.append("Billing address: ").append(billingAddress).append(System.lineSeparator());
+        sb.append("Name: ").append(name).append(", ");
+        sb.append("Email: ").append(email).append(", ");
+        sb.append(shippingAddress).append(", ");
         sb.append(company ? "Company name: " + companyName + " " : "");
-        sb.append(company ? "Tax number: " + taxNumber + System.lineSeparator() : "");
+        sb.append(company ? "Tax number: " + taxNumber : "");
         return sb.toString();
     }
 
@@ -106,7 +94,7 @@ public class Customer implements Comparable<Customer> {
         if (this == o) return true;
         if (!(o instanceof Customer)) return false;
         Customer customer = (Customer) o;
-        return id == customer.id;
+        return Objects.equals(id, customer.id);
     }
 
     @Override

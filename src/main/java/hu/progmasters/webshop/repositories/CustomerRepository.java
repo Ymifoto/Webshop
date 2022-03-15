@@ -19,8 +19,7 @@ public class CustomerRepository extends Repository {
                 "OR company_name LIKE ?" +
                 "OR city LIKE ? " +
                 "OR street LIKE ? " +
-                "OR zip = ? " +
-                "AND billing_address = 0;";
+                "OR zip = ? ;";
         try (Connection connection = DatabaseConfig.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
@@ -31,7 +30,7 @@ public class CustomerRepository extends Repository {
             preparedStatement.setString(5, keyword);
             preparedStatement.setString(6, keyword);
             ResultSet result = preparedStatement.executeQuery();
-            return getCustomers(result);
+            return makeCustomers(result);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -46,7 +45,7 @@ public class CustomerRepository extends Repository {
             preparedStatement.setString(1, email);
             ResultSet result = preparedStatement.executeQuery();
 
-            Set<Customer> customer = getCustomers(result);
+            Set<Customer> customer = makeCustomers(result);
             return customer.isEmpty() ? Optional.empty() : customer.stream().findFirst();
         } catch (SQLException e) {
             System.out.println("Not find customer!");
@@ -62,7 +61,7 @@ public class CustomerRepository extends Repository {
             preparedStatement.setInt(1, id);
             ResultSet result = preparedStatement.executeQuery();
 
-            Set<Customer> customer = getCustomers(result);
+            Set<Customer> customer = makeCustomers(result);
             return customer.isEmpty() ? Optional.empty() : customer.stream().findFirst();
         } catch (SQLException e) {
             System.out.println("Not find customer!");
@@ -76,7 +75,7 @@ public class CustomerRepository extends Repository {
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(sql)
         ) {
-            return getCustomers(result);
+            return makeCustomers(result);
 
         } catch (SQLException e) {
             System.out.println("Can't open database!");
@@ -104,10 +103,9 @@ public class CustomerRepository extends Repository {
     private void updateAddress(Customer customer) {
         update(ADDRESS_TABLE, customer.getShippingAddress().getId(), customer.getShippingAddress().getData());
         update(ADDRESS_TABLE, customer.getBillingAddress().getId(), customer.getBillingAddress().getData());
-
     }
 
-    private Set<Customer> getCustomers(ResultSet result) throws SQLException {
+    private Set<Customer> makeCustomers(ResultSet result) throws SQLException {
         Set<Customer> customerList = new TreeSet<>();
         while (result.next()) {
             customerList.add(new Customer(result.getInt("id")

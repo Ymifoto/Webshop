@@ -77,9 +77,8 @@ public class Address {
         return this;
     }
 
-    public Address setBillingAddress(boolean billingAddress) {
+    public void setBillingAddress(boolean billingAddress) {
         this.billingAddress = billingAddress;
-        return this;
     }
 
     public int getId() {
@@ -90,5 +89,17 @@ public class Address {
     public String toString() {
         String address = zip + " " + city + ", " + street;
         return billingAddress ? "Billing address: " + address : "Shipping address: " + address;
+    }
+
+    public int getZip() {
+        return zip;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getStreet() {
+        return street;
     }
 }

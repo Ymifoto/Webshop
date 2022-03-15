@@ -43,4 +43,14 @@ public class InputHandler {
         scanner.nextLine();
         return option;
     }
+
+    public boolean checkStringIsNumber(String input) {
+        try {
+            Integer.parseInt(input);
+            return true;
+        } catch (NumberFormatException e) {
+            OutputHandler.outputRed("It's not a number!");
+            return false;
+        }
+    }
 }

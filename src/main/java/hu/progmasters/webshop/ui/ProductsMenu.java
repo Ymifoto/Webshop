@@ -40,12 +40,12 @@ public class ProductsMenu extends Menu {
                 case ON_SALE:
                     Map<String,String> onSaleProductList = new TreeMap<>(Comparator.comparingInt(Integer::parseInt));
                     productRepository.getStockOrDiscountProducts("on_sale").forEach(product -> onSaleProductList.put(String.valueOf(product.getId()),product.getValuesForList()));
-                    OutputHandler.printMap(onSaleProductList,"ID","Products");
+                    OutputHandler.printMapStringKey(onSaleProductList,"ID","Products");
                     break;
                 case IN_STOCK:
                     Map<String,String> inStockProductList = new TreeMap<>(Comparator.comparingInt(Integer::parseInt));
                     productRepository.getStockOrDiscountProducts("in_stock").forEach(product -> inStockProductList.put(String.valueOf(product.getId()),product.getValuesForList()));
-                    OutputHandler.printMap(inStockProductList,"ID","Products");
+                    OutputHandler.printMapStringKey(inStockProductList,"ID","Products");
                     break;
                 case ADD_TO_CATEGORY:
                     System.out.print("Product id: ");
@@ -84,7 +84,7 @@ public class ProductsMenu extends Menu {
         System.out.println(System.lineSeparator() + "Found " + founded.size() + " product");
         Map<String,String> productsList = new TreeMap<>();
         founded.forEach(product -> productsList.put(String.valueOf(product.getId()), product.getValuesForList()));
-        OutputHandler.printMap(productsList,"ID","Products");
+        OutputHandler.printMapStringKey(productsList,"ID","Products");
     }
 
     private Map<String, String> getProductData(boolean update) {
