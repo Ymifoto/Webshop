@@ -9,7 +9,6 @@ import java.util.*;
 public class CustomerRepository extends Repository {
 
     private static final String TABLE = "customers";
-    private static final String ADDRESS_TABLE = "address";
 
     public Set<Customer> customerSearch(String keyword) {
         String sql = "SELECT * FROM customers AS c " +

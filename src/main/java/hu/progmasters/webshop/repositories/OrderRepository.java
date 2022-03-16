@@ -12,7 +12,6 @@ import java.util.List;
 
 public class OrderRepository extends Repository {
 
-
     public List<Order> getAllOrders() {
         List<Order> orders = new ArrayList<>();
         String sql = "SELECT * FROM orders AS o " +

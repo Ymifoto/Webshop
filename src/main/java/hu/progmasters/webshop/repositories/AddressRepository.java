@@ -25,7 +25,6 @@ public class AddressRepository {
         repository.insert(TABLE, data);
     }
 
-
     public void updateAddress(Customer customer) {
         repository.update(TABLE, customer.getShippingAddress().getId(), customer.getShippingAddress().getData());
         repository.update(TABLE, customer.getBillingAddress().getId(), customer.getBillingAddress().getData());
