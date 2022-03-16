@@ -13,6 +13,8 @@ import java.util.Map;
 
 public abstract class Repository {
 
+    private final AddressRepository addressRepository = new AddressRepository(this);
+
     protected void execute(String sql) {
         try (Connection connection = DatabaseConfig.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -77,28 +79,7 @@ public abstract class Repository {
         execute(sql);
     }
 
-    protected Address getAddress(int id, boolean billing) {
-        Address address = new Address();
-        String sql = "SELECT * FROM address WHERE customer_id = ? AND billing_address = ?;";
-        try (Connection connection = DatabaseConfig.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, id);
-            preparedStatement.setBoolean(2, billing);
-            ResultSet result = preparedStatement.executeQuery();
-
-            if (result.next()) {
-                address.setId(result.getInt("id"))
-                        .setCustomerId(result.getInt("customer_id"))
-                        .setZip(result.getInt("zip"))
-                        .setCity(result.getString("city"))
-                        .setStreet(result.getString("street"))
-                        .setBillingAddress(billing);
-            }
-
-        } catch (SQLException e) {
-            OutputHandler.outputRed("Cant read database");
-            e.printStackTrace();
-        }
-        return address;
+    public AddressRepository getAddressRepository() {
+        return addressRepository;
     }
 }

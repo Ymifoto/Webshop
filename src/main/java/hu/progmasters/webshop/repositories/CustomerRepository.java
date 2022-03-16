@@ -85,24 +85,14 @@ public class CustomerRepository extends Repository {
 
     public int addCustomer(Customer customer) {
         int customerId = insert(TABLE, customer.getData());
-        addAddresses(customer.getShippingAddress().getData(), customerId);
-        addAddresses(customer.getBillingAddress().getData(), customerId);
+        getAddressRepository().addAddresses(customer.getShippingAddress().getData(), customerId);
+        getAddressRepository().addAddresses(customer.getBillingAddress().getData(), customerId);
         return customerId;
-    }
-
-    public void addAddresses(Map<String, String> data, int customerId) {
-        data.put("customer_id", String.valueOf(customerId));
-        insert(ADDRESS_TABLE, data);
     }
 
     public void updateCustomer(Customer customer) {
         update(TABLE, customer.getId(), customer.getData());
-        updateAddress(customer);
-    }
-
-    private void updateAddress(Customer customer) {
-        update(ADDRESS_TABLE, customer.getShippingAddress().getId(), customer.getShippingAddress().getData());
-        update(ADDRESS_TABLE, customer.getBillingAddress().getId(), customer.getBillingAddress().getData());
+        getAddressRepository().updateAddress(customer);
     }
 
     private Set<Customer> makeCustomers(ResultSet result) throws SQLException {
@@ -110,8 +100,8 @@ public class CustomerRepository extends Repository {
         while (result.next()) {
             customerList.add(new Customer(result.getInt("id")
                     , result.getString("name")
-                    , getAddress(result.getInt("id"), false)
-                    , getAddress(result.getInt("id"), true)
+                    , getAddressRepository().getAddress(result.getInt("id"), false)
+                    , getAddressRepository().getAddress(result.getInt("id"), true)
                     , result.getString("email")
                     , result.getString("company_name")
                     , result.getBoolean("company")
