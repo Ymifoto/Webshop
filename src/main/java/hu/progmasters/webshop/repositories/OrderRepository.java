@@ -9,6 +9,7 @@ import hu.progmasters.webshop.domain.Tax;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 public class OrderRepository extends Repository {
 
@@ -84,15 +85,21 @@ public class OrderRepository extends Repository {
 
     private void getOrdersList(ResultSet result, List<Order> ordersList) throws SQLException {
         while (result.next()) {
-            Order order = new Order(result.getInt(1)
-                    , new Customer(result.getInt("customer_id")
+            Customer customer = new Customer(result.getInt("customer_id")
                     , result.getString("name")
-                    , getAddressRepository().getAddress(result.getInt("customer_id"),false )
-                    , getAddressRepository().getAddress(result.getInt("customer_id"),true )
+                    , getAddressRepository().getAddress(result.getInt("customer_id"), false)
                     , result.getString("email")
                     , result.getString("company_name")
                     , Boolean.parseBoolean(result.getString("company"))
-                    , result.getString("tax_number"))
+                    , result.getString("tax_number")
+                    , result.getBoolean("same_address"));
+
+            if (!customer.isSameAddress()) {
+                customer.setBillingAddress(getAddressRepository().getAddress(result.getInt("customer_id"), true));
+            }
+
+            Order order = new Order(result.getInt(1)
+                    , customer
                     , result.getString("sm_name")
                     , result.getString("pm_name")
                     , result.getInt("shipping_cost")

@@ -9,21 +9,22 @@ public class Customer implements Comparable<Customer> {
     private final Integer id;
     private String name;
     private final Address shippingAddress;
-    private final Address billingAddress;
+    private Address billingAddress;
     private String email;
     private String companyName;
     private boolean company;
     private String taxNumber;
+    private boolean sameAddress;
 
-    public Customer(Integer id, String name, Address shippingAddress, Address billingAddress, String email, String companyName, boolean company, String taxNumber) {
+    public Customer(Integer id, String name, Address shippingAddress, String email, String companyName, boolean company, String taxNumber, boolean sameAddress) {
         this.id = id;
         this.name = name;
         this.shippingAddress = shippingAddress;
-        this.billingAddress = billingAddress;
         this.email = email;
         this.companyName = companyName;
         this.company = company;
         this.taxNumber = taxNumber;
+        this.sameAddress = sameAddress;
     }
 
     public int getId() {
@@ -38,24 +39,38 @@ public class Customer implements Comparable<Customer> {
         return email;
     }
 
+    public boolean isSameAddress() {
+        return sameAddress;
+    }
+
+    public void setSameAddress(boolean sameAddress) {
+        this.sameAddress = sameAddress;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
         sb.append("Name: ").append(name).append(", ");
         sb.append("Email: ").append(email).append(", ");
         sb.append(shippingAddress).append(", ");
-        sb.append(company ? "Company name: " + companyName + " " : "");
-        sb.append(company ? "Tax number: " + taxNumber : "");
+        if (!billingAddress.equals(shippingAddress)) {
+            sb.append(billingAddress);
+        }
+        if (company) {
+            sb.append(", Company name: " + companyName);
+            sb.append(", Tax number: " + taxNumber);
+        }
         return sb.toString();
     }
 
     public Map<String, String> getData() {
         Map<String, String> data = new TreeMap<>();
         data.put("name", name);
-        data.put("email",email);
-        data.put("company_name",companyName);
-        data.put("company",company ? "1" : "0");
-        data.put("tax_number",taxNumber);
+        data.put("email", email);
+        data.put("company_name", companyName);
+        data.put("company", company ? "1" : "0");
+        data.put("same_address", sameAddress ? "1" : "0");
+        data.put("tax_number", taxNumber);
         return data;
     }
 
@@ -89,6 +104,22 @@ public class Customer implements Comparable<Customer> {
         return billingAddress;
     }
 
+    public void setBillingAddress(Address billingAddress) {
+        this.billingAddress = billingAddress;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public void setCompany(boolean company) {
+        this.company = company;
+    }
+
+    public void setTaxNumber(String taxNumber) {
+        this.taxNumber = taxNumber;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -106,4 +137,6 @@ public class Customer implements Comparable<Customer> {
     public int compareTo(Customer o) {
         return id - o.getId();
     }
+
+
 }

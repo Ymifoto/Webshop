@@ -27,7 +27,17 @@ public class AddressRepository {
 
     public void updateAddress(Customer customer) {
         repository.update(TABLE, customer.getShippingAddress().getId(), customer.getShippingAddress().getData());
-        repository.update(TABLE, customer.getBillingAddress().getId(), customer.getBillingAddress().getData());
+        if (!customer.isSameAddress()) {
+            updateBillingAddress(customer.getBillingAddress());
+        }
+    }
+
+    public void updateBillingAddress(Address address) {
+        if (address.getId() == 0) {
+            address.setId(repository.insert(TABLE, address.getData()));
+        } else {
+            repository.update(TABLE, address.getId(), address.getData());
+        }
     }
 
     public Address getAddress(int id, boolean billing) {
@@ -55,7 +65,8 @@ public class AddressRepository {
                     .setCustomerId(result.getInt("customer_id"))
                     .setZip(result.getInt("zip"))
                     .setCity(result.getString("city"))
-                    .setStreet(result.getString("street"));
+                    .setStreet(result.getString("street"))
+                    .setBillingAddress(result.getBoolean("billing_address"));
         }
         return address;
     }

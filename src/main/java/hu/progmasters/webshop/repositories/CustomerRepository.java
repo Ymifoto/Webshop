@@ -85,7 +85,9 @@ public class CustomerRepository extends Repository {
     public int addCustomer(Customer customer) {
         int customerId = insert(TABLE, customer.getData());
         getAddressRepository().addAddresses(customer.getShippingAddress().getData(), customerId);
-        getAddressRepository().addAddresses(customer.getBillingAddress().getData(), customerId);
+        if (!customer.isSameAddress()) {
+            getAddressRepository().addAddresses(customer.getBillingAddress().getData(), customerId);
+        }
         return customerId;
     }
 
@@ -97,14 +99,21 @@ public class CustomerRepository extends Repository {
     private Set<Customer> makeCustomers(ResultSet result) throws SQLException {
         Set<Customer> customerList = new TreeSet<>();
         while (result.next()) {
-            customerList.add(new Customer(result.getInt("id")
+            Customer customer = new Customer(result.getInt("id")
                     , result.getString("name")
                     , getAddressRepository().getAddress(result.getInt("id"), false)
-                    , getAddressRepository().getAddress(result.getInt("id"), true)
                     , result.getString("email")
                     , result.getString("company_name")
                     , result.getBoolean("company")
-                    , result.getString("tax_number")));
+                    , result.getString("tax_number")
+                    , result.getBoolean("same_address"));
+
+            if (!customer.isSameAddress()) {
+                customer.setBillingAddress(getAddressRepository().getAddress(customer.getId(), true));
+            } else {
+                customer.setBillingAddress(customer.getShippingAddress());
+            }
+            customerList.add(customer);
         }
         return customerList;
     }

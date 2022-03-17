@@ -47,6 +47,7 @@ public class Product {
         return sb.toString();
     }
 
+
     public Map<String, String> getData() {
         Map<String, String> data = new TreeMap<>();
         data.put("name", name);

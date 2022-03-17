@@ -379,6 +379,7 @@ INSERT INTO categories_name(category_name) VALUES ("Szabadonálló borhűtő");
 INSERT INTO categories_name(category_name) VALUES ("Porszívó, takarítógép");
 INSERT INTO categories_name(category_name) VALUES ("Joghurtkészítő gép");
 INSERT IGNORE INTO categories(product_id,category_id) SELECT id,category_id FROM products WHERE category_id IS NOT NULL;
-INSERT INTO customers(name,email,company,company_name,tax_number) VALUES ("Jhon Doe","jhon_doe@gmail.com",1,"SzélKasza Bt.","111111-1-11");
+INSERT INTO customers(name,email,company,company_name,same_address,tax_number) VALUES ("Jhon Doe","jhon_doe@gmail.com",1,"SzélKasza Bt.",0,"111111-1-11");
+INSERT INTO customers(name,email,company,company_name,same_address,tax_number) VALUES ("Jane Doe","jane_doe@gmail.com",0,NULL,1,NULL);
 INSERT INTO address(customer_id, zip, city, street, billing_address) VALUES (1,1000,"Budapest","Gyár utca 2.",0);
 INSERT INTO address(customer_id, zip, city, street, billing_address) VALUES (1,5000,"Szeged","Gyár utca 2.",1);

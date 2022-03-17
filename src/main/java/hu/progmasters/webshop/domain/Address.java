@@ -1,6 +1,7 @@
 package hu.progmasters.webshop.domain;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 public class Address {
@@ -25,8 +26,8 @@ public class Address {
         this.billingAddress = billingAddress;
     }
 
-    public Address copy() {
-        return new Address(id, customerId, zip, city, street, billingAddress);
+    public Address copyShippingtoBilling() {
+        return new Address(0,customerId,zip,city,street,true);
     }
 
     public void updateData(Map<String, String> data) {
@@ -41,14 +42,13 @@ public class Address {
         }
     }
 
-
     public Map<String, String> getData() {
         Map<String, String> data = new TreeMap<>();
         data.put("zip", String.valueOf(zip));
         data.put("city", city);
         data.put("street", street);
         data.put("customer_id", String.valueOf(customerId));
-        data.put("billing_address",billingAddress ? "1" : "0");
+        data.put("billing_address", billingAddress ? "1" : "0");
         return data;
     }
 
@@ -85,12 +85,6 @@ public class Address {
         return id;
     }
 
-    @Override
-    public String toString() {
-        String address = zip + " " + city + ", " + street;
-        return billingAddress ? "Billing address: " + address : "Shipping address: " + address;
-    }
-
     public int getZip() {
         return zip;
     }
@@ -101,5 +95,24 @@ public class Address {
 
     public String getStreet() {
         return street;
+    }
+
+    @Override
+    public String toString() {
+        String address = zip + " " + city + ", " + street;
+        return billingAddress ? "Billing address: " + address : "Shipping address: " + address;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Address)) return false;
+        Address address = (Address) o;
+        return zip == address.zip && Objects.equals(city, address.city) && Objects.equals(street, address.street);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(zip, city, street);
     }
 }

@@ -31,6 +31,7 @@ public enum Tables {
             + "email VARCHAR(20) NOT NULL,"
             + "company BOOLEAN DEFAULT 0,"
             + "company_name VARCHAR(100),"
+            + "same_address BOOLEAN DEFAULT 1,"
             + "tax_number VARCHAR(14));"),
 
     CATEGORIES_NAME("CREATE TABLE IF NOT EXISTS categories_name("
@@ -87,7 +88,7 @@ public enum Tables {
             + "zip INT UNSIGNED NOT NULL,"
             + "city VARCHAR(30) NOT NULL,"
             + "street VARCHAR(100) NOT NULL,"
-            + "billing_address BOOLEAN DEFAULT 0, "
+            + "billing_address BOOLEAN, "
             + "FOREIGN KEY (customer_id) REFERENCES customers(id));");
 
 
