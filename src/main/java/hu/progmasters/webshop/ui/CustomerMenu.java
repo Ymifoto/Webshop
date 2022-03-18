@@ -1,12 +1,18 @@
 package hu.progmasters.webshop.ui;
 
+import hu.progmasters.webshop.chechkers.Checker;
+import hu.progmasters.webshop.chechkers.EmailChecker;
+import hu.progmasters.webshop.chechkers.ZipCodeChecker;
 import hu.progmasters.webshop.domain.Address;
 import hu.progmasters.webshop.domain.Customer;
 import hu.progmasters.webshop.handlers.OutputHandler;
 import hu.progmasters.webshop.repositories.CustomerRepository;
 import hu.progmasters.webshop.ui.menuoptions.CustomersMenuOptions;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 public class CustomerMenu extends Menu {
@@ -93,11 +99,9 @@ public class CustomerMenu extends Menu {
         System.out.print("Give a name: ");
         String name = inputHandler.getInputString();
 
-        System.out.print("Give a email address: ");
-        String email = inputHandler.getInputString();
+        String email = checkInputData(new EmailChecker(), null, "Give a email address: ");
 
-        System.out.print("Give a zip code: ");
-        shippingAddress.setZip(inputHandler.getInputNumber());
+        shippingAddress.setZip(Integer.parseInt(checkInputData(new ZipCodeChecker(), null, "Give a zip code: ")));
 
         System.out.print("Give a city: ");
         shippingAddress.setCity(inputHandler.getInputString());
@@ -137,8 +141,7 @@ public class CustomerMenu extends Menu {
         System.out.print("(" + customer.getName() + ") Name: ");
         customerData.put("name", inputHandler.getInputString());
 
-        System.out.print("(" + customer.getEmail() + ") Email address: ");
-        customerData.put("email", inputHandler.getInputString());
+        customerData.put("email", checkInputData(new EmailChecker(), customer.getEmail(), "Give a email address: "));
 
         if (yesOrNo("Update shipping address? (y/n): ")) {
             updateAddress(customer.getShippingAddress());
@@ -172,7 +175,7 @@ public class CustomerMenu extends Menu {
 
     private Address updateAddress(Address address) {
         Map<String, String> customerAddress = new TreeMap<>();
-        customerAddress.put("zip", getZipCode(address.getZip()));
+        customerAddress.put("zip", checkInputData(new ZipCodeChecker(), String.valueOf(address.getZip()), "Give a zip code: "));
         System.out.print("(" + address.getCity() + ") Give a city: ");
         customerAddress.put("city", inputHandler.getInputString());
         System.out.print("(" + address.getStreet() + ") Give a address: ");
@@ -181,18 +184,13 @@ public class CustomerMenu extends Menu {
         return address;
     }
 
-    private String getZipCode(int address) {
-        boolean check;
-        String zipCode;
+    private String checkInputData(Checker checker, String oldData, String question) {
+        String data;
         do {
-            System.out.print("(" + address + ") Give a zip code: ");
-            zipCode = inputHandler.getInputString();
-            if (zipCode.length() > 0) {
-                check = !inputHandler.checkStringIsNumber(zipCode);
-            } else {
-                check = false;
-            }
-        } while (check);
-        return zipCode;
+            System.out.print(oldData != null ? "(" + oldData + ") " : "");
+            System.out.print(question);
+            data = inputHandler.getInputString();
+        } while (!checker.check(data));
+        return data;
     }
 }

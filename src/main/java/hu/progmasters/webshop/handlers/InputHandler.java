@@ -13,7 +13,7 @@ public class InputHandler {
             try {
                 option = scanner.nextInt();
             } catch (InputMismatchException e) {
-                System.out.println("It's not a number");
+                OutputHandler.outputRed("It's not a number");
                 scanner.nextLine();
             }
         } while (option < 0);
@@ -36,21 +36,11 @@ public class InputHandler {
             try {
                 option = scanner.nextDouble();
             } catch (InputMismatchException e) {
-                System.out.println("It's not number");
+                OutputHandler.outputRed("It's not a number");
                 scanner.nextLine();
             }
         } while (option < 0);
         scanner.nextLine();
         return option;
-    }
-
-    public boolean checkStringIsNumber(String input) {
-        try {
-            Integer.parseInt(input);
-            return true;
-        } catch (NumberFormatException e) {
-            OutputHandler.outputRed("It's not a number!");
-            return false;
-        }
     }
 }
