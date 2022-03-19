@@ -40,6 +40,25 @@ public class CheckoutRepository extends Repository {
         return shippingMethods;
     }
 
+    public int getShippingCostById(int id, int orderTotal) {
+        int price = 0;
+        String sql = "SELECT price FROM shipping_price " +
+                "WHERE amount_min < " + orderTotal +
+                " AND amount_max >= " + orderTotal +
+                " AND shipping_method = " + id + " ;";
+        try (Connection connection = DatabaseConfig.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery(sql)
+        ) {
+            if (result.next()) {
+              price = result.getInt("price");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return price;
+    }
+
     public Map<Integer, String> getPaymentMethods() {
         Map<Integer, String> paymentMethods = new TreeMap<>();
         String sql = "SELECT * FROM payment_methods";

@@ -31,13 +31,13 @@ public class Address {
     }
 
     public void updateData(Map<String, String> data) {
-        if (data.get("zip").length() > 0) {
+        if (data.get("zip") != null && data.get("zip").length() > 0) {
             zip = Integer.parseInt(data.get("zip"));
         }
-        if (data.get("city").length() > 0) {
+        if (data.get("city") != null && data.get("city").length() > 0) {
             city = data.get("city");
         }
-        if (data.get("street").length() > 0) {
+        if (data.get("street") != null && data.get("street").length() > 0) {
             street = data.get("street");
         }
     }

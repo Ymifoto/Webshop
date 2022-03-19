@@ -75,18 +75,18 @@ public class Customer implements Comparable<Customer> {
     }
 
     public void updateData(Map<String, String> data) {
-        if (data.get("name").length() > 0) {
+        if (data.get("name") != null && data.get("name").length() > 0) {
             name = data.get("name");
         }
-        if (data.get("email").length() > 0) {
+        if (data.get("email") != null && data.get("email").length() > 0 ) {
             email = data.get("email");
         }
-        if (data.get("company").equals("1")) {
+        if (data.get("company") != null &&data.get("company").equals("1")) {
             company = true;
-            if (data.get("company_name").length() > 0) {
+            if (data.get("company_name") != null && data.get("company_name").length() > 0) {
                 companyName = data.get("company_name");
             }
-            if (data.get("tax_number").length() > 0) {
+            if (data.get("tax_number") != null && data.get("tax_number").length() > 0) {
                 taxNumber = data.get("tax_number");
             }
         } else {

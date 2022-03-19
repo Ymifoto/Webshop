@@ -56,7 +56,7 @@ public class CategoryMenu extends Menu {
         } while (option != CategoryMenuOptions.BACK);
     }
 
-    public Map<String, String> getCategoryData() {
+    private Map<String, String> getCategoryData() {
         Map<String, String> categoryData = new TreeMap<>();
         System.out.print("Give a category name: ");
         categoryData.put("category_name", inputHandler.getInputString());

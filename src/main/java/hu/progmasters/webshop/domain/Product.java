@@ -62,30 +62,30 @@ public class Product {
 
     public void updateData(Map<String, String> data) {
 
-        if (data.get("name").length() > 0) {
+        if (data.get("name") != null && data.get("name").length() > 0) {
             name = data.get("name");
         }
-        if (data.get("vendor").length() > 0) {
+        if (data.get("vendor") != null && data.get("vendor").length() > 0) {
             vendor = data.get("vendor");
         }
-        if (data.get("product_type").length() > 0) {
+        if (data.get("product_type") != null && data.get("product_type").length() > 0) {
             productType = data.get("product_type");
         }
         try {
-            if (data.get("price").length() > 0) {
+            if (data.get("price") != null && data.get("price").length() > 0) {
                 price = Integer.parseInt(data.get("price"));
             }
         } catch (NumberFormatException e) {
             System.out.println("Not a number, price not updated");
         }
         try {
-            if (data.get("sale_price").length() > 0) {
+            if (data.get("sale_price") != null && data.get("sale_price").length() > 0) {
                 salePrice = Integer.parseInt(data.get("sale_price"));
             }
         } catch (NumberFormatException e) {
             System.out.println("Not a number, sale price not updated");
         }
-        if (data.get("description").length() > 0) {
+        if (data.get("description") != null && data.get("description").length() > 0) {
             description = data.get("description");
         }
         inStock = data.get("in_stock").equals("1");

@@ -1,5 +1,6 @@
 package hu.progmasters.webshop.ui;
 
+import hu.progmasters.webshop.chechkers.Checker;
 import hu.progmasters.webshop.domain.Product;
 import hu.progmasters.webshop.domain.ShoppingCart;
 import hu.progmasters.webshop.handlers.InputHandler;
@@ -37,16 +38,21 @@ public abstract class Menu {
         return answer.equals("y");
     }
 
-    protected boolean optionChecker(int option, int max) {
-        return option > 0 && option <= max;
-    }
-
-
     public void addProductToCart(ShoppingCart shoppingCart, Product product) {
         if (product.isInStock()) {
             shoppingCart.addProduct(product);
         } else {
             OutputHandler.outputRed("Product out of stock!");
         }
+    }
+
+    protected String checkInputData(Checker checker, String oldData, String question) {
+        String data;
+        do {
+            System.out.print(oldData != null ? "(" + oldData + ") " : "");
+            System.out.print(question);
+            data = inputHandler.getInputString();
+        } while (!checker.check(data));
+        return data;
     }
 }

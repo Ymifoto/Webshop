@@ -1,7 +1,7 @@
 package hu.progmasters.webshop.ui;
 
-import hu.progmasters.webshop.chechkers.Checker;
 import hu.progmasters.webshop.chechkers.EmailChecker;
+import hu.progmasters.webshop.chechkers.StringLengthChecker;
 import hu.progmasters.webshop.chechkers.ZipCodeChecker;
 import hu.progmasters.webshop.domain.Address;
 import hu.progmasters.webshop.domain.Customer;
@@ -96,8 +96,7 @@ public class CustomerMenu extends Menu {
         Customer customer;
         Address shippingAddress = new Address();
 
-        System.out.print("Give a name: ");
-        String name = inputHandler.getInputString();
+        String name = checkInputData(new StringLengthChecker(),null,"Give a name: ");
 
         String email = checkInputData(new EmailChecker(), null, "Give a email address: ");
 
@@ -113,8 +112,7 @@ public class CustomerMenu extends Menu {
 
         if (!yesOrNo("Billing and shipping address are the same? (y/n): ")) {
             Address billingAddress = new Address();
-            System.out.print("Give a zip code: ");
-            billingAddress.setZip(inputHandler.getInputNumber());
+            billingAddress.setZip(Integer.parseInt(checkInputData(new ZipCodeChecker(), null, "Give a zip code: ")));
             System.out.print("Give a city: ");
             billingAddress.setCity(inputHandler.getInputString());
             System.out.print("Give a address: ");
@@ -138,8 +136,7 @@ public class CustomerMenu extends Menu {
     private void getDataForUpdateCustomer(Customer customer) {
         Map<String, String> customerData = new TreeMap<>();
 
-        System.out.print("(" + customer.getName() + ") Name: ");
-        customerData.put("name", inputHandler.getInputString());
+        customerData.put("name", checkInputData(new StringLengthChecker(),customer.getName(),"Give a name: "));
 
         customerData.put("email", checkInputData(new EmailChecker(), customer.getEmail(), "Give a email address: "));
 
@@ -182,15 +179,5 @@ public class CustomerMenu extends Menu {
         customerAddress.put("street", inputHandler.getInputString());
         address.updateData(customerAddress);
         return address;
-    }
-
-    private String checkInputData(Checker checker, String oldData, String question) {
-        String data;
-        do {
-            System.out.print(oldData != null ? "(" + oldData + ") " : "");
-            System.out.print(question);
-            data = inputHandler.getInputString();
-        } while (!checker.check(data));
-        return data;
     }
 }

@@ -54,10 +54,10 @@ public class Category {
     }
 
     public void updateData(Map<String, String> data) {
-        if (data.get("category_name").length() > 0) {
+        if (data.get("category_name") != null && data.get("category_name").length() > 0) {
             name = data.get("category_name");
         }
-        if (data.get("category_desc").length() > 0) {
+        if (data.get("category_desc") != null && data.get("category_desc").length() > 0) {
             description = data.get("category_desc");
         }
     }
