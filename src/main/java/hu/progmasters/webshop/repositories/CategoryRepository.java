@@ -1,6 +1,6 @@
 package hu.progmasters.webshop.repositories;
 
-import hu.progmasters.webshop.DatabaseConfig;
+import hu.progmasters.webshop.domain.DatabaseConfig;
 import hu.progmasters.webshop.domain.Category;
 import hu.progmasters.webshop.domain.Product;
 import hu.progmasters.webshop.domain.Tax;
@@ -14,7 +14,15 @@ import java.util.TreeMap;
 
 public class CategoryRepository extends Repository {
 
+    private static final CategoryRepository CATEGORY_REPOSITORY = new CategoryRepository();
     private static final String TABLE = "categories_name";
+
+    private CategoryRepository() {
+    }
+
+    public static CategoryRepository getRepository() {
+        return CATEGORY_REPOSITORY;
+    }
 
     public Category getCategroyById(int id) {
         String sql = "SELECT name,vendor_name,price,sale_price,description,product_type_name,tax,on_sale,in_stock,product_id,category_name " +

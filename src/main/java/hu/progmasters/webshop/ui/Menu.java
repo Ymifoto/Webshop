@@ -1,6 +1,6 @@
 package hu.progmasters.webshop.ui;
 
-import hu.progmasters.webshop.chechkers.Checker;
+import hu.progmasters.webshop.checkers.Checker;
 import hu.progmasters.webshop.domain.Product;
 import hu.progmasters.webshop.domain.ShoppingCart;
 import hu.progmasters.webshop.handlers.InputHandler;
@@ -10,6 +10,8 @@ import hu.progmasters.webshop.ui.menuoptions.MenuOption;
 public abstract class Menu {
 
     protected final InputHandler inputHandler = new InputHandler();
+    protected final ShoppingCart shoppingCart = new ShoppingCart();
+
 
     protected MenuOption getMenu(MenuOption[] menuOptions) {
         int option;

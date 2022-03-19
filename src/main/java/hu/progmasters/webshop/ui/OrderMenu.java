@@ -5,7 +5,7 @@ import hu.progmasters.webshop.ui.menuoptions.OrdersMenuOptions;
 
 public class OrderMenu extends Menu {
 
-    private final OrderRepository orderRepository = new OrderRepository();
+    private final OrderRepository orderRepository = OrderRepository.getRepository();
 
     public void menuOptions() {
         OrdersMenuOptions option;

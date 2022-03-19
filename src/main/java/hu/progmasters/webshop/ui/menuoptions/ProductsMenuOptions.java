@@ -1,7 +1,7 @@
 package hu.progmasters.webshop.ui.menuoptions;
 
 public enum ProductsMenuOptions implements MenuOption {
-    ADD_NEW("New product"), UPDATE("Update product"), ON_SALE("On sale products"), IN_STOCK("Products in stock"), ADD_TO_CATEGORY("Add to category"), SEARCH("Search product"), LIST_PRODUCT_TYPES("List product types"), ADD_TO_CART("Add to cart"), BACK("Back");
+    ON_SALE("On sale products"), IN_STOCK("Products in stock"), SEARCH("Search product"), LIST_PRODUCT_TYPES("List product types"), ADD_TO_CART("Add to cart"), BACK("Back");
 
     private final String name;
 

@@ -1,7 +1,6 @@
 package hu.progmasters.webshop.repositories;
 
-import hu.progmasters.webshop.DatabaseConfig;
-import hu.progmasters.webshop.domain.Address;
+import hu.progmasters.webshop.domain.DatabaseConfig;
 import hu.progmasters.webshop.handlers.LogHandler;
 import hu.progmasters.webshop.handlers.OutputHandler;
 
@@ -12,8 +11,6 @@ import java.sql.SQLException;
 import java.util.Map;
 
 public abstract class Repository {
-
-    private final AddressRepository addressRepository = new AddressRepository(this);
 
     protected void execute(String sql) {
         try (Connection connection = DatabaseConfig.getConnection();
@@ -77,9 +74,5 @@ public abstract class Repository {
     protected void updateCategoriesTable() {
         String sql = "INSERT IGNORE INTO categories(product_id,category_id) SELECT id,category_id FROM products WHERE category_id IS NOT NULL;";
         execute(sql);
-    }
-
-    public AddressRepository getAddressRepository() {
-        return addressRepository;
     }
 }

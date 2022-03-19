@@ -1,4 +1,4 @@
-package hu.progmasters.webshop.chechkers;
+package hu.progmasters.webshop.checkers;
 
 public class StringLengthChecker implements Checker {
 

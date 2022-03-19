@@ -1,6 +1,6 @@
 package hu.progmasters.webshop.repositories;
 
-import hu.progmasters.webshop.DatabaseConfig;
+import hu.progmasters.webshop.domain.DatabaseConfig;
 import hu.progmasters.webshop.handlers.OutputHandler;
 
 import java.sql.Connection;
@@ -13,7 +13,15 @@ import java.util.TreeMap;
 
 public class CheckoutRepository extends Repository {
 
+    private static final CheckoutRepository CHECKOUT_REPOSITORY = new CheckoutRepository();
     private static final String TABLE = "orders";
+
+    private CheckoutRepository() {
+    }
+
+    public static CheckoutRepository getRepository() {
+        return CHECKOUT_REPOSITORY;
+    }
 
     public int saveOrder(Map<String, String> order, List<Integer> orderedProductsId) {
         int id = insert(TABLE, order);

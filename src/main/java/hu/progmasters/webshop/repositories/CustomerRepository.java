@@ -1,6 +1,6 @@
 package hu.progmasters.webshop.repositories;
 
-import hu.progmasters.webshop.DatabaseConfig;
+import hu.progmasters.webshop.domain.DatabaseConfig;
 import hu.progmasters.webshop.domain.Customer;
 
 import java.sql.*;
@@ -8,7 +8,16 @@ import java.util.*;
 
 public class CustomerRepository extends Repository {
 
+    private static final CustomerRepository CUSTOMER_REPOSITORY = new CustomerRepository();
     private static final String TABLE = "customers";
+    private final AddressRepository addressRepository = AddressRepository.getRepository();
+
+    private CustomerRepository() {
+    }
+
+    public static CustomerRepository getRepository() {
+        return CUSTOMER_REPOSITORY;
+    }
 
     public Set<Customer> customerSearch(String keyword) {
         String sql = "SELECT * FROM customers AS c " +
@@ -84,16 +93,16 @@ public class CustomerRepository extends Repository {
 
     public int addCustomer(Customer customer) {
         int customerId = insert(TABLE, customer.getData());
-        getAddressRepository().addAddresses(customer.getShippingAddress().getData(), customerId);
+        addressRepository.addAddresses(customer.getShippingAddress().getData(), customerId);
         if (!customer.isSameAddress()) {
-            getAddressRepository().addAddresses(customer.getBillingAddress().getData(), customerId);
+            addressRepository.addAddresses(customer.getBillingAddress().getData(), customerId);
         }
         return customerId;
     }
 
     public void updateCustomer(Customer customer) {
         update(TABLE, customer.getId(), customer.getData());
-        getAddressRepository().updateAddress(customer);
+        addressRepository.updateAddress(customer);
     }
 
     private Set<Customer> makeCustomers(ResultSet result) throws SQLException {
@@ -101,7 +110,7 @@ public class CustomerRepository extends Repository {
         while (result.next()) {
             Customer customer = new Customer(result.getInt("id")
                     , result.getString("name")
-                    , getAddressRepository().getAddress(result.getInt("id"), false)
+                    , addressRepository.getAddress(result.getInt("id"), false)
                     , result.getString("email")
                     , result.getString("company_name")
                     , result.getBoolean("company")
@@ -109,7 +118,7 @@ public class CustomerRepository extends Repository {
                     , result.getBoolean("same_address"));
 
             if (!customer.isSameAddress()) {
-                customer.setBillingAddress(getAddressRepository().getAddress(customer.getId(), true));
+                customer.setBillingAddress(addressRepository.getAddress(customer.getId(), true));
             } else {
                 customer.setBillingAddress(customer.getShippingAddress());
             }

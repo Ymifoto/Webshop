@@ -1,6 +1,6 @@
 package hu.progmasters.webshop.repositories;
 
-import hu.progmasters.webshop.DatabaseConfig;
+import hu.progmasters.webshop.domain.DatabaseConfig;
 import hu.progmasters.webshop.domain.Customer;
 import hu.progmasters.webshop.domain.Order;
 import hu.progmasters.webshop.domain.Product;
@@ -9,9 +9,18 @@ import hu.progmasters.webshop.domain.Tax;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 public class OrderRepository extends Repository {
+
+    private final static OrderRepository ORDER_REPOSITORY = new OrderRepository();
+    private final AddressRepository addressRepository = AddressRepository.getRepository();
+
+    private OrderRepository() {
+    }
+
+    public static OrderRepository getRepository() {
+        return ORDER_REPOSITORY;
+    }
 
     public List<Order> getAllOrders() {
         List<Order> orders = new ArrayList<>();
@@ -87,7 +96,7 @@ public class OrderRepository extends Repository {
         while (result.next()) {
             Customer customer = new Customer(result.getInt("customer_id")
                     , result.getString("name")
-                    , getAddressRepository().getAddress(result.getInt("customer_id"), false)
+                    , addressRepository.getAddress(result.getInt("customer_id"), false)
                     , result.getString("email")
                     , result.getString("company_name")
                     , Boolean.parseBoolean(result.getString("company"))
@@ -95,7 +104,7 @@ public class OrderRepository extends Repository {
                     , result.getBoolean("same_address"));
 
             if (!customer.isSameAddress()) {
-                customer.setBillingAddress(getAddressRepository().getAddress(result.getInt("customer_id"), true));
+                customer.setBillingAddress(addressRepository.getAddress(result.getInt("customer_id"), true));
             }
 
             Order order = new Order(result.getInt(1)

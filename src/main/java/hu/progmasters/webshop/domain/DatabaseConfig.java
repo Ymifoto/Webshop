@@ -1,4 +1,4 @@
-package hu.progmasters.webshop;
+package hu.progmasters.webshop.domain;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -1,6 +1,6 @@
 package hu.progmasters.webshop.repositories;
 
-import hu.progmasters.webshop.DatabaseConfig;
+import hu.progmasters.webshop.domain.DatabaseConfig;
 import hu.progmasters.webshop.domain.Address;
 import hu.progmasters.webshop.domain.Customer;
 import hu.progmasters.webshop.handlers.OutputHandler;
@@ -11,22 +11,25 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 
-public class AddressRepository {
+public class AddressRepository extends Repository {
 
+    private static final AddressRepository ADDRESS_REPOSITORY = new AddressRepository();
     private static final String TABLE = "address";
-    private final Repository repository;
 
-    public AddressRepository(Repository repository) {
-        this.repository = repository;
+    private AddressRepository() {
+    }
+
+    public static AddressRepository getRepository() {
+        return ADDRESS_REPOSITORY;
     }
 
     public void addAddresses(Map<String, String> data, int customerId) {
         data.put("customer_id", String.valueOf(customerId));
-        repository.insert(TABLE, data);
+        insert(TABLE, data);
     }
 
     public void updateAddress(Customer customer) {
-        repository.update(TABLE, customer.getShippingAddress().getId(), customer.getShippingAddress().getData());
+        update(TABLE, customer.getShippingAddress().getId(), customer.getShippingAddress().getData());
         if (!customer.isSameAddress()) {
             updateBillingAddress(customer.getBillingAddress());
         }
@@ -34,9 +37,9 @@ public class AddressRepository {
 
     public void updateBillingAddress(Address address) {
         if (address.getId() == 0) {
-            address.setId(repository.insert(TABLE, address.getData()));
+            address.setId(insert(TABLE, address.getData()));
         } else {
-            repository.update(TABLE, address.getId(), address.getData());
+            update(TABLE, address.getId(), address.getData());
         }
     }
 

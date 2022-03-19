@@ -1,7 +1,6 @@
 package hu.progmasters.webshop.ui;
 
 import hu.progmasters.webshop.domain.Customer;
-import hu.progmasters.webshop.domain.ShoppingCart;
 import hu.progmasters.webshop.handlers.LogHandler;
 import hu.progmasters.webshop.handlers.OutputHandler;
 import hu.progmasters.webshop.ui.menuoptions.MainMenuOptions;
@@ -10,12 +9,10 @@ import java.util.Optional;
 
 public class MainMenu extends Menu {
 
-    private final ShoppingCart shoppingCart = new ShoppingCart();
     private final ProductsMenu productsMenu = new ProductsMenu(shoppingCart);
     private final CustomerMenu customerMenu = new CustomerMenu();
-    private final CategoryMenu categoryMenu = new CategoryMenu(productsMenu.getProductRepository(), shoppingCart);
+    private final CategoryMenu categoryMenu = new CategoryMenu(shoppingCart);
     private final CheckoutMenu checkoutMenu = new CheckoutMenu(shoppingCart);
-    private final OrderMenu orderMenu = new OrderMenu();
     private final AdminMenu adminMenu = new AdminMenu();
 
     public void menuOptions() {
@@ -36,17 +33,11 @@ public class MainMenu extends Menu {
                 case PRODUCTS:
                     productsMenu.menuOptions();
                     break;
-                case CUSTOMERS:
-                    customerMenu.menuOptions();
-                    break;
                 case CATEGORIES:
                     categoryMenu.menuOptions();
                     break;
                 case CHECKOUT:
                     checkoutMenu.menuOptions();
-                    break;
-                case ORDERS:
-                    orderMenu.menuOptions();
                     break;
                 case LOGOUT:
                     shoppingCart.setCustomer(null);

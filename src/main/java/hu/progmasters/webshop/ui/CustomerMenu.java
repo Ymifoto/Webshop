@@ -1,8 +1,8 @@
 package hu.progmasters.webshop.ui;
 
-import hu.progmasters.webshop.chechkers.EmailChecker;
-import hu.progmasters.webshop.chechkers.StringLengthChecker;
-import hu.progmasters.webshop.chechkers.ZipCodeChecker;
+import hu.progmasters.webshop.checkers.EmailChecker;
+import hu.progmasters.webshop.checkers.StringLengthChecker;
+import hu.progmasters.webshop.checkers.ZipCodeChecker;
 import hu.progmasters.webshop.domain.Address;
 import hu.progmasters.webshop.domain.Customer;
 import hu.progmasters.webshop.handlers.OutputHandler;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class CustomerMenu extends Menu {
 
-    private final CustomerRepository customerRepository = new CustomerRepository();
+    private final CustomerRepository customerRepository = CustomerRepository.getRepository();
 
     public void menuOptions() {
         int id;

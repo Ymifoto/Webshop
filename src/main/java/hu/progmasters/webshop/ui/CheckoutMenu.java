@@ -28,7 +28,7 @@ public class CheckoutMenu extends Menu {
     private String paymentMethod;
     private int generalTotal;
     private final ShoppingCart shoppingCart;
-    private final CheckoutRepository checkoutRepository = new CheckoutRepository();
+    private final CheckoutRepository checkoutRepository = CheckoutRepository.getRepository();
 
     public CheckoutMenu(ShoppingCart shoppingCart) {
         this.shoppingCart = shoppingCart;

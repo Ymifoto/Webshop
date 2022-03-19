@@ -1,6 +1,6 @@
 package hu.progmasters.webshop.repositories;
 
-import hu.progmasters.webshop.DatabaseConfig;
+import hu.progmasters.webshop.domain.DatabaseConfig;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,7 +12,15 @@ import java.sql.Statement;
 
 public class AdminRepository extends Repository {
 
+    private static final AdminRepository ADMIN_REPOSITORY = new AdminRepository();
     private static final String DATA_FILE = "src/main/resources/webshop_basedata.csv";
+
+    private AdminRepository() {
+    }
+
+    public static AdminRepository getRepository() {
+        return ADMIN_REPOSITORY;
+    }
 
     public void loadData() {
         try (BufferedReader bufferedReader = Files.newBufferedReader(Path.of(DATA_FILE))) {

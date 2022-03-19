@@ -383,3 +383,4 @@ INSERT INTO customers(name,email,company,company_name,same_address,tax_number) V
 INSERT INTO customers(name,email,company,company_name,same_address,tax_number) VALUES ("Jane Doe","jane_doe@gmail.com",0,NULL,1,NULL);
 INSERT INTO address(customer_id, zip, city, street, billing_address) VALUES (1,1000,"Budapest","Gyár utca 2.",0);
 INSERT INTO address(customer_id, zip, city, street, billing_address) VALUES (1,5000,"Szeged","Gyár utca 2.",1);
+INSERT INTO address(customer_id, zip, city, street, billing_address) VALUES (2,1100,"Budapest","Gyár utca 2.",0);

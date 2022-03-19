@@ -1,6 +1,6 @@
 package hu.progmasters.webshop.repositories;
 
-import hu.progmasters.webshop.DatabaseConfig;
+import hu.progmasters.webshop.domain.DatabaseConfig;
 import hu.progmasters.webshop.domain.Product;
 import hu.progmasters.webshop.domain.Tax;
 
@@ -9,7 +9,15 @@ import java.util.*;
 
 public class ProductRepository extends Repository {
 
+    public static final ProductRepository PRODUCT_REPOSITORY = new ProductRepository();
     private static final String TABLE = "products";
+
+    private ProductRepository() {
+    }
+
+    public static ProductRepository getRepository() {
+        return PRODUCT_REPOSITORY;
+    }
 
     public Product getProductById(int id) {
         String sql = "SELECT * FROM products AS p " +

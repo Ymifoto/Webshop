@@ -1,4 +1,4 @@
-package hu.progmasters.webshop.chechkers;
+package hu.progmasters.webshop.checkers;
 
 import hu.progmasters.webshop.handlers.OutputHandler;
 
