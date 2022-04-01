@@ -56,7 +56,6 @@ public class AddressRepository extends Repository {
 
         } catch (SQLException e) {
             OutputHandler.outputRed("Cant read database");
-            e.printStackTrace();
         }
         return address;
     }

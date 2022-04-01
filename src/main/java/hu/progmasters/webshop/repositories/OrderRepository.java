@@ -67,12 +67,10 @@ public class OrderRepository extends Repository {
                 + "JOIN customers AS c ON o.customer_id = c.id "
                 + "JOIN shipping_methods AS sm ON o.shipping_method = sm.id "
                 + "JOIN payment_methods AS pm ON o.payment_method = pm.id "
-                + "WHERE customer_id LIKE ? "
-                + "OR billing_address LIKE ? "
-                + "OR email LIKE ? "
+                + "JOIN address AS a ON c.id = a.customer_id "
+                + "WHERE email LIKE ? "
                 + "OR name LIKE ? "
-                + "OR company_name LIKE ? "
-                + "OR shipping_address LIKE ?";
+                + "OR company_name LIKE ? ;";
 
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)
@@ -80,9 +78,6 @@ public class OrderRepository extends Repository {
             preparedStatement.setString(1, keyword);
             preparedStatement.setString(2, keyword);
             preparedStatement.setString(3, keyword);
-            preparedStatement.setString(4, keyword);
-            preparedStatement.setString(5, keyword);
-            preparedStatement.setString(6, keyword);
             ResultSet result = preparedStatement.executeQuery();
             getOrdersList(result, ordersList);
         } catch (SQLException e) {

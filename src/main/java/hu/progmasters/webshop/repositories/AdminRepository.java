@@ -61,13 +61,4 @@ public class AdminRepository extends Repository {
             execute(value.getSql());
         }
     }
-
-    public void getTables() throws SQLException {
-        DatabaseMetaData md = getConnection().getMetaData();
-        ResultSet rs = md.getTables(null, null, "%", null);
-        while (rs.next()) {
-            System.out.println(rs.getString(3));
-        }
-    }
-
 }

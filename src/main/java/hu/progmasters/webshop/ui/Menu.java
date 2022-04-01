@@ -40,7 +40,7 @@ public abstract class Menu {
         return answer.equals("y");
     }
 
-    public void addProductToCart(ShoppingCart shoppingCart, Product product) {
+    public void addProductToCart(Product product) {
         if (product.isInStock()) {
             shoppingCart.addProduct(product);
         } else {
@@ -56,5 +56,9 @@ public abstract class Menu {
             data = inputHandler.getInputString();
         } while (!checker.check(data));
         return data;
+    }
+
+    public ShoppingCart getShoppingCart() {
+        return shoppingCart;
     }
 }

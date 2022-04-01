@@ -8,6 +8,9 @@ import hu.progmasters.webshop.repositories.Repository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CustomerRepositoryTest {
@@ -41,6 +44,18 @@ public class CustomerRepositoryTest {
         assertEquals(3,customerRepository.getAllCustomer().size());
         assertEquals("Jack Test",customerRepository.getCustomerByEmail("jack_test@gmail.com").get().getName());
         assertEquals("Jack Test",customerRepository.getCustomerById(3).get().getName());
+    }
+
+    @Test
+    public void updateCustomerTest() {
+        Customer customer = customerRepository.getCustomerById(2).get();
+        assertEquals("jane_doe@gmail.com", customer.getEmail());
+        Map<String,String> data = new HashMap<>();
+        data.put("email","jane_doe.doe@gmail.com");
+        customer.updateData(data);
+        customerRepository.updateCustomer(customer);
+        customer = customerRepository.getCustomerById(2).get();
+        assertEquals("jane_doe.doe@gmail.com", customer.getEmail());
     }
 
     @Test

@@ -1,7 +1,6 @@
 package hu.progmasters.webshop.ui;
 
 import hu.progmasters.webshop.domain.Category;
-import hu.progmasters.webshop.domain.ShoppingCart;
 import hu.progmasters.webshop.handlers.OutputHandler;
 import hu.progmasters.webshop.repositories.CategoryRepository;
 import hu.progmasters.webshop.repositories.ProductRepository;
@@ -11,11 +10,6 @@ public class CategoryMenu extends Menu {
 
     private final CategoryRepository categoryRepository = CategoryRepository.getRepository();
     private final ProductRepository productRepository = ProductRepository.getRepository();
-    private final ShoppingCart shoppingCart;
-
-    public CategoryMenu(ShoppingCart shoppingCart) {
-        this.shoppingCart = shoppingCart;
-    }
 
     public void menuOptions() {
         CategoryMenuOptions option;
@@ -35,7 +29,7 @@ public class CategoryMenu extends Menu {
                     break;
                 case ADD_TO_CART:
                     System.out.print("Give a product id: ");
-                    addProductToCart(shoppingCart, productRepository.getProductById(inputHandler.getInputNumber()));
+                    addProductToCart(productRepository.getProductById(inputHandler.getInputNumber()));
                     break;
                 case BACK:
             }

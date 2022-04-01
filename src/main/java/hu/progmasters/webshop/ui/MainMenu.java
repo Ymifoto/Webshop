@@ -9,10 +9,10 @@ import java.util.Optional;
 
 public class MainMenu extends Menu {
 
-    private final ProductsMenu productsMenu = new ProductsMenu(shoppingCart);
+    private final ProductsMenu productsMenu = new ProductsMenu();
     private final CustomerMenu customerMenu = new CustomerMenu();
-    private final CategoryMenu categoryMenu = new CategoryMenu(shoppingCart);
-    private final CheckoutMenu checkoutMenu = new CheckoutMenu(shoppingCart);
+    private final CategoryMenu categoryMenu = new CategoryMenu();
+    private final CheckoutMenu checkoutMenu = new CheckoutMenu();
     private final AdminMenu adminMenu = new AdminMenu();
 
     public void menuOptions() {

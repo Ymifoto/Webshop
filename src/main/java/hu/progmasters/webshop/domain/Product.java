@@ -33,21 +33,6 @@ public class Product {
         return name + ", Sale price: " + getPrice() + ", " + (onSale ? "On Sale! Original price: " + price : "") + ", " + (inStock ? "In stock" : "Out of stock");
     }
 
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append("ID: ").append(id).append(", ");
-        sb.append("Name: ").append(name).append(", ");
-        sb.append("Vendor: ").append(vendor).append(System.lineSeparator());
-        sb.append("Price: ").append(price).append(", ");
-        sb.append(onSale ? "Sale price: " + salePrice + ", " : "");
-        sb.append("Product type: ").append(productType).append(", ");
-        sb.append("In stock: ").append(inStock ? "yes" : "no").append(System.lineSeparator());
-        sb.append("Description: ").append(description).append(System.lineSeparator());
-        return sb.toString();
-    }
-
-
     public Map<String, String> getData() {
         Map<String, String> data = new TreeMap<>();
         data.put("name", name);
@@ -92,6 +77,20 @@ public class Product {
             inStock = data.get("in_stock").equals("1");
         }
         setOnSale();
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("ID: ").append(id).append(", ");
+        sb.append("Name: ").append(name).append(", ");
+        sb.append("Vendor: ").append(vendor).append(System.lineSeparator());
+        sb.append("Price: ").append(price).append(", ");
+        sb.append(onSale ? "Sale price: " + salePrice + ", " : "");
+        sb.append("Product type: ").append(productType).append(", ");
+        sb.append("In stock: ").append(inStock ? "yes" : "no").append(System.lineSeparator());
+        sb.append("Description: ").append(description).append(System.lineSeparator());
+        return sb.toString();
     }
 
     public boolean isInStock() {

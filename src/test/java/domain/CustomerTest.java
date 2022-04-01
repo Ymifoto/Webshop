@@ -23,12 +23,7 @@ public class CustomerTest {
 
     @BeforeEach
     public void setCustomer() {
-        shippingAddress = new Address(0,1,1000,"Budapest","Gyár utca 2.", false);
-        billingAddress = new Address(0,1,5000,"Szeged","Gyár utca 2.", true);
-        customer = new Customer(1,"Jhon Doe",shippingAddress,"jhon_doe@gmail.com","SzélKasza Bt.",true,"111111-1-11", false);
-        customer.setBillingAddress(billingAddress);
-        List.of("zip","city","street").forEach(v -> addressData.put(v,null));
-        List.of("name","email","company","company_name","tax_number").forEach(v -> customerData.put(v,null));
+        customer = getCustomer();
     }
 
 
@@ -50,5 +45,22 @@ public class CustomerTest {
         addressData.put("city",null);
         customer.getShippingAddress().updateData(addressData);
         assertNotEquals(null,customer.getShippingAddress().getCity());
+    }
+
+    @Test
+    public void compareCustomersTest() {
+        Customer customer1 = getCustomer();
+        Customer customer2 = getCustomer();
+        assertEquals(customer1,customer2);
+    }
+
+    private Customer getCustomer() {
+        shippingAddress = new Address(0,1,1000,"Budapest","Gyár utca 2.", false);
+        billingAddress = new Address(0,1,5000,"Szeged","Gyár utca 2.", true);
+        customer = new Customer(1,"Jhon Doe",shippingAddress,"jhon_doe@gmail.com","SzélKasza Bt.",true,"111111-1-11", false);
+        customer.setBillingAddress(billingAddress);
+        List.of("zip","city","street").forEach(v -> addressData.put(v,null));
+        List.of("name","email","company","company_name","tax_number").forEach(v -> customerData.put(v,null));
+        return customer;
     }
 }

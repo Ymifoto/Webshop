@@ -2,7 +2,6 @@ package hu.progmasters.webshop.ui;
 
 import hu.progmasters.webshop.domain.Customer;
 import hu.progmasters.webshop.domain.Product;
-import hu.progmasters.webshop.domain.ShoppingCart;
 import hu.progmasters.webshop.handlers.OutputHandler;
 import hu.progmasters.webshop.repositories.CheckoutRepository;
 import hu.progmasters.webshop.ui.menuoptions.CheckoutMenuOptions;
@@ -27,12 +26,7 @@ public class CheckoutMenu extends Menu {
     private int paymentMethodId;
     private String paymentMethod;
     private int generalTotal;
-    private final ShoppingCart shoppingCart;
     private final CheckoutRepository checkoutRepository = CheckoutRepository.getRepository();
-
-    public CheckoutMenu(ShoppingCart shoppingCart) {
-        this.shoppingCart = shoppingCart;
-    }
 
     public void menuOptions() {
         CheckoutMenuOptions option;

@@ -1,7 +1,6 @@
 package hu.progmasters.webshop.ui;
 
 import hu.progmasters.webshop.domain.Product;
-import hu.progmasters.webshop.domain.ShoppingCart;
 import hu.progmasters.webshop.handlers.OutputHandler;
 import hu.progmasters.webshop.repositories.ProductRepository;
 import hu.progmasters.webshop.ui.menuoptions.ProductsMenuOptions;
@@ -13,13 +12,7 @@ import java.util.TreeMap;
 
 public class ProductsMenu extends Menu {
 
-
     private final ProductRepository productRepository = ProductRepository.getRepository();
-    private final ShoppingCart shoppingCart;
-
-    public ProductsMenu(ShoppingCart shoppingCart) {
-        this.shoppingCart = shoppingCart;
-    }
 
     public void menuOptions() {
         ProductsMenuOptions option;
@@ -45,16 +38,12 @@ public class ProductsMenu extends Menu {
                     break;
                 case ADD_TO_CART:
                     System.out.print("Give a product id: ");
-                    addProductToCart(shoppingCart, productRepository.getProductById(inputHandler.getInputNumber()));
+                    addProductToCart(productRepository.getProductById(inputHandler.getInputNumber()));
                     break;
                 case BACK:
                     break;
             }
         } while (option != ProductsMenuOptions.BACK);
-    }
-
-    public ProductRepository getProductRepository() {
-        return productRepository;
     }
 
     private void productSearch() {

@@ -28,7 +28,7 @@ public enum Tables {
     CUSTOMERS("CREATE TABLE IF NOT EXISTS customers("
             + "id INT PRIMARY KEY AUTO_INCREMENT,"
             + "name VARCHAR(30) NOT NULL,"
-            + "email VARCHAR(20) NOT NULL,"
+            + "email VARCHAR(30) NOT NULL,"
             + "company BOOLEAN DEFAULT 0,"
             + "company_name VARCHAR(100),"
             + "same_address BOOLEAN DEFAULT 1,"

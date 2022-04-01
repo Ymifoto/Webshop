@@ -87,7 +87,4 @@ public abstract class Repository {
         Repository.testMode = testMode;
     }
 
-    public static boolean isTestMode() {
-        return testMode;
-    }
 }
