@@ -26,7 +26,7 @@ public class Address {
         this.billingAddress = billingAddress;
     }
 
-    public Address copyShippingtoBilling() {
+    public Address copyShippingToBilling() {
         return new Address(0,customerId,zip,city,street,true);
     }
 

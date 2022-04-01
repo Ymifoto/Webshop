@@ -113,7 +113,7 @@ public class OrderRepository extends Repository {
                     , result.getString("pm_name")
                     , result.getInt("shipping_cost")
                     , result.getInt("order_total")
-                    , result.getString("order_time")
+                    , result.getDate("order_time")
                     , result.getBoolean("shipped")
             );
             order.getOrderedProducts().addAll(getOrderedProducts(order.getId()));

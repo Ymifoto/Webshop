@@ -1,6 +1,8 @@
 package hu.progmasters.webshop.domain;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Order {
@@ -12,11 +14,11 @@ public class Order {
     private final String paymentMethod;
     private final int shippingCost;
     private final int orderTotal;
-    private final String orderTime;
-    private double taxAmount;
+    private final Date orderTime;
+    private BigDecimal taxAmount;
     private final boolean shipped;
 
-    public Order(int id, Customer customer, String shippingMethod, String paymentMethod, int shippingCost, int orderTotal, String orderTime, boolean shipped) {
+    public Order(int id, Customer customer, String shippingMethod, String paymentMethod, int shippingCost, int orderTotal, Date orderTime, boolean shipped) {
         this.id = id;
         this.customer = customer;
         this.shippingMethod = shippingMethod;
@@ -28,7 +30,7 @@ public class Order {
     }
 
     private void setTaxAmount() {
-        taxAmount = orderedProducts.stream().mapToDouble(p -> p.getPrice() * p.getTax().getAmount()).sum();
+        taxAmount = BigDecimal.valueOf(orderedProducts.stream().mapToDouble(p -> p.getPrice() * p.getTax().getAmount()).sum());
     }
 
     public List<Product> getOrderedProducts() {

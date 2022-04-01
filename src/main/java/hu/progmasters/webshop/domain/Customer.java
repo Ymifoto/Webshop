@@ -27,26 +27,6 @@ public class Customer implements Comparable<Customer> {
         this.sameAddress = sameAddress;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public boolean isSameAddress() {
-        return sameAddress;
-    }
-
-    public void setSameAddress(boolean sameAddress) {
-        this.sameAddress = sameAddress;
-    }
-
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
@@ -100,6 +80,26 @@ public class Customer implements Comparable<Customer> {
         return shippingAddress;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public boolean isSameAddress() {
+        return sameAddress;
+    }
+
+    public void setSameAddress(boolean sameAddress) {
+        this.sameAddress = sameAddress;
+    }
+
     public Address getBillingAddress() {
         return billingAddress;
     }
@@ -137,6 +137,4 @@ public class Customer implements Comparable<Customer> {
     public int compareTo(Customer o) {
         return id - o.getId();
     }
-
-
 }

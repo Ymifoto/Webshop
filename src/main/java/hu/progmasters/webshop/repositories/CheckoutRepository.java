@@ -34,7 +34,7 @@ public class CheckoutRepository extends Repository {
         String sql = "SELECT sm.id, sm_name, sp.price FROM shipping_methods AS sm " +
                 "JOIN shipping_price AS sp ON sp.shipping_method = sm.id " +
                 "WHERE sp.amount_min < " + orderTotal + " AND sp.amount_max >= " + orderTotal + ";";
-        try (Connection connection = DatabaseConfig.getConnection();
+        try (Connection connection = getConnection();
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(sql)
         ) {
@@ -54,7 +54,7 @@ public class CheckoutRepository extends Repository {
                 "WHERE amount_min < " + orderTotal +
                 " AND amount_max >= " + orderTotal +
                 " AND shipping_method = " + id + " ;";
-        try (Connection connection = DatabaseConfig.getConnection();
+        try (Connection connection = getConnection();
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(sql)
         ) {
@@ -70,7 +70,7 @@ public class CheckoutRepository extends Repository {
     public Map<Integer, String> getPaymentMethods() {
         Map<Integer, String> paymentMethods = new TreeMap<>();
         String sql = "SELECT * FROM payment_methods";
-        try (Connection connection = DatabaseConfig.getConnection();
+        try (Connection connection = getConnection();
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(sql)
         ) {
@@ -85,7 +85,7 @@ public class CheckoutRepository extends Repository {
 
     public String getShippingMethodName(int methodId) {
         String sql = "SELECT sm_name FROM shipping_methods WHERE id = " + methodId;
-        try (Connection connection = DatabaseConfig.getConnection();
+        try (Connection connection = getConnection();
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(sql)
         ) {

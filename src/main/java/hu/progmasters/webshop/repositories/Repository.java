@@ -4,16 +4,15 @@ import hu.progmasters.webshop.domain.DatabaseConfig;
 import hu.progmasters.webshop.handlers.LogHandler;
 import hu.progmasters.webshop.handlers.OutputHandler;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Map;
 
 public abstract class Repository {
 
+    private static boolean testMode = false;
+
     protected void execute(String sql) {
-        try (Connection connection = DatabaseConfig.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.execute();
         } catch (SQLException e) {
@@ -23,7 +22,7 @@ public abstract class Repository {
 
     protected void update(String table, int id, Map<String, String> datas) {
         String sql = "UPDATE " + table + " SET " + String.join(" = ?,", datas.keySet()) + " = ? WHERE id = ?;";
-        try (Connection connection = DatabaseConfig.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             setMapValues(preparedStatement, datas);
             preparedStatement.setInt(datas.size() + 1, id);
@@ -38,7 +37,7 @@ public abstract class Repository {
     protected int insert(String table, Map<String, String> datas) {
         int id = -1;
         String sql = "INSERT INTO " + table + "(" + String.join(", ", datas.keySet()) + ") VALUES(" + getPlaceHolders(datas.size()) + ");";
-        try (Connection connection = DatabaseConfig.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             setMapValues(preparedStatement, datas);
             preparedStatement.execute();
@@ -74,5 +73,20 @@ public abstract class Repository {
     protected void updateCategoriesTable() {
         String sql = "INSERT IGNORE INTO categories(product_id,category_id) SELECT id,category_id FROM products WHERE category_id IS NOT NULL;";
         execute(sql);
+    }
+
+    protected Connection getConnection() throws SQLException {
+        if (testMode) {
+            return DatabaseConfig.getTestConnection();
+        }
+        return DatabaseConfig.getConnection();
+    }
+
+    public static void setTestMode(boolean testMode) {
+        Repository.testMode = testMode;
+    }
+
+    public static boolean isTestMode() {
+        return testMode;
     }
 }

@@ -1,6 +1,6 @@
 package hu.progmasters.webshop.ui;
 
-import hu.progmasters.webshop.checkers.EmailChecker;
+import hu.progmasters.webshop.checkers.EmailChecking;
 import hu.progmasters.webshop.checkers.StringLengthChecker;
 import hu.progmasters.webshop.checkers.ZipCodeChecker;
 import hu.progmasters.webshop.domain.Address;
@@ -98,7 +98,7 @@ public class CustomerMenu extends Menu {
 
         String name = checkInputData(new StringLengthChecker(),null,"Give a name: ");
 
-        String email = checkInputData(new EmailChecker(), null, "Give a email address: ");
+        String email = checkInputData(new EmailChecking(), null, "Give a email address: ");
 
         shippingAddress.setZip(Integer.parseInt(checkInputData(new ZipCodeChecker(), null, "Give a zip code: ")));
 
@@ -138,7 +138,7 @@ public class CustomerMenu extends Menu {
 
         customerData.put("name", checkInputData(new StringLengthChecker(),customer.getName(),"Give a name: "));
 
-        customerData.put("email", checkInputData(new EmailChecker(), customer.getEmail(), "Give a email address: "));
+        customerData.put("email", checkInputData(new EmailChecking(), customer.getEmail(), "Give a email address: "));
 
         if (yesOrNo("Update shipping address? (y/n): ")) {
             updateAddress(customer.getShippingAddress());
@@ -147,7 +147,7 @@ public class CustomerMenu extends Menu {
         if (yesOrNo("Update billing address? (y/n): ")) {
             Address billingAddress;
             if (customer.isSameAddress()) {
-                billingAddress = customer.getShippingAddress().copyShippingtoBilling();
+                billingAddress = customer.getShippingAddress().copyShippingToBilling();
             } else {
                 billingAddress = customer.getBillingAddress();
             }

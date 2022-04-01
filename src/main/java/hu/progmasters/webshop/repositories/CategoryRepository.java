@@ -36,7 +36,7 @@ public class CategoryRepository extends Repository {
         Category category = new Category();
         category.setId(id);
 
-        try (Connection connection = DatabaseConfig.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
             preparedStatement.setInt(1, id);
@@ -57,7 +57,7 @@ public class CategoryRepository extends Repository {
                 "LEFT JOIN categories AS c ON c.category_id = cn.id " +
                 "GROUP BY cn.id " +
                 "ORDER BY cn.id;";
-        try (Connection connection = DatabaseConfig.getConnection();
+        try (Connection connection = getConnection();
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(sql)
         ) {

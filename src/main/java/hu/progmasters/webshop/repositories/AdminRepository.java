@@ -1,19 +1,16 @@
 package hu.progmasters.webshop.repositories;
 
-import hu.progmasters.webshop.domain.DatabaseConfig;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class AdminRepository extends Repository {
 
     private static final AdminRepository ADMIN_REPOSITORY = new AdminRepository();
-    private static final String DATA_FILE = "src/main/resources/webshop_basedata.csv";
+    private static final String SAMPLE_DATA_FILE = "src/main/resources/webshop_sampledata.csv";
+    private static final String TEST_DATA_FILE = "src/main/resources/webshop_testdata.csv";
 
     private AdminRepository() {
     }
@@ -23,7 +20,18 @@ public class AdminRepository extends Repository {
     }
 
     public void loadData() {
-        try (BufferedReader bufferedReader = Files.newBufferedReader(Path.of(DATA_FILE))) {
+        try (BufferedReader bufferedReader = Files.newBufferedReader(Path.of(SAMPLE_DATA_FILE))) {
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                execute(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadTestData() {
+        try (BufferedReader bufferedReader = Files.newBufferedReader(Path.of(TEST_DATA_FILE))) {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 execute(line);
@@ -34,7 +42,7 @@ public class AdminRepository extends Repository {
     }
 
     public void deleteData() {
-        try (Connection connection = DatabaseConfig.getConnection();
+        try (Connection connection = getConnection();
              Statement statement = connection.createStatement()) {
             statement.addBatch("SET FOREIGN_KEY_CHECKS = 0");
             for (Tables value : Tables.values()) {
@@ -54,5 +62,12 @@ public class AdminRepository extends Repository {
         }
     }
 
+    public void getTables() throws SQLException {
+        DatabaseMetaData md = getConnection().getMetaData();
+        ResultSet rs = md.getTables(null, null, "%", null);
+        while (rs.next()) {
+            System.out.println(rs.getString(3));
+        }
+    }
 
 }

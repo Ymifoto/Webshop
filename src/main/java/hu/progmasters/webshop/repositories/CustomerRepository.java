@@ -1,10 +1,12 @@
 package hu.progmasters.webshop.repositories;
 
-import hu.progmasters.webshop.domain.DatabaseConfig;
 import hu.progmasters.webshop.domain.Customer;
 
 import java.sql.*;
-import java.util.*;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class CustomerRepository extends Repository {
 
@@ -28,7 +30,7 @@ public class CustomerRepository extends Repository {
                 "OR city LIKE ? " +
                 "OR street LIKE ? " +
                 "OR zip = ? ;";
-        try (Connection connection = DatabaseConfig.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
             preparedStatement.setString(1, keyword);
@@ -47,7 +49,7 @@ public class CustomerRepository extends Repository {
 
     public Optional<Customer> getCustomerByEmail(String email) {
         String sql = "SELECT * FROM customers AS c WHERE email LIKE ?;";
-        try (Connection connection = DatabaseConfig.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
             preparedStatement.setString(1, email);
@@ -63,7 +65,7 @@ public class CustomerRepository extends Repository {
 
     public Optional<Customer> getCustomerById(int id) {
         String sql = "SELECT * FROM customers WHERE id = ?;";
-        try (Connection connection = DatabaseConfig.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
             preparedStatement.setInt(1, id);
@@ -79,7 +81,7 @@ public class CustomerRepository extends Repository {
 
     public Set<Customer> getAllCustomer() {
         String sql = "SELECT * FROM customers;";
-        try (Connection connection = DatabaseConfig.getConnection();
+        try (Connection connection = getConnection();
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(sql)
         ) {

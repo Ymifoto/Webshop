@@ -1,6 +1,8 @@
 package domain;
 
 import hu.progmasters.webshop.domain.Category;
+import hu.progmasters.webshop.domain.Product;
+import hu.progmasters.webshop.domain.Tax;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class CategoryTest {
 
     private Category category;
+    private final Product product = new Product(1,"Test Product","Test",100,50,"Test product", "Test", Tax.AFA, true );
 
     @BeforeEach
     void createCategory() {
@@ -40,4 +43,23 @@ public class CategoryTest {
         assertEquals("Test category", category.getData().get("category_name"));
         assertEquals("Test description", category.getData().get("category_desc"));
     }
+
+    @Test
+    void categoryAttributesTest() {
+        assertEquals(1, category.getId());
+        category.setId(2);
+        assertEquals(2, category.getId());
+
+        assertEquals("Category", category.getName());
+        category.setName("New Category");
+        assertEquals("New Category", category.getName());
+    }
+
+    @Test
+    void productsInCategoryTest() {
+        assertEquals(0, category.getProducts().size());
+        category.getProducts().add(product);
+        assertEquals(1, category.getProducts().size());
+    }
+
 }

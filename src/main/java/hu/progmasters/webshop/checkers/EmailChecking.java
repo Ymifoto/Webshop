@@ -2,7 +2,7 @@ package hu.progmasters.webshop.checkers;
 
 import hu.progmasters.webshop.handlers.OutputHandler;
 
-public class EmailChecker implements Checker {
+public class EmailChecking implements Checker {
 
 
     public boolean check(String input) {
