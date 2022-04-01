@@ -2,6 +2,7 @@ package hu.progmasters.webshop.ui;
 
 import hu.progmasters.webshop.domain.Category;
 import hu.progmasters.webshop.domain.ShoppingCart;
+import hu.progmasters.webshop.handlers.OutputHandler;
 import hu.progmasters.webshop.repositories.CategoryRepository;
 import hu.progmasters.webshop.repositories.ProductRepository;
 import hu.progmasters.webshop.ui.menuoptions.CategoryMenuOptions;
@@ -24,7 +25,7 @@ public class CategoryMenu extends Menu {
             switch (option) {
                 case LIST:
                     System.out.println("Categories:");
-                    categoryRepository.getCategoryList();
+                    OutputHandler.printMapStringKey(categoryRepository.getCategoryList(),"ID" ,"Categories" );
                     break;
                 case SELECT:
                     System.out.print("Give category ID: ");

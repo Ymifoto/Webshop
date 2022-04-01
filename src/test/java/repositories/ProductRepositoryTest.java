@@ -37,10 +37,6 @@ public class ProductRepositoryTest {
     }
 
     @Test
-    void name() {
-    }
-
-    @Test
     public void productSearchNotValidTest() {
         assertTrue(productRepository.productSearch("xxxxxx").isEmpty());
     }
@@ -49,14 +45,14 @@ public class ProductRepositoryTest {
     public void getProductByIdValidTest() {
         Product product;
         product = productRepository.getProductById(1);
-        assertFalse(product == null);
+        assertNotNull(product);
     }
 
     @Test
     public void getProductByIdNotValidTest() {
         Product product;
         product = productRepository.getProductById(999);
-        assertFalse(product != null);
+        assertNull(product);
     }
 
     @Test
@@ -85,6 +81,16 @@ public class ProductRepositoryTest {
 
     @Test
     public void updateProductTest() {
+        Map<String,String> productData = new TreeMap<>();
+        productData.put("sale_price","1000");
+        Product product = productRepository.getProductById(1);
+        product.updateData(productData);
+        productRepository.updateProduct(product);
+        assertEquals(1000,productRepository.getProductById(1).getPrice());
+    }
+
+    @Test
+    public void addProductToCategoryTest() {
         Map<String,String> productData = new TreeMap<>();
         productData.put("sale_price","1000");
         Product product = productRepository.getProductById(1);

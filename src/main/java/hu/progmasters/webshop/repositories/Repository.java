@@ -71,7 +71,8 @@ public abstract class Repository {
     }
 
     protected void updateCategoriesTable() {
-        String sql = "INSERT IGNORE INTO categories(product_id,category_id) SELECT id,category_id FROM products WHERE category_id IS NOT NULL;";
+        String sql = "DELETE FROM categories WHERE id > 0;" +
+                "INSERT INTO categories(product_id,category_id) SELECT id,category_id FROM products WHERE category_id IS NOT NULL;";
         execute(sql);
     }
 

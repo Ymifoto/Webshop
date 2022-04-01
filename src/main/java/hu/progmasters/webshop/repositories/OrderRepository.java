@@ -1,6 +1,5 @@
 package hu.progmasters.webshop.repositories;
 
-import hu.progmasters.webshop.domain.DatabaseConfig;
 import hu.progmasters.webshop.domain.Customer;
 import hu.progmasters.webshop.domain.Order;
 import hu.progmasters.webshop.domain.Product;
@@ -28,7 +27,7 @@ public class OrderRepository extends Repository {
                 "JOIN customers AS c ON c.id = o.customer_id " +
                 "JOIN shipping_methods AS sm ON o.shipping_method = sm.id " +
                 "JOIN payment_methods AS pm ON o.payment_method = pm.id;";
-        try (Connection connection = DatabaseConfig.getConnection();
+        try (Connection connection = getConnection();
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(sql)
         ) {
@@ -46,7 +45,7 @@ public class OrderRepository extends Repository {
                 "JOIN shipping_methods AS sm ON o.shipping_method = sm.id " +
                 "JOIN payment_methods AS pm ON o.payment_method = pm.id " +
                 "WHERE o.shipped = 0;";
-        try (Connection connection = DatabaseConfig.getConnection();
+        try (Connection connection = getConnection();
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(sql)
         ) {
@@ -75,7 +74,7 @@ public class OrderRepository extends Repository {
                 + "OR company_name LIKE ? "
                 + "OR shipping_address LIKE ?";
 
-        try (Connection connection = DatabaseConfig.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
             preparedStatement.setString(1, keyword);
@@ -126,7 +125,7 @@ public class OrderRepository extends Repository {
         String sql = "SELECT * FROM products AS p " +
                 "JOIN ordered_products AS op ON p.id = op.product_id " +
                 "WHERE op.order_id = " + orderId;
-        try (Connection connection = DatabaseConfig.getConnection();
+        try (Connection connection = getConnection();
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(sql)
         ) {

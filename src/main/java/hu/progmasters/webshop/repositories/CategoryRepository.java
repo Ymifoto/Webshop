@@ -1,6 +1,5 @@
 package hu.progmasters.webshop.repositories;
 
-import hu.progmasters.webshop.domain.DatabaseConfig;
 import hu.progmasters.webshop.domain.Category;
 import hu.progmasters.webshop.domain.Product;
 import hu.progmasters.webshop.domain.Tax;
@@ -25,31 +24,28 @@ public class CategoryRepository extends Repository {
     }
 
     public Category getCategroyById(int id) {
-        String sql = "SELECT name,vendor_name,price,sale_price,description,product_type_name,tax,on_sale,in_stock,product_id,category_name " +
-                "FROM products AS p " +
-                "RIGHT JOIN categories AS c ON p.id = c.product_id " +
-                "RIGHT JOIN categories_name AS cn ON c.category_id = cn.id " +
-                "RIGHT JOIN product_types AS pt ON p.product_type = pt.id " +
-                "RIGHT JOIN vendors AS v ON p.vendor = v.id " +
-                "WHERE cn.id = ?;";
-
-        Category category = new Category();
-        category.setId(id);
-
+        String sql = "SELECT * FROM categories_name WHERE id = ?;";
+        Category category = null;
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
             preparedStatement.setInt(1, id);
             ResultSet result = preparedStatement.executeQuery();
-            getProductList(result, category);
+            if (result.next()) {
+                category = new Category();
+                category.setId(result.getInt("id"));
+                category.setName(result.getString("category_name"));
+                category.setDescription(result.getString("category_desc"));
+                setCategoryProducts(category);
+            }
 
         } catch (SQLException e) {
-            System.out.println("Not found category");
+            OutputHandler.outputRed("Database error!");
         }
         return category;
     }
 
-    public void getCategoryList() {
+    public Map<String, String> getCategoryList() {
         Map<String, String> data = new TreeMap<>(Comparator.comparingInt(Integer::parseInt));
 
         String sql = "SELECT cn.id,category_name, COUNT(c.product_id) AS product_number " +
@@ -64,39 +60,53 @@ public class CategoryRepository extends Repository {
             while (result.next()) {
                 data.put(String.valueOf(result.getInt("id")), result.getString("category_name") + " (" + result.getInt("product_number") + " products)");
             }
-            OutputHandler.printMapStringKey(data, "ID", "Categories");
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return data;
     }
 
-    public void addCategory(Map<String, String> data) {
-        insert(TABLE, data);
+    public int addCategory(Map<String, String> data) {
+        int id = insert(TABLE, data);
         updateCategoriesTable();
+        return id;
     }
 
     public void updateCategory(Category category) {
         update(TABLE, category.getId(), category.getData());
     }
 
-    private void getProductList(ResultSet result, Category category) throws SQLException {
-        List<Product> productList = category.getProducts();
-        while (result.next()) {
-            if (category.getName() == null) {
-                category.setName(result.getString("category_name"));
+    private void setCategoryProducts(Category category) throws SQLException {
+        String sql = "SELECT name,vendor_name,price,sale_price,description,product_type_name,tax,on_sale,in_stock,product_id " +
+                "FROM products AS p " +
+                "RIGHT JOIN categories AS c ON p.id = c.product_id " +
+                "RIGHT JOIN categories_name AS cn ON c.category_id = cn.id " +
+                "RIGHT JOIN product_types AS pt ON p.product_type = pt.id " +
+                "RIGHT JOIN vendors AS v ON p.vendor = v.id " +
+                "WHERE cn.id = ?;";
+
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ) {
+            preparedStatement.setInt(1, category.getId());
+            ResultSet result = preparedStatement.executeQuery();
+            List<Product> productList = category.getProducts();
+            while (result.next()) {
+                if (result.getInt("product_id") != 0) {
+                    productList.add(new Product(
+                            result.getInt("product_id"),
+                            result.getString("name"),
+                            result.getString("vendor_name"),
+                            result.getInt("price"),
+                            result.getInt("sale_price"),
+                            result.getString("description"),
+                            result.getString("product_type_name"),
+                            Tax.valueOf(result.getString("tax")),
+                            result.getBoolean("in_stock")));
+                }
             }
-            if (result.getInt("product_id") != 0) {
-                productList.add(new Product(
-                        result.getInt("product_id"),
-                        result.getString("name"),
-                        result.getString("vendor_name"),
-                        result.getInt("price"),
-                        result.getInt("sale_price"),
-                        result.getString("description"),
-                        result.getString("product_type_name"),
-                        Tax.valueOf(result.getString("tax")),
-                        result.getBoolean("in_stock")));
-            }
+        } catch (SQLException e) {
+            OutputHandler.outputRed("Database error!");
         }
     }
 }

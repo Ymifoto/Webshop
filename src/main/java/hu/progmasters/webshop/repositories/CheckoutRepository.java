@@ -1,6 +1,5 @@
 package hu.progmasters.webshop.repositories;
 
-import hu.progmasters.webshop.domain.DatabaseConfig;
 import hu.progmasters.webshop.handlers.OutputHandler;
 
 import java.sql.Connection;
