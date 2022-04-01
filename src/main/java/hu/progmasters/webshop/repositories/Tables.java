@@ -18,7 +18,7 @@ public enum Tables {
             + "sale_price INT UNSIGNED DEFAULT 0,"
             + "description VARCHAR(255),"
             + "product_type INT NOT NULL,"
-            + "tax VARCHAR(10) NOT NULL,"
+            + "tax VARCHAR(10) DEFAULT 'AFA',"
             + "category_id INT UNSIGNED,"
             + "on_sale BOOLEAN NOT NULL DEFAULT 0,"
             + "in_stock BOOLEAN NOT NULL DEFAULT 1, "
@@ -82,7 +82,7 @@ public enum Tables {
             + "FOREIGN KEY (product_id) REFERENCES products(id), "
             + "FOREIGN KEY (order_id) REFERENCES orders(id));"),
 
-    ADDRESS( "CREATE TABLE IF NOT EXISTS address("
+    ADDRESS("CREATE TABLE IF NOT EXISTS address("
             + "id INT PRIMARY KEY AUTO_INCREMENT,"
             + "customer_id INT NOT NULL,"
             + "zip INT UNSIGNED NOT NULL,"

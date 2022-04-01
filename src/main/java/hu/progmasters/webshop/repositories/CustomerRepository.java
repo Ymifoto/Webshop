@@ -22,14 +22,14 @@ public class CustomerRepository extends Repository {
     }
 
     public Set<Customer> customerSearch(String keyword) {
+        keyword = "%" + keyword + "%";
         String sql = "SELECT * FROM customers AS c " +
                 "JOIN address AS a ON a.customer_id = c.id " +
                 "WHERE name LIKE ? " +
                 "OR email LIKE ? " +
-                "OR company_name LIKE ?" +
+                "OR company_name LIKE ? " +
                 "OR city LIKE ? " +
-                "OR street LIKE ? " +
-                "OR zip = ? ;";
+                "OR street LIKE ? ;";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
@@ -38,7 +38,6 @@ public class CustomerRepository extends Repository {
             preparedStatement.setString(3, keyword);
             preparedStatement.setString(4, keyword);
             preparedStatement.setString(5, keyword);
-            preparedStatement.setString(6, keyword);
             ResultSet result = preparedStatement.executeQuery();
             return makeCustomers(result);
         } catch (SQLException e) {

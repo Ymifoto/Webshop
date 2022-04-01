@@ -88,7 +88,9 @@ public class Product {
         if (data.get("description") != null && data.get("description").length() > 0) {
             description = data.get("description");
         }
-        inStock = data.get("in_stock").equals("1");
+        if (data.get("in_stock") != null && data.get("in_stock").length() > 0) {
+            inStock = data.get("in_stock").equals("1");
+        }
         setOnSale();
     }
 

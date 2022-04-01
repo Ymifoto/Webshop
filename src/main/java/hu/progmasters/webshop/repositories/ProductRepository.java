@@ -1,6 +1,5 @@
 package hu.progmasters.webshop.repositories;
 
-import hu.progmasters.webshop.domain.DatabaseConfig;
 import hu.progmasters.webshop.domain.Product;
 import hu.progmasters.webshop.domain.Tax;
 
@@ -24,7 +23,7 @@ public class ProductRepository extends Repository {
                 "JOIN product_types AS pt ON pt.id = p.product_type " +
                 "JOIN vendors AS v ON v.id = p.vendor " +
                 "WHERE p.id = ?;";
-        try (Connection connection = DatabaseConfig.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
             preparedStatement.setInt(1, id);
@@ -39,6 +38,7 @@ public class ProductRepository extends Repository {
     }
 
     public List<Product> productSearch(String keyword) {
+        keyword = "%" + keyword + "%";
         List<Product> productList = new ArrayList<>();
         String sql = "SELECT * FROM products AS p " +
                 "JOIN product_types AS pt ON pt.id = p.product_type " +
@@ -47,7 +47,7 @@ public class ProductRepository extends Repository {
                 "OR vendor_name LIKE ? " +
                 "OR product_type_name LIKE ? " +
                 "OR description LIKE ?;";
-        try (Connection connection = DatabaseConfig.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
             preparedStatement.setString(1, keyword);
@@ -71,7 +71,7 @@ public class ProductRepository extends Repository {
                 "JOIN product_types AS pt ON pt.id = p.product_type " +
                 "JOIN vendors AS v ON v.id = p.vendor " +
                 "WHERE " + option + " = 1;";
-        try (Connection connection = DatabaseConfig.getConnection();
+        try (Connection connection = getConnection();
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(sql)
         ) {
@@ -85,9 +85,10 @@ public class ProductRepository extends Repository {
         }
     }
 
-    public void addProduct(Map<String, String> data) {
-        insert(TABLE, data);
+    public int addProduct(Map<String, String> data) {
+        int id = insert(TABLE, data);
         updateCategoriesTable();
+        return id;
     }
 
     public void updateProduct(Product product) {
@@ -108,7 +109,7 @@ public class ProductRepository extends Repository {
     public List<String> getProductTypes() {
         List<String> productTypes = new ArrayList<>();
         String sql = "SELECT * FROM product_types;";
-        try (Connection connection = DatabaseConfig.getConnection();
+        try (Connection connection = getConnection();
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(sql)) {
             while (result.next()) {
@@ -124,7 +125,7 @@ public class ProductRepository extends Repository {
 
     private int getValueIdByName(String valueName, String table, String column) {
         String sql = "SELECT id FROM " + table + " WHERE " + column + " LIKE  '" + valueName + "';";
-        try (Connection connection = DatabaseConfig.getConnection();
+        try (Connection connection = getConnection();
              Statement statement = connection.createStatement();
              ResultSet result = statement.executeQuery(sql)) {
             if (result.next()) {
