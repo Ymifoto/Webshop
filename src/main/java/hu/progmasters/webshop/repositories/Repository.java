@@ -28,7 +28,6 @@ public abstract class Repository {
             preparedStatement.setInt(datas.size() + 1, id);
             preparedStatement.execute();
         } catch (SQLException e) {
-            e.printStackTrace();
             OutputHandler.outputRed("Update error!" + e.getMessage());
         }
         LogHandler.addLog("Update " + table + " table, updated id: " + id + ", " + datas.keySet());
