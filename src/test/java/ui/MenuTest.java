@@ -2,18 +2,17 @@ package ui;
 
 import hu.progmasters.webshop.domain.Product;
 import hu.progmasters.webshop.domain.Tax;
-import hu.progmasters.webshop.domain.WebShop;
 import hu.progmasters.webshop.ui.Menu;
 import hu.progmasters.webshop.ui.ProductsMenu;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MenuTest {
 
     private Menu menu;
-
 
     @BeforeEach
     public void init() {

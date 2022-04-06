@@ -10,7 +10,7 @@ import hu.progmasters.webshop.ui.menuoptions.MenuOption;
 public abstract class Menu {
 
     protected final InputHandler inputHandler = new InputHandler();
-    protected final ShoppingCart shoppingCart = new ShoppingCart();
+    protected static final ShoppingCart shoppingCart = new ShoppingCart();
 
 
     protected MenuOption getMenu(MenuOption[] menuOptions) {
