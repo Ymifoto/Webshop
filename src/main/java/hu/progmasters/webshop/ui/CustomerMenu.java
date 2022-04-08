@@ -102,11 +102,9 @@ public class CustomerMenu extends Menu {
 
         shippingAddress.setZip(Integer.parseInt(checkInputData(new ZipCodeChecker(), null, "Give a zip code: ")));
 
-        System.out.print("Give a city: ");
-        shippingAddress.setCity(inputHandler.getInputString());
+        shippingAddress.setCity(checkInputData(new StringLengthChecker(),null,"Give a city: "));
 
-        System.out.print("Give a address: ");
-        shippingAddress.setStreet(inputHandler.getInputString());
+        shippingAddress.setStreet(checkInputData(new StringLengthChecker(),null,"Give a address: "));
 
         customer = new Customer(null,name,shippingAddress,email,null,false,null,true);
 
