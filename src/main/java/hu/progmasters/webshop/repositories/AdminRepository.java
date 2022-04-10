@@ -4,7 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.sql.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class AdminRepository extends Repository {
 
@@ -41,19 +42,9 @@ public class AdminRepository extends Repository {
         }
     }
 
-    public void deleteData() {
-        try (Connection connection = getConnection();
-             Statement statement = connection.createStatement()) {
-            statement.addBatch("SET FOREIGN_KEY_CHECKS = 0");
-            for (Tables value : Tables.values()) {
-                statement.addBatch("TRUNCATE TABLE " + value.name() + ";");
-            }
-            statement.addBatch("SET FOREIGN_KEY_CHECKS = 1");
-            statement.executeBatch();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void dropTables() {
+        String tableNames = List.of(Tables.values()).stream().map(Tables::name).collect(Collectors.joining(","));
+        execute("DROP TABLES " + tableNames);
     }
 
     public void createTables() {

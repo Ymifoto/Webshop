@@ -46,6 +46,7 @@ public class AdminMenu extends Menu {
                 case NEW_CATEGORY:
                     System.out.println("Add category");
                     categoryRepository.addCategory(getCategoryData());
+                    break;
                 case UPDATE_CATEGORY:
                     System.out.print("Give category ID: ");
                     Category updatingCategory = categoryRepository.getCategroyById(inputHandler.getInputNumber());
@@ -59,8 +60,8 @@ public class AdminMenu extends Menu {
                 case LOAD_DATA:
                     adminRepository.loadData();
                     break;
-                case DELETE_DATA:
-                    adminRepository.deleteData();
+                case DROP_TABLES:
+                    adminRepository.dropTables();
                     break;
                 case CREATE_TABLES:
                     adminRepository.createTables();

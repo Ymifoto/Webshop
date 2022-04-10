@@ -1,5 +1,6 @@
 package hu.progmasters.webshop.repositories;
 
+import hu.progmasters.webshop.domain.Product;
 import hu.progmasters.webshop.handlers.OutputHandler;
 
 import java.sql.Connection;
@@ -22,9 +23,9 @@ public class CheckoutRepository extends Repository {
         return CHECKOUT_REPOSITORY;
     }
 
-    public int saveOrder(Map<String, String> order, List<Integer> orderedProductsId) {
+    public int saveOrder(Map<String, String> order, List<Product> orderedProducts) {
         int id = insert(TABLE, order);
-        updateOrderedProductsTable(id, orderedProductsId);
+        updateOrderedProductsTable(id, orderedProducts);
         return id;
     }
 
@@ -97,11 +98,12 @@ public class CheckoutRepository extends Repository {
         return null;
     }
 
-    public void updateOrderedProductsTable(int orderId, List<Integer> productsId) {
+    public void updateOrderedProductsTable(int orderId, List<Product> products) {
         Map<String, String> datas = new TreeMap<>();
         datas.put("order_id", String.valueOf(orderId));
-        for (Integer productId : productsId) {
-            datas.put("product_id", productId.toString());
+        for (Product product : products) {
+            datas.put("product_id", String.valueOf(product.getId()));
+            datas.put("ordered_price", String.valueOf(product.getPrice()));
             insert("ordered_products", datas);
         }
     }

@@ -79,6 +79,7 @@ public enum Tables {
             + "id INT PRIMARY KEY AUTO_INCREMENT,"
             + "product_id INT NOT NULL,"
             + "order_id INT NOT NULL,"
+            + "ordered_price INT UNSIGNED NOT NULL ,"
             + "FOREIGN KEY (product_id) REFERENCES products(id), "
             + "FOREIGN KEY (order_id) REFERENCES orders(id));"),
 

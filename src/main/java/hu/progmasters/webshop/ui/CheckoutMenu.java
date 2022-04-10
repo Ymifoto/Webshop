@@ -47,7 +47,7 @@ public class CheckoutMenu extends Menu {
                 case FINALIZE:
                     if (shoppingCart.getCustomer() == null) {
                         OutputHandler.outputRed("Not logged in");
-                    } else if (shoppingCart.getProductList().size() == 0) {
+                    } else if (shoppingCart.getProductList().isEmpty()) {
                         OutputHandler.outputRed("No products in cart");
                     } else if (shippingMethodId == 0) {
                         OutputHandler.outputRed("No shipping method selected!");
@@ -56,6 +56,7 @@ public class CheckoutMenu extends Menu {
                     } else {
                         finalizeOrder();
                     }
+                    break;
                 case BACK:
             }
         } while (option != CheckoutMenuOptions.BACK);
@@ -68,7 +69,7 @@ public class CheckoutMenu extends Menu {
         order.put("shipping_cost", String.valueOf(shippingCost));
         order.put("order_total", String.valueOf(generalTotal + shippingCost));
         order.put("payment_method", String.valueOf(paymentMethodId));
-        int id = checkoutRepository.saveOrder(order, getOrderedProductsId());
+        int id = checkoutRepository.saveOrder(order, shoppingCart.getProductList());
         saveOrderToFile(id);
         shoppingCart.getProductList().clear();
         shippingMethodId = 0;
@@ -138,10 +139,6 @@ public class CheckoutMenu extends Menu {
 
     private int getGeneralTotal() {
         return shoppingCart.getProductList().stream().mapToInt(Product::getPrice).sum();
-    }
-
-    private List<Integer> getOrderedProductsId() {
-        return shoppingCart.getProductList().stream().map(Product::getId).collect(Collectors.toList());
     }
 
     private void removeProduct(int id) {

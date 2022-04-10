@@ -22,7 +22,6 @@ public class ProductRepositoryTest {
     public static void initDataBase() {
         Repository.setTestMode(true);
         adminRepository.createTables();
-        adminRepository.deleteData();
         adminRepository.loadTestData();
     }
 

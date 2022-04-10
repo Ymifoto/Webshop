@@ -23,7 +23,6 @@ public class CustomerRepositoryTest {
     public static void initDataBase() {
         Repository.setTestMode(true);
         adminRepository.createTables();
-        adminRepository.deleteData();
         adminRepository.loadTestData();
     }
 

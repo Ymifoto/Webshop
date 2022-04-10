@@ -27,7 +27,6 @@ public class OrderRepositoryTest {
     public static void initDataBase() {
         Repository.setTestMode(true);
         adminRepository.createTables();
-        adminRepository.deleteData();
         adminRepository.loadTestData();
     }
 
@@ -67,7 +66,7 @@ public class OrderRepositoryTest {
         order.put("shipping_cost", String.valueOf(shippingCost));
         order.put("order_total", String.valueOf(cartTotal + shippingCost));
         order.put("payment_method", "1");
-        return checkoutRepository.saveOrder(order, orderedProducts);
+        return checkoutRepository.saveOrder(order, shoppingCart.getProductList());
     }
 
     private static void setUpShoppingCart() {
