@@ -1,6 +1,5 @@
 package hu.progmasters.webshop.repositories;
 
-import hu.progmasters.webshop.domain.DatabaseConfig;
 import hu.progmasters.webshop.domain.Address;
 import hu.progmasters.webshop.domain.Customer;
 import hu.progmasters.webshop.handlers.OutputHandler;
@@ -46,7 +45,7 @@ public class AddressRepository extends Repository {
     public Address getAddress(int id, boolean billing) {
         Address address = new Address();
         String sql = "SELECT * FROM address WHERE customer_id = ? AND billing_address = ?;";
-        try (Connection connection = DatabaseConfig.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
             preparedStatement.setBoolean(2, billing);
@@ -55,7 +54,7 @@ public class AddressRepository extends Repository {
             address = createAddress(result);
 
         } catch (SQLException e) {
-            OutputHandler.outputRed("Cant read database");
+            OutputHandler.outputRed("Cant read database " + e.getMessage());
         }
         return address;
     }

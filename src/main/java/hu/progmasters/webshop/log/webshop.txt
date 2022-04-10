@@ -1,1 +1,27 @@
-2022-04-10 19:21:45 - Start program
+2022-04-10 21:15:47 - Update products table, updated id: 1, [category_id]
+2022-04-10 21:15:48 - Insert categories_name table, ID: 32
+2022-04-10 21:15:48 - Update categories_name table, updated id: 1, [category_desc, category_name, id]
+2022-04-10 21:15:48 - Insert customers table, ID: 3
+2022-04-10 21:15:48 - Insert address table, ID: 4
+2022-04-10 21:15:48 - Insert address table, ID: 5
+2022-04-10 21:15:48 - Update customers table, updated id: 2, [company, company_name, email, name, same_address, tax_number]
+2022-04-10 21:15:48 - Update address table, updated id: 3, [billing_address, city, customer_id, street, zip]
+2022-04-10 21:15:48 - Insert orders table, ID: 1
+2022-04-10 21:15:48 - Insert ordered_products table, ID: 1
+2022-04-10 21:15:48 - Insert ordered_products table, ID: 2
+2022-04-10 21:15:48 - Insert ordered_products table, ID: 3
+2022-04-10 21:15:48 - Insert orders table, ID: 2
+2022-04-10 21:15:48 - Insert ordered_products table, ID: 4
+2022-04-10 21:15:48 - Insert ordered_products table, ID: 5
+2022-04-10 21:15:48 - Insert ordered_products table, ID: 6
+2022-04-10 21:15:48 - Insert orders table, ID: 3
+2022-04-10 21:15:48 - Insert ordered_products table, ID: 7
+2022-04-10 21:15:48 - Insert ordered_products table, ID: 8
+2022-04-10 21:15:48 - Insert ordered_products table, ID: 9
+2022-04-10 21:15:48 - Insert orders table, ID: 4
+2022-04-10 21:15:48 - Insert ordered_products table, ID: 10
+2022-04-10 21:15:48 - Insert ordered_products table, ID: 11
+2022-04-10 21:15:48 - Insert ordered_products table, ID: 12
+2022-04-10 21:15:48 - Update products table, updated id: 1, [description, in_stock, name, price, product_type, sale_price, vendor]
+2022-04-10 21:15:48 - Insert products table, ID: 51
+2022-04-10 21:15:48 - Update products table, updated id: 1, [description, in_stock, name, price, product_type, sale_price, vendor]

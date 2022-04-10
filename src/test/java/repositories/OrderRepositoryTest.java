@@ -6,12 +6,11 @@ import hu.progmasters.webshop.repositories.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class OrderRepositoryTest {
 
@@ -26,14 +25,17 @@ public class OrderRepositoryTest {
     @BeforeAll
     public static void initDataBase() {
         Repository.setTestMode(true);
-        adminRepository.createTables();
-        adminRepository.loadTestData();
+        if (!Repository.isTestDatabaseCreated()) {
+            adminRepository.createTables();
+            adminRepository.loadTestData();
+            Repository.setTestDatabaseCreated(true);
+        }
     }
 
     @Test
     public void getInProgressOrdersTest() {
         int id = saveTestOrder();
-        assertEquals(1, orderRepository.getInProgressOrders().stream().filter(o -> o.getId() == id).count());
+        assertEquals(1,orderRepository.getInProgressOrders().stream().filter(o -> o.getId() == id).count());
     }
 
     @Test
@@ -59,7 +61,6 @@ public class OrderRepositoryTest {
         setUpShoppingCart();
         int cartTotal = shoppingCart.getProductList().stream().mapToInt(Product::getPrice).sum();
         int shippingCost = checkoutRepository.getShippingCostById(2,cartTotal);
-        List<Integer> orderedProducts = shoppingCart.getProductList().stream().map(Product::getId).collect(Collectors.toList());
         Map<String, String> order = new TreeMap<>();
         order.put("customer_id", String.valueOf(shoppingCart.getCustomer().getId()));
         order.put("shipping_method", "2");

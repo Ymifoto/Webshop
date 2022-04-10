@@ -11,7 +11,7 @@ import java.util.List;
 
 public class OrderRepository extends Repository {
 
-    private final static OrderRepository ORDER_REPOSITORY = new OrderRepository();
+    private static final OrderRepository ORDER_REPOSITORY = new OrderRepository();
     private final AddressRepository addressRepository = AddressRepository.getRepository();
 
     private OrderRepository() {
@@ -128,8 +128,8 @@ public class OrderRepository extends Repository {
                 products.add(new Product(result.getInt("product_id")
                         , result.getString("name")
                         , result.getString("vendor")
-                        , result.getInt("price")
-                        , result.getInt("sale_price")
+                        , result.getInt("ordered_price")
+                        , 0
                         , result.getString("description")
                         , result.getString("product_type")
                         , Tax.valueOf(result.getString("tax"))

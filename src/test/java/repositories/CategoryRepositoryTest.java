@@ -22,8 +22,11 @@ public class CategoryRepositoryTest {
     @BeforeAll
     public static void initDataBase() {
         Repository.setTestMode(true);
-        adminRepository.createTables();
-        adminRepository.loadTestData();
+        if (!Repository.isTestDatabaseCreated()) {
+            adminRepository.createTables();
+            adminRepository.loadTestData();
+            Repository.setTestDatabaseCreated(true);
+        }
     }
 
     @Test
@@ -47,8 +50,8 @@ public class CategoryRepositoryTest {
         data.put("category_name", "Test category");
         data.put("category_desc", "Test category description");
         int id = categoryRepository.addCategory(data);
-        assertEquals("Test category",categoryRepository.getCategroyById(id).getName());
-        assertEquals("Test category description",categoryRepository.getCategroyById(id).getDescription());
+        assertEquals("Test category", categoryRepository.getCategroyById(id).getName());
+        assertEquals("Test category description", categoryRepository.getCategroyById(id).getDescription());
 
     }
 
@@ -58,15 +61,15 @@ public class CategoryRepositoryTest {
         category.setName("New test category");
         category.setDescription("Updated test category description");
         categoryRepository.updateCategory(category);
-        assertEquals("New test category",categoryRepository.getCategroyById(1).getName());
-        assertEquals("Updated test category description",categoryRepository.getCategroyById(1).getDescription());
+        assertEquals("New test category", categoryRepository.getCategroyById(1).getName());
+        assertEquals("Updated test category description", categoryRepository.getCategroyById(1).getDescription());
     }
 
     @Test
     public void addProductToCategoryTest() {
         Category category = categoryRepository.getCategroyById(22);
         assertTrue(category.getProducts().isEmpty());
-        productRepository.addProductToCategory(1,22);
+        productRepository.addProductToCategory(1, 22);
         category = categoryRepository.getCategroyById(22);
         assertFalse(category.getProducts().isEmpty());
     }

@@ -10,6 +10,7 @@ import java.util.Map;
 public abstract class Repository {
 
     private static boolean testMode = false;
+    private static boolean testDatabaseCreated = false;
 
     protected void execute(String sql) {
         try (Connection connection = getConnection();
@@ -37,7 +38,7 @@ public abstract class Repository {
         int id = -1;
         String sql = "INSERT INTO " + table + "(" + String.join(", ", datas.keySet()) + ") VALUES(" + getPlaceHolders(datas.size()) + ");";
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             setMapValues(preparedStatement, datas);
             preparedStatement.execute();
             ResultSet result = preparedStatement.getGeneratedKeys();
@@ -86,4 +87,11 @@ public abstract class Repository {
         Repository.testMode = testMode;
     }
 
+    public static void setTestDatabaseCreated(boolean testDatabaseCreated) {
+        Repository.testDatabaseCreated = testDatabaseCreated;
+    }
+
+    public static boolean isTestDatabaseCreated() {
+        return testDatabaseCreated;
+    }
 }

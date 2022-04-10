@@ -19,8 +19,11 @@ public class CheckoutRepositoryTest {
     @BeforeAll
     public static void initDataBase() {
         Repository.setTestMode(true);
-        adminRepository.createTables();
-        adminRepository.loadTestData();
+        if (!Repository.isTestDatabaseCreated()) {
+            adminRepository.createTables();
+            adminRepository.loadTestData();
+            Repository.setTestDatabaseCreated(true);
+        }
     }
 
     @Test
