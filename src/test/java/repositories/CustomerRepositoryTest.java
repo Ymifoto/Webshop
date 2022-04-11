@@ -20,7 +20,7 @@ public class CustomerRepositoryTest {
     private static final Customer customer = getTestCutomer();
 
     @BeforeAll
-    public static void initDataBase() {
+    static void initDataBase() {
         Repository.setTestMode(true);
         if (!Repository.isTestDatabaseCreated()) {
             adminRepository.createTables();
@@ -30,17 +30,17 @@ public class CustomerRepositoryTest {
     }
 
     @Test
-    public void getCustomerByEmailTest() {
+    void getCustomerByEmailTest() {
         assertEquals("Jhon Doe",customerRepository.getCustomerByEmail("jhon_doe@gmail.com").get().getName());
     }
 
     @Test
-    public void getCustomerByIdTest() {
+    void getCustomerByIdTest() {
         assertEquals("Jhon Doe",customerRepository.getCustomerById(1).get().getName());
     }
 
     @Test
-    public void addCustomerTest() {
+    void addCustomerTest() {
         assertEquals(2,customerRepository.getAllCustomer().size());
         customerRepository.addCustomer(customer);
         assertEquals(3,customerRepository.getAllCustomer().size());
@@ -49,7 +49,7 @@ public class CustomerRepositoryTest {
     }
 
     @Test
-    public void updateCustomerTest() {
+    void updateCustomerTest() {
         Customer customer = customerRepository.getCustomerById(2).get();
         assertEquals("jane_doe@gmail.com", customer.getEmail());
         Map<String,String> data = new HashMap<>();
@@ -61,7 +61,7 @@ public class CustomerRepositoryTest {
     }
 
     @Test
-    public void customerSearchTest() {
+    void customerSearchTest() {
         assertEquals("Jhon Doe", customerRepository.customerSearch("jhon").stream().findFirst().get().getName());
     }
 

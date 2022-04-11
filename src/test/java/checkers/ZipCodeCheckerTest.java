@@ -13,12 +13,12 @@ public class ZipCodeCheckerTest {
 
 
     @Test
-    public void validZipTest() {
+    void validZipTest() {
     assertTrue(zipCodeChecker.check("1154"));
     }
 
     @Test
-    public void notValidZipTest() {
+    void notValidZipTest() {
         assertFalse(zipCodeChecker.check("joe"));
     }
 

@@ -12,17 +12,17 @@ public class EmailCheckingTest {
 
 
     @Test
-    public void validEmailCheck() {
+    void validEmailCheck() {
         assertTrue(emailChecking.check("jhon_doe@gmail.conm"));
     }
 
     @Test
-    public void notValidEmailCheckDoubleDot() {
+    void notValidEmailCheckDoubleDot() {
         assertFalse(emailChecking.check("jhon..doe@gmail.a"));
     }
 
     @Test
-    public void notValidEmailCheckNotSign() {
+    void notValidEmailCheckNotSign() {
         assertFalse(emailChecking.check("jhon.doegmail.a"));
     }
 

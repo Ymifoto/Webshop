@@ -12,7 +12,7 @@ public class OutputHandlerTest {
 
 
     @BeforeEach
-    public void initMaps() {
+    void initMaps() {
 
     }
 

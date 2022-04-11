@@ -12,12 +12,12 @@ public class StringLenghtCheckerTest {
 
 
     @Test
-    public void validStringTest() {
+    void validStringTest() {
         assertTrue(stringLenghtChecker.check("joe"));
     }
 
     @Test
-    public void notValidStringTest() {
+    void notValidStringTest() {
         assertFalse(stringLenghtChecker.check(""));
     }
 

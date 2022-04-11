@@ -12,14 +12,14 @@ import java.util.TreeMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ProductRepositoryTest {
+class ProductRepositoryTest {
 
     private static final AdminRepository adminRepository = AdminRepository.getRepository();
     private static final ProductRepository productRepository = ProductRepository.getRepository();
 
 
     @BeforeAll
-    public static void initDataBase() {
+    static void initDataBase() {
         Repository.setTestMode(true);
         if (!Repository.isTestDatabaseCreated()) {
             adminRepository.createTables();
@@ -29,46 +29,46 @@ public class ProductRepositoryTest {
     }
 
     @Test
-    public void getProductTypesTest() {
+    void getProductTypesTest() {
         assertFalse(productRepository.getProductTypes().isEmpty());
     }
 
     @Test
-    public void productSearchValidTest() {
+    void productSearchValidTest() {
         assertFalse(productRepository.productSearch("Charge").isEmpty());
     }
 
     @Test
-    public void productSearchNotValidTest() {
+    void productSearchNotValidTest() {
         assertTrue(productRepository.productSearch("xxxxxx").isEmpty());
     }
 
     @Test
-    public void getProductByIdValidTest() {
+    void getProductByIdValidTest() {
         Product product;
         product = productRepository.getProductById(1);
         assertNotNull(product);
     }
 
     @Test
-    public void getProductByIdNotValidTest() {
+    void getProductByIdNotValidTest() {
         Product product;
         product = productRepository.getProductById(999);
         assertNull(product);
     }
 
     @Test
-    public void getOnSaleProductsTest() {
+    void getOnSaleProductsTest() {
         assertFalse(productRepository.getStockOrDiscountProducts("on_sale").isEmpty());
     }
 
     @Test
-    public void getInStockProductsTest() {
+    void getInStockProductsTest() {
         assertFalse(productRepository.getStockOrDiscountProducts("in_stock").isEmpty());
     }
 
     @Test
-    public void addProductTest() {
+    void addProductTest() {
         Map<String,String> productData = new TreeMap<>();
         productData.put("name", "Test product");
         productData.put("vendor", "1");
@@ -82,7 +82,7 @@ public class ProductRepositoryTest {
     }
 
     @Test
-    public void updateProductTest() {
+    void updateProductTest() {
         Map<String,String> productData = new TreeMap<>();
         productData.put("sale_price","1000");
         Product product = productRepository.getProductById(1);
@@ -92,7 +92,7 @@ public class ProductRepositoryTest {
     }
 
     @Test
-    public void addProductToCategoryTest() {
+    void addProductToCategoryTest() {
         Map<String,String> productData = new TreeMap<>();
         productData.put("sale_price","1000");
         Product product = productRepository.getProductById(1);

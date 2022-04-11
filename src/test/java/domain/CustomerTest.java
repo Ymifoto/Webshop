@@ -11,44 +11,44 @@ import java.util.TreeMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CustomerTest {
+class CustomerTest {
 
-    Customer customer;
-    Address shippingAddress;
-    Address billingAddress;
-    Map<String,String> customerData = new TreeMap<>();
-    Map<String,String> addressData = new TreeMap<>();
+    private Customer customer;
+    private Address shippingAddress;
+    private Address billingAddress;
+    private Map<String,String> customerData = new TreeMap<>();
+    private Map<String,String> addressData = new TreeMap<>();
 
 
 
     @BeforeEach
-    public void setCustomer() {
+    void setCustomer() {
         customer = getCustomer();
     }
 
 
     @Test
-    public void checkCustomerDifferentAddress() {
+    void checkCustomerDifferentAddress() {
         assertFalse(customer.isSameAddress());
         assertNotEquals(customer.getShippingAddress(), customer.getBillingAddress());
     }
 
     @Test
-    public void checkCustomerUpdate() {
+    void checkCustomerUpdate() {
         addressData.put("city","Debrecen");
         customer.getShippingAddress().updateData(addressData);
         assertEquals("Debrecen",customer.getShippingAddress().getCity());
     }
 
     @Test
-    public void checkCustomerNull() {
+    void checkCustomerNull() {
         addressData.put("city",null);
         customer.getShippingAddress().updateData(addressData);
         assertNotEquals(null,customer.getShippingAddress().getCity());
     }
 
     @Test
-    public void compareCustomersTest() {
+    void compareCustomersTest() {
         Customer customer1 = getCustomer();
         Customer customer2 = getCustomer();
         assertEquals(customer1,customer2);

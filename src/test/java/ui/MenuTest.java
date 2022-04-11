@@ -15,12 +15,12 @@ public class MenuTest {
     private Menu menu;
 
     @BeforeEach
-    public void init() {
+    void init() {
         menu = new ProductsMenu();
     }
 
     @Test
-    public void addProductToCartTest() {
+    void addProductToCartTest() {
         assertTrue(menu.getShoppingCart().getProductList().isEmpty());
         menu.addProductToCart(new Product(1,"Test product","Teszt",10000,5000,"Description","Test product", Tax.AFA,true));
         assertFalse(menu.getShoppingCart().getProductList().isEmpty());

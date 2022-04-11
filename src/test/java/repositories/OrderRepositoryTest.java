@@ -12,7 +12,7 @@ import java.util.TreeMap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-public class OrderRepositoryTest {
+class OrderRepositoryTest {
 
 
     private static final AdminRepository adminRepository = AdminRepository.getRepository();
@@ -23,7 +23,7 @@ public class OrderRepositoryTest {
     private static final ShoppingCart shoppingCart = new ShoppingCart();
 
     @BeforeAll
-    public static void initDataBase() {
+    static void initDataBase() {
         Repository.setTestMode(true);
         if (!Repository.isTestDatabaseCreated()) {
             adminRepository.createTables();
@@ -33,26 +33,26 @@ public class OrderRepositoryTest {
     }
 
     @Test
-    public void getInProgressOrdersTest() {
+    void getInProgressOrdersTest() {
         int id = saveTestOrder();
         assertEquals(1,orderRepository.getInProgressOrders().stream().filter(o -> o.getId() == id).count());
     }
 
     @Test
-    public void setOrderShippedDoneTest() {
+    void setOrderShippedDoneTest() {
         int id = saveTestOrder();
         orderRepository.setOrderShippedDone(id);
         assertEquals(0, orderRepository.getInProgressOrders().stream().filter(o -> o.getId() == id).count());
     }
 
     @Test
-    public void orderSearchTest() {
+    void orderSearchTest() {
         saveTestOrder();
         assertFalse(orderRepository.orderSearch("jhon_doe@gmail.com").isEmpty());
     }
 
     @Test
-    public void getAllOrdersTest() {
+    void getAllOrdersTest() {
         saveTestOrder();
         assertFalse(orderRepository.getAllOrders().isEmpty());
     }

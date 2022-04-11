@@ -16,12 +16,12 @@ public class OrderTest {
     private Order order;
 
     @BeforeEach
-    public void createOrder() {
+    void createOrder() {
         order = new Order(1,getCustomer(),"Home delivery", "Credit card",1600, 99000, new Date(), false);
     }
 
     @Test
-    public void getOrderAttributes() {
+    void getOrderAttributes() {
        assertEquals(1, order.getId());
        assertTrue(order.toString().length()>0);
     }

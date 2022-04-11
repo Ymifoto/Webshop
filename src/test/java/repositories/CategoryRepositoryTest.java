@@ -20,7 +20,7 @@ public class CategoryRepositoryTest {
     private static final ProductRepository productRepository = ProductRepository.getRepository();
 
     @BeforeAll
-    public static void initDataBase() {
+    static void initDataBase() {
         Repository.setTestMode(true);
         if (!Repository.isTestDatabaseCreated()) {
             adminRepository.createTables();
@@ -30,22 +30,22 @@ public class CategoryRepositoryTest {
     }
 
     @Test
-    public void getCategeryByIdValidTest() {
+    void getCategeryByIdValidTest() {
         assertNotNull(categoryRepository.getCategroyById(1));
     }
 
     @Test
-    public void getCategeryByIdNotValidTest() {
+    void getCategeryByIdNotValidTest() {
         assertNull(categoryRepository.getCategroyById(999));
     }
 
     @Test
-    public void getCategoryListTest() {
+    void getCategoryListTest() {
         assertFalse(categoryRepository.getCategoryList().isEmpty());
     }
 
     @Test
-    public void addCategoryTest() {
+    void addCategoryTest() {
         Map<String, String> data = new TreeMap<>();
         data.put("category_name", "Test category");
         data.put("category_desc", "Test category description");
@@ -56,7 +56,7 @@ public class CategoryRepositoryTest {
     }
 
     @Test
-    public void updateCategoryTest() {
+    void updateCategoryTest() {
         Category category = categoryRepository.getCategroyById(1);
         category.setName("New test category");
         category.setDescription("Updated test category description");
@@ -66,7 +66,7 @@ public class CategoryRepositoryTest {
     }
 
     @Test
-    public void addProductToCategoryTest() {
+    void addProductToCategoryTest() {
         Category category = categoryRepository.getCategroyById(22);
         assertTrue(category.getProducts().isEmpty());
         productRepository.addProductToCategory(1, 22);

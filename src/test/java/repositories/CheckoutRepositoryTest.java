@@ -17,7 +17,7 @@ public class CheckoutRepositoryTest {
 
 
     @BeforeAll
-    public static void initDataBase() {
+    static void initDataBase() {
         Repository.setTestMode(true);
         if (!Repository.isTestDatabaseCreated()) {
             adminRepository.createTables();
@@ -27,7 +27,7 @@ public class CheckoutRepositoryTest {
     }
 
     @Test
-    public void getShippingCostTest() {
+    void getShippingCostTest() {
         assertEquals(0, checkoutRepository.getShippingCostById(1, 10_000));
         assertEquals(1600, checkoutRepository.getShippingCostById(2, 100_000));
         assertEquals(890, checkoutRepository.getShippingCostById(2, 150_000));
@@ -35,25 +35,25 @@ public class CheckoutRepositoryTest {
     }
 
     @Test
-    public void getShippingMethodNameTest() {
+    void getShippingMethodNameTest() {
         assertEquals("Home delivery", checkoutRepository.getShippingMethodName(1));
         assertEquals("Personal receipt", checkoutRepository.getShippingMethodName(2));
     }
 
     @Test
-    public void getPaymentMethodsTest() {
+    void getPaymentMethodsTest() {
         Map<Integer, String> paymentMethods = checkoutRepository.getPaymentMethods();
         assertEquals("Cash on delivery", paymentMethods.get(1));
         assertEquals("Credit card", paymentMethods.get(2));
     }
 
     @Test
-    public void getInvalidShippingMethodNameTest() {
+    void getInvalidShippingMethodNameTest() {
         assertNull(checkoutRepository.getShippingMethodName(999));
     }
 
     @Test
-    public void getShippingMethodsTest() {
+    void getShippingMethodsTest() {
         assertFalse(checkoutRepository.getShippingMethods(1000).isEmpty());
     }
 }
