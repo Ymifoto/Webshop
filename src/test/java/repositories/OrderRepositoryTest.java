@@ -1,15 +1,17 @@
 package repositories;
 
+import hu.progmasters.webshop.domain.Order;
 import hu.progmasters.webshop.domain.Product;
 import hu.progmasters.webshop.domain.ShoppingCart;
 import hu.progmasters.webshop.repositories.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class OrderRepositoryTest {
@@ -35,32 +37,40 @@ class OrderRepositoryTest {
     @Test
     void getInProgressOrdersTest() {
         int id = saveTestOrder();
-        assertEquals(1,orderRepository.getInProgressOrders().stream().filter(o -> o.getId() == id).count());
+        List<Order> orderList = orderRepository.getInProgressOrders();
+        assertThat(orderList)
+                .isNotEmpty()
+                .extracting(Order::getId)
+                .contains(id);
     }
 
     @Test
     void setOrderShippedDoneTest() {
         int id = saveTestOrder();
         orderRepository.setOrderShippedDone(id);
-        assertEquals(0, orderRepository.getInProgressOrders().stream().filter(o -> o.getId() == id).count());
+        List<Order> orderList = orderRepository.getInProgressOrders();
+        assertThat(orderList)
+                .isNotEmpty()
+                .extracting(Order::getId)
+                .doesNotContain(id);
     }
 
     @Test
     void orderSearchTest() {
-        saveTestOrder();
-        assertFalse(orderRepository.orderSearch("jhon_doe@gmail.com").isEmpty());
+        int id = saveTestOrder();
+        assertFalse(orderRepository.orderSearch(String.valueOf(id)).isEmpty());
     }
 
     @Test
     void getAllOrdersTest() {
-        saveTestOrder();
+        int id = saveTestOrder();
         assertFalse(orderRepository.getAllOrders().isEmpty());
     }
 
     private int saveTestOrder() {
         setUpShoppingCart();
         int cartTotal = shoppingCart.getProductList().stream().mapToInt(Product::getPrice).sum();
-        int shippingCost = checkoutRepository.getShippingCostById(2,cartTotal);
+        int shippingCost = checkoutRepository.getShippingCostById(2, cartTotal);
         Map<String, String> order = new TreeMap<>();
         order.put("customer_id", String.valueOf(shoppingCart.getCustomer().getId()));
         order.put("shipping_method", "2");
@@ -77,5 +87,4 @@ class OrderRepositoryTest {
         shoppingCart.getProductList().add(productRepository.getProductById(3));
         shoppingCart.getProductList().add(productRepository.getProductById(25));
     }
-
 }

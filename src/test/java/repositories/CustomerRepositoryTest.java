@@ -12,8 +12,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class CustomerRepositoryTest {
+class CustomerRepositoryTest {
 
     private static final AdminRepository adminRepository = AdminRepository.getRepository();
     private static final CustomerRepository customerRepository = CustomerRepository.getRepository();
@@ -31,12 +32,17 @@ public class CustomerRepositoryTest {
 
     @Test
     void getCustomerByEmailTest() {
-        assertEquals("Jhon Doe",customerRepository.getCustomerByEmail("jhon_doe@gmail.com").get().getName());
+        assertEquals("Jhon Doe",customerRepository.getCustomerByEmail("jhon_doe@gmail.com").orElse(null).getName());
     }
 
     @Test
-    void getCustomerByIdTest() {
-        assertEquals("Jhon Doe",customerRepository.getCustomerById(1).get().getName());
+    void getCustomerByIdTest_Valid() {
+        assertEquals("Jhon Doe",customerRepository.getCustomerById(1).orElse(null).getName());
+    }
+
+    @Test
+    void getCustomerByIdTest_NotValid() {
+        assertNull(customerRepository.getCustomerById(9999).orElse(null));
     }
 
     @Test
@@ -62,7 +68,7 @@ public class CustomerRepositoryTest {
 
     @Test
     void customerSearchTest() {
-        assertEquals("Jhon Doe", customerRepository.customerSearch("jhon").stream().findFirst().get().getName());
+        assertEquals("Jhon Doe", customerRepository.customerSearch("jhon").stream().findFirst().orElse(null).getName());
     }
 
     private static Customer getTestCutomer() {

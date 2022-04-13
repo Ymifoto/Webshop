@@ -70,6 +70,7 @@ public class OrderRepository extends Repository {
                 + "JOIN address AS a ON c.id = a.customer_id "
                 + "WHERE email LIKE ? "
                 + "OR name LIKE ? "
+                + "OR o.id LIKE ? "
                 + "OR company_name LIKE ? ;";
 
         try (Connection connection = getConnection();
@@ -78,6 +79,7 @@ public class OrderRepository extends Repository {
             preparedStatement.setString(1, keyword);
             preparedStatement.setString(2, keyword);
             preparedStatement.setString(3, keyword);
+            preparedStatement.setString(4, keyword);
             ResultSet result = preparedStatement.executeQuery();
             getOrdersList(result, ordersList);
         } catch (SQLException e) {

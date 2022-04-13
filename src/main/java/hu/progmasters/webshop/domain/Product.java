@@ -136,5 +136,9 @@ public class Product {
     private void setOnSale() {
         onSale = salePrice > 0;
     }
+
+    public boolean isOnSale() {
+        return onSale;
+    }
 }
 

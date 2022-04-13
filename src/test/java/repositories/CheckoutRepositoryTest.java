@@ -3,14 +3,18 @@ package repositories;
 import hu.progmasters.webshop.repositories.AdminRepository;
 import hu.progmasters.webshop.repositories.CheckoutRepository;
 import hu.progmasters.webshop.repositories.Repository;
+import org.assertj.core.api.SoftAssertions;
+import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CheckoutRepositoryTest {
+@ExtendWith(SoftAssertionsExtension.class)
+class CheckoutRepositoryTest {
 
     private static final AdminRepository adminRepository = AdminRepository.getRepository();
     private static final CheckoutRepository checkoutRepository = CheckoutRepository.getRepository();
@@ -35,9 +39,14 @@ public class CheckoutRepositoryTest {
     }
 
     @Test
-    void getShippingMethodNameTest() {
+    void getShippingMethodNameTest_Valid() {
         assertEquals("Home delivery", checkoutRepository.getShippingMethodName(1));
         assertEquals("Personal receipt", checkoutRepository.getShippingMethodName(2));
+    }
+
+    @Test
+    void getShippingMethodNameTest_NotValid() {
+        assertNull(checkoutRepository.getShippingMethodName(999));
     }
 
     @Test
@@ -45,11 +54,6 @@ public class CheckoutRepositoryTest {
         Map<Integer, String> paymentMethods = checkoutRepository.getPaymentMethods();
         assertEquals("Cash on delivery", paymentMethods.get(1));
         assertEquals("Credit card", paymentMethods.get(2));
-    }
-
-    @Test
-    void getInvalidShippingMethodNameTest() {
-        assertNull(checkoutRepository.getShippingMethodName(999));
     }
 
     @Test
