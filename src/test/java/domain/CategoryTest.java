@@ -11,7 +11,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CategoryTest {
+class CategoryTest {
 
     private Category category;
     private final Product product = new Product(1,"Test Product","Test",100,50,"Test product", "Test", Tax.AFA, true );

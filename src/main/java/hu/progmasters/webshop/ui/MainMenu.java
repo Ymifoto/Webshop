@@ -1,6 +1,7 @@
 package hu.progmasters.webshop.ui;
 
 import hu.progmasters.webshop.domain.Customer;
+import hu.progmasters.webshop.handlers.InputHandler;
 import hu.progmasters.webshop.handlers.LogHandler;
 import hu.progmasters.webshop.handlers.OutputHandler;
 import hu.progmasters.webshop.ui.menuoptions.MainMenuOptions;
@@ -53,7 +54,7 @@ public class MainMenu extends Menu {
     protected void setCustomer() {
         Optional<Customer> customer;
         System.out.print("Give your email address: ");
-        String email = inputHandler.getInputString();
+        String email = InputHandler.getInputString();
         customer = customerMenu.getCustomerByEmail(email);
         if (customer.isPresent()) {
             shoppingCart.setCustomer(customer.get());

@@ -17,6 +17,9 @@ public class LogHandler {
         create();
     }
 
+    private LogHandler() {
+    }
+
     public static void addLog(String event) {
         try (BufferedWriter writer = Files.newBufferedWriter(Path.of(FILE), StandardCharsets.UTF_8, StandardOpenOption.APPEND)) {
                 writer.write(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) + " - " + event);

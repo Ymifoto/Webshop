@@ -6,6 +6,9 @@ import java.util.Set;
 
 public class OutputHandler {
 
+    private OutputHandler() {
+    }
+
     private static final int VERTICAL_LINE_DIFFERENT_MAP = 7;
     private static final int VERTICAL_LINE_DIFFERENT_LIST = 4;
     private static final String RED = "\033[0;31m";

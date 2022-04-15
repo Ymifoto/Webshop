@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 
 import java.util.*;
 
-public class OutputHandlerTest {
+class OutputHandlerTest {
 
     Map<String, String> outputMap = new HashMap<>();
     List<String> outpuString = new ArrayList<>();
