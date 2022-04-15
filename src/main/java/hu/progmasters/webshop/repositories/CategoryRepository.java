@@ -13,15 +13,7 @@ import java.util.TreeMap;
 
 public class CategoryRepository extends Repository {
 
-    private static final CategoryRepository CATEGORY_REPOSITORY = new CategoryRepository();
     private static final String TABLE = "categories_name";
-
-    private CategoryRepository() {
-    }
-
-    public static CategoryRepository getRepository() {
-        return CATEGORY_REPOSITORY;
-    }
 
     public Category getCategroyById(int id) {
         String sql = "SELECT * FROM categories_name WHERE id = ?;";

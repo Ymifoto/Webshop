@@ -5,42 +5,45 @@ import java.util.Scanner;
 
 public class InputHandler {
 
-    private final Scanner scanner = new Scanner(System.in);
+    private static final Scanner SCANNER = new Scanner(System.in);
 
-    public int getInputNumber() {
+    private InputHandler() {
+    }
+
+    public static int getInputNumber() {
         int option = -1;
         do {
             try {
-                option = scanner.nextInt();
+                option = SCANNER.nextInt();
             } catch (InputMismatchException e) {
                 OutputHandler.outputRed("It's not a number");
-                scanner.nextLine();
+                SCANNER.nextLine();
             }
         } while (option < 0);
-        scanner.nextLine();
+        SCANNER.nextLine();
         return option;
     }
 
-    public String getInputString() {
+    public static String getInputString() {
         String data;
         do {
-            data = scanner.nextLine();
+            data = SCANNER.nextLine();
 
         } while (data == null);
         return data;
     }
 
-    public double getInputDouble() {
+    public static double getInputDouble() {
         double option = -1;
         do {
             try {
-                option = scanner.nextDouble();
+                option = SCANNER.nextDouble();
             } catch (InputMismatchException e) {
                 OutputHandler.outputRed("It's not a number");
-                scanner.nextLine();
+                SCANNER.nextLine();
             }
         } while (option < 0);
-        scanner.nextLine();
+        SCANNER.nextLine();
         return option;
     }
 }

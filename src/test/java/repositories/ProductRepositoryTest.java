@@ -16,8 +16,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ProductRepositoryTest {
 
-    private static final AdminRepository adminRepository = AdminRepository.getRepository();
-    private static final ProductRepository productRepository = ProductRepository.getRepository();
+    private static final AdminRepository adminRepository = new AdminRepository();
+    private static final ProductRepository productRepository = new ProductRepository();
 
 
     @BeforeAll

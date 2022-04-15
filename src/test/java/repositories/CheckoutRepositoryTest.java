@@ -16,8 +16,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(SoftAssertionsExtension.class)
 class CheckoutRepositoryTest {
 
-    private static final AdminRepository adminRepository = AdminRepository.getRepository();
-    private static final CheckoutRepository checkoutRepository = CheckoutRepository.getRepository();
+    private static final AdminRepository adminRepository = new AdminRepository();
+    private static final CheckoutRepository checkoutRepository = new CheckoutRepository();
 
 
     @BeforeAll

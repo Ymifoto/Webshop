@@ -11,15 +11,7 @@ import java.util.List;
 
 public class OrderRepository extends Repository {
 
-    private static final OrderRepository ORDER_REPOSITORY = new OrderRepository();
-    private final AddressRepository addressRepository = AddressRepository.getRepository();
-
-    private OrderRepository() {
-    }
-
-    public static OrderRepository getRepository() {
-        return ORDER_REPOSITORY;
-    }
+    private AddressRepository addressRepository = new AddressRepository();
 
     public List<Order> getAllOrders() {
         List<Order> orders = new ArrayList<>();
@@ -56,7 +48,7 @@ public class OrderRepository extends Repository {
         return orders;
     }
 
-    public void setOrderShippedDone(int id) {
+    public void setOrderShipped(int id) {
         String sql = "UPDATE orders SET shipped = 1 WHERE id = " + id;
         execute(sql);
     }

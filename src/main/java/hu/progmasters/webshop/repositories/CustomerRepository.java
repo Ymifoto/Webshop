@@ -10,16 +10,9 @@ import java.util.TreeSet;
 
 public class CustomerRepository extends Repository {
 
-    private static final CustomerRepository CUSTOMER_REPOSITORY = new CustomerRepository();
+    AddressRepository addressRepository = new AddressRepository();
+
     private static final String TABLE = "customers";
-    private final AddressRepository addressRepository = AddressRepository.getRepository();
-
-    private CustomerRepository() {
-    }
-
-    public static CustomerRepository getRepository() {
-        return CUSTOMER_REPOSITORY;
-    }
 
     public Set<Customer> customerSearch(String keyword) {
         keyword = "%" + keyword + "%";
@@ -57,7 +50,7 @@ public class CustomerRepository extends Repository {
             Set<Customer> customer = makeCustomers(result);
             return customer.isEmpty() ? Optional.empty() : customer.stream().findFirst();
         } catch (SQLException e) {
-            System.out.println("Not find customer!");
+            System.out.println(e.getMessage());
         }
         return Optional.empty();
     }

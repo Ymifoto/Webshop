@@ -12,15 +12,7 @@ import java.util.Map;
 
 public class AddressRepository extends Repository {
 
-    private static final AddressRepository ADDRESS_REPOSITORY = new AddressRepository();
     private static final String TABLE = "address";
-
-    private AddressRepository() {
-    }
-
-    public static AddressRepository getRepository() {
-        return ADDRESS_REPOSITORY;
-    }
 
     public void addAddresses(Map<String, String> data, int customerId) {
         data.put("customer_id", String.valueOf(customerId));

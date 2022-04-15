@@ -9,16 +9,8 @@ import java.util.stream.Collectors;
 
 public class AdminRepository extends Repository {
 
-    private static final AdminRepository ADMIN_REPOSITORY = new AdminRepository();
     private static final String SAMPLE_DATA_FILE = "src/main/resources/webshop_sampledata.csv";
     private static final String TEST_DATA_FILE = "src/main/resources/webshop_testdata.csv";
-
-    private AdminRepository() {
-    }
-
-    public static AdminRepository getRepository() {
-        return ADMIN_REPOSITORY;
-    }
 
     public void loadData() {
         try (BufferedReader bufferedReader = Files.newBufferedReader(Path.of(SAMPLE_DATA_FILE))) {

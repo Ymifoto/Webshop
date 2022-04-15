@@ -19,9 +19,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(SoftAssertionsExtension.class)
 class CategoryRepositoryTest {
 
-    private static final AdminRepository adminRepository = AdminRepository.getRepository();
-    private static final CategoryRepository categoryRepository = CategoryRepository.getRepository();
-    private static final ProductRepository productRepository = ProductRepository.getRepository();
+    private static final AdminRepository adminRepository = new AdminRepository();
+    private static final CategoryRepository categoryRepository = new CategoryRepository();
+    private static final ProductRepository productRepository = new ProductRepository();
 
     @BeforeAll
     static void initDataBase() {

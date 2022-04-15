@@ -16,8 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 class CustomerRepositoryTest {
 
-    private static final AdminRepository adminRepository = AdminRepository.getRepository();
-    private static final CustomerRepository customerRepository = CustomerRepository.getRepository();
+    private static final AdminRepository adminRepository = new AdminRepository();
+    private static final CustomerRepository customerRepository = new CustomerRepository();
     private static final Customer customer = getTestCutomer();
 
     @BeforeAll

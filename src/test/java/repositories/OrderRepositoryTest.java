@@ -16,12 +16,11 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class OrderRepositoryTest {
 
-
-    private static final AdminRepository adminRepository = AdminRepository.getRepository();
-    private static final OrderRepository orderRepository = OrderRepository.getRepository();
-    private static final CustomerRepository customerRepository = CustomerRepository.getRepository();
-    private static final ProductRepository productRepository = ProductRepository.getRepository();
-    private static final CheckoutRepository checkoutRepository = CheckoutRepository.getRepository();
+    private static final AdminRepository adminRepository = new AdminRepository();
+    private static final OrderRepository orderRepository = new OrderRepository();
+    private static final CustomerRepository customerRepository = new CustomerRepository();
+    private static final ProductRepository productRepository = new ProductRepository();
+    private static final CheckoutRepository checkoutRepository = new CheckoutRepository();
     private static final ShoppingCart shoppingCart = new ShoppingCart();
 
     @BeforeAll
@@ -47,7 +46,7 @@ class OrderRepositoryTest {
     @Test
     void setOrderShippedDoneTest() {
         int id = saveTestOrder();
-        orderRepository.setOrderShippedDone(id);
+        orderRepository.setOrderShipped(id);
         List<Order> orderList = orderRepository.getInProgressOrders();
         assertThat(orderList)
                 .isNotEmpty()

@@ -1,6 +1,5 @@
 package hu.progmasters.webshop.ui;
 
-import hu.progmasters.webshop.checkers.Checker;
 import hu.progmasters.webshop.domain.Product;
 import hu.progmasters.webshop.domain.ShoppingCart;
 import hu.progmasters.webshop.handlers.InputHandler;
@@ -9,7 +8,6 @@ import hu.progmasters.webshop.ui.menuoptions.MenuOption;
 
 public abstract class Menu {
 
-    protected final InputHandler inputHandler = new InputHandler();
     protected static final ShoppingCart shoppingCart = new ShoppingCart();
 
 
@@ -22,7 +20,7 @@ public abstract class Menu {
         }
         do {
             System.out.print("Choose an option: ");
-            option = inputHandler.getInputNumber();
+            option = InputHandler.getInputNumber();
 
         } while (option < 1 || option > menuOptions.length);
         return menuOptions[option - 1];
@@ -32,7 +30,7 @@ public abstract class Menu {
         String answer;
         do {
             System.out.print(question);
-            answer = inputHandler.getInputString().toLowerCase();
+            answer = InputHandler.getInputString().toLowerCase();
             if (!answer.equals("y") && !answer.equals("n")) {
                 System.out.println("Wrong choice!");
             }
@@ -46,16 +44,6 @@ public abstract class Menu {
         } else {
             OutputHandler.outputRed("Product out of stock!");
         }
-    }
-
-    protected String checkInputData(Checker checker, String oldData, String question) {
-        String data;
-        do {
-            System.out.print(oldData != null ? "(" + oldData + ") " : "");
-            System.out.print(question);
-            data = inputHandler.getInputString();
-        } while (!checker.check(data));
-        return data;
     }
 
     public ShoppingCart getShoppingCart() {

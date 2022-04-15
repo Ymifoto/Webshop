@@ -13,15 +13,7 @@ import java.util.TreeMap;
 
 public class CheckoutRepository extends Repository {
 
-    private static final CheckoutRepository CHECKOUT_REPOSITORY = new CheckoutRepository();
     private static final String TABLE = "orders";
-
-    private CheckoutRepository() {
-    }
-
-    public static CheckoutRepository getRepository() {
-        return CHECKOUT_REPOSITORY;
-    }
 
     public int saveOrder(Map<String, String> order, List<Product> orderedProducts) {
         int id = insert(TABLE, order);
