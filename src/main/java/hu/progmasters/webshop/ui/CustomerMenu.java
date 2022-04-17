@@ -2,6 +2,7 @@ package hu.progmasters.webshop.ui;
 
 import hu.progmasters.webshop.domain.Customer;
 import hu.progmasters.webshop.handlers.InputHandler;
+import hu.progmasters.webshop.repositories.CustomerRepository;
 import hu.progmasters.webshop.services.CustomerService;
 import hu.progmasters.webshop.ui.menuoptions.CustomersMenuOptions;
 
@@ -9,7 +10,7 @@ import java.util.Optional;
 
 public class CustomerMenu extends Menu {
 
-    private final CustomerService customerService = new CustomerService();
+    private final CustomerService customerService = new CustomerService(new CustomerRepository());
 
     public void menuOptions() {
         int id;

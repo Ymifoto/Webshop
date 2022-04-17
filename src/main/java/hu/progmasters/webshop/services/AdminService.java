@@ -3,11 +3,19 @@ package hu.progmasters.webshop.services;
 import hu.progmasters.webshop.domain.Category;
 import hu.progmasters.webshop.domain.Product;
 import hu.progmasters.webshop.handlers.InputHandler;
+import hu.progmasters.webshop.repositories.AdminRepository;
 
 import java.util.Map;
 import java.util.TreeMap;
 
 public class AdminService extends Services {
+
+    private AdminRepository adminRepository;
+
+    public AdminService(AdminRepository adminRepository) {
+        this.adminRepository = adminRepository;
+        setAdminRepository(adminRepository);
+    }
 
     private Product updatingProduct;
 

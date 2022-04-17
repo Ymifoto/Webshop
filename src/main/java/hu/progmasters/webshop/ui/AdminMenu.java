@@ -1,11 +1,12 @@
 package hu.progmasters.webshop.ui;
 
+import hu.progmasters.webshop.repositories.AdminRepository;
 import hu.progmasters.webshop.services.AdminService;
 import hu.progmasters.webshop.ui.menuoptions.AdminMenuOptions;
 
 public class AdminMenu extends Menu {
 
-    private final AdminService adminService = new AdminService();
+    private final AdminService adminService = new AdminService(new AdminRepository());
 
     public void menuOptions() {
         AdminMenuOptions option;

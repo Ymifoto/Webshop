@@ -1,11 +1,12 @@
 package hu.progmasters.webshop.ui;
 
+import hu.progmasters.webshop.repositories.CategoryRepository;
 import hu.progmasters.webshop.services.CategoryService;
 import hu.progmasters.webshop.ui.menuoptions.CategoryMenuOptions;
 
 public class CategoryMenu extends Menu {
 
-    private final CategoryService categoryService = new CategoryService();
+    private final CategoryService categoryService = new CategoryService(new CategoryRepository());
 
     public void menuOptions() {
         CategoryMenuOptions option;

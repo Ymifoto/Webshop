@@ -1,11 +1,12 @@
 package hu.progmasters.webshop.ui;
 
+import hu.progmasters.webshop.repositories.ProductRepository;
 import hu.progmasters.webshop.services.ProductService;
 import hu.progmasters.webshop.ui.menuoptions.ProductsMenuOptions;
 
 public class ProductsMenu extends Menu {
 
-    private final ProductService productService = new ProductService();
+    private final ProductService productService = new ProductService(new ProductRepository());
 
 
     public void menuOptions() {

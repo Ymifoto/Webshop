@@ -7,6 +7,7 @@ import hu.progmasters.webshop.domain.Address;
 import hu.progmasters.webshop.domain.Customer;
 import hu.progmasters.webshop.handlers.InputHandler;
 import hu.progmasters.webshop.handlers.OutputHandler;
+import hu.progmasters.webshop.repositories.CustomerRepository;
 
 import java.util.Map;
 import java.util.Optional;
@@ -15,6 +16,13 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 public class CustomerService extends Services {
+
+    private CustomerRepository customerRepository;
+
+    public CustomerService(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+        setCustomerRepository(customerRepository);
+    }
 
     public void customerSearch() {
         System.out.println("Search customers");

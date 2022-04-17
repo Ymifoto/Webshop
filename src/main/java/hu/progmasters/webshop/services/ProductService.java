@@ -3,6 +3,7 @@ package hu.progmasters.webshop.services;
 import hu.progmasters.webshop.domain.Product;
 import hu.progmasters.webshop.handlers.InputHandler;
 import hu.progmasters.webshop.handlers.OutputHandler;
+import hu.progmasters.webshop.repositories.ProductRepository;
 
 import java.util.Comparator;
 import java.util.List;
@@ -11,6 +12,12 @@ import java.util.TreeMap;
 
 public class ProductService extends Services {
 
+    private ProductRepository productRepository;
+
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+        setProductRepository(productRepository);
+    }
 
     public void getOnSaleProducts() {
         Map<String, String> onSaleProductList = new TreeMap<>(Comparator.comparingInt(Integer::parseInt));

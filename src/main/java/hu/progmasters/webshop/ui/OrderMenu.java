@@ -1,11 +1,12 @@
 package hu.progmasters.webshop.ui;
 
+import hu.progmasters.webshop.repositories.OrderRepository;
 import hu.progmasters.webshop.services.OrderService;
 import hu.progmasters.webshop.ui.menuoptions.OrdersMenuOptions;
 
 public class OrderMenu extends Menu {
 
-    private final OrderService orderService = new OrderService();
+    private final OrderService orderService = new OrderService(new OrderRepository());
 
     public void menuOptions() {
         OrdersMenuOptions option;

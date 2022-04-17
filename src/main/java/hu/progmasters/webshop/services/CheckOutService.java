@@ -5,6 +5,7 @@ import hu.progmasters.webshop.domain.Product;
 import hu.progmasters.webshop.domain.ShoppingCart;
 import hu.progmasters.webshop.handlers.InputHandler;
 import hu.progmasters.webshop.handlers.OutputHandler;
+import hu.progmasters.webshop.repositories.CheckoutRepository;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -27,6 +28,12 @@ public class CheckOutService extends Services {
     private String paymentMethod;
     private int generalTotal;
 
+    private CheckoutRepository checkoutRepository;
+
+    public CheckOutService(CheckoutRepository checkoutRepository) {
+        this.checkoutRepository = checkoutRepository;
+        setCheckoutRepository(checkoutRepository);
+    }
 
     public void chooseShippingMethod() {
         Map<Integer, Integer> shippingMethods = checkoutRepository.getShippingMethods(generalTotal);

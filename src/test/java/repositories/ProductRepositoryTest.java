@@ -18,6 +18,7 @@ class ProductRepositoryTest {
 
     private static final AdminRepository adminRepository = new AdminRepository();
     private static final ProductRepository productRepository = new ProductRepository();
+    private List<Product> productList;
 
 
     @BeforeAll
@@ -37,7 +38,11 @@ class ProductRepositoryTest {
 
     @Test
     void productSearchValidTest() {
-        assertFalse(productRepository.productSearch("Charge").isEmpty());
+        productList = productRepository.productSearch("JBL");
+        assertThat(productList)
+                .isNotEmpty()
+                .extracting(Product::getVendor)
+                .allMatch(v -> v.equals("JBL"));
     }
 
     @Test

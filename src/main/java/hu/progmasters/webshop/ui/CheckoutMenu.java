@@ -1,11 +1,12 @@
 package hu.progmasters.webshop.ui;
 
+import hu.progmasters.webshop.repositories.CheckoutRepository;
 import hu.progmasters.webshop.services.CheckOutService;
 import hu.progmasters.webshop.ui.menuoptions.CheckoutMenuOptions;
 
 public class CheckoutMenu extends Menu {
 
-    private final CheckOutService checkOutService = new CheckOutService();
+    private final CheckOutService checkOutService = new CheckOutService(new CheckoutRepository());
 
     public void menuOptions() {
         CheckoutMenuOptions option;

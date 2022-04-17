@@ -9,12 +9,12 @@ import hu.progmasters.webshop.repositories.*;
 
 public abstract class Services {
 
-    protected static final ProductRepository productRepository = new ProductRepository();
-    protected static final CategoryRepository categoryRepository = new CategoryRepository();
-    protected static final CustomerRepository customerRepository = new CustomerRepository();
-    protected static final OrderRepository orderRepository = new OrderRepository();
-    protected static final CheckoutRepository checkoutRepository = new CheckoutRepository();
-    protected static final AdminRepository adminRepository = new AdminRepository();
+    protected ProductRepository productRepository;
+    protected CategoryRepository categoryRepository;
+    protected CustomerRepository customerRepository;
+    protected OrderRepository orderRepository;
+    protected CheckoutRepository checkoutRepository;
+    protected AdminRepository adminRepository;
 
     public void addToCart(ShoppingCart shoppingCart) {
         System.out.print("Give a product id: ");
@@ -51,5 +51,27 @@ public abstract class Services {
         return answer.equals("y");
     }
 
+    protected void setProductRepository(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
+    protected void setCategoryRepository(CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
+    }
+
+    protected void setCustomerRepository(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
+
+    protected void setOrderRepository(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
+    }
+
+    protected void setCheckoutRepository(CheckoutRepository checkoutRepository) {
+        this.checkoutRepository = checkoutRepository;
+    }
+
+    protected void setAdminRepository(AdminRepository adminRepository) {
+        this.adminRepository = adminRepository;
+    }
 }

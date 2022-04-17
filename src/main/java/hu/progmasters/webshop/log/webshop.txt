@@ -1,5 +1,1 @@
-2022-04-15 15:33:47 - Start program
-2022-04-15 15:34:28 - Customer logged in: 1, Jhon Doe, jhon_doe@gmail.com
-2022-04-15 15:34:32 - Insert orders table, ID: 8
-2022-04-15 15:34:32 - Insert ordered_products table, ID: 13
-2022-04-15 15:34:32 - Insert ordered_products table, ID: 14
+2022-04-18 00:18:46 - Start program

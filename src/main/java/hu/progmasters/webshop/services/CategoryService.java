@@ -3,8 +3,16 @@ package hu.progmasters.webshop.services;
 import hu.progmasters.webshop.domain.Category;
 import hu.progmasters.webshop.handlers.InputHandler;
 import hu.progmasters.webshop.handlers.OutputHandler;
+import hu.progmasters.webshop.repositories.CategoryRepository;
 
 public class CategoryService extends Services {
+
+    private CategoryRepository categoryRepository;
+
+    public CategoryService(CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
+        setCategoryRepository(categoryRepository);
+    }
 
     public void getCategoryList() {
         System.out.println("Categories:");

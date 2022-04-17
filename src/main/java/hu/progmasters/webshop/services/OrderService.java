@@ -1,8 +1,16 @@
 package hu.progmasters.webshop.services;
 
 import hu.progmasters.webshop.handlers.InputHandler;
+import hu.progmasters.webshop.repositories.OrderRepository;
 
 public class OrderService extends Services {
+
+    private OrderRepository orderRepository;
+
+    public OrderService(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
+        setOrderRepository(orderRepository);
+    }
 
     public void getInProgressOrders() {
         orderRepository.getInProgressOrders().forEach(System.out::println);
