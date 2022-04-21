@@ -19,10 +19,11 @@ public class ProductService extends Services {
         setProductRepository(productRepository);
     }
 
-    public void getOnSaleProducts() {
+    public Map<String, String> getOnSaleProducts() {
         Map<String, String> onSaleProductList = new TreeMap<>(Comparator.comparingInt(Integer::parseInt));
-        productRepository.getStockOrDiscountProducts("on_sale").forEach(product -> onSaleProductList.put(String.valueOf(product.getId()), product.getValuesForList()));
+        productRepository.getStockOrDiscountProducts("on_sale").forEach(p -> onSaleProductList.put(String.valueOf(p.getId()), p.getValuesForList()));
         OutputHandler.printMapStringKey(onSaleProductList, "ID", "Products");
+        return onSaleProductList;
     }
 
     public void getInStockProducts() {
