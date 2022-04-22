@@ -9,16 +9,20 @@ import hu.progmasters.webshop.repositories.*;
 
 public abstract class Services {
 
-    protected ProductRepository productRepository;
-    protected CategoryRepository categoryRepository;
-    protected CustomerRepository customerRepository;
-    protected OrderRepository orderRepository;
-    protected CheckoutRepository checkoutRepository;
-    protected AdminRepository adminRepository;
+    protected static ProductRepository productRepository;
+    protected static CategoryRepository categoryRepository;
+    protected static CustomerRepository customerRepository;
+    protected static OrderRepository orderRepository;
+    protected static CheckoutRepository checkoutRepository;
+    protected static AdminRepository adminRepository;
 
     public void addToCart(ShoppingCart shoppingCart) {
         System.out.print("Give a product id: ");
-        addProductToCart(productRepository.getProductById(InputHandler.getInputNumber()), shoppingCart);
+        Product product = productRepository.getProductById(InputHandler.getInputNumber());
+        if (product != null) {
+            addProductToCart(product, shoppingCart);
+        }
+        System.out.println("Cant find product");
     }
 
     protected void addProductToCart(Product product, ShoppingCart shoppingCart) {
@@ -51,27 +55,27 @@ public abstract class Services {
         return answer.equals("y");
     }
 
-    protected void setProductRepository(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+    public static void setProductRepository(ProductRepository productRepository) {
+        Services.productRepository = productRepository;
     }
 
-    protected void setCategoryRepository(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
+    public static void setCategoryRepository(CategoryRepository categoryRepository) {
+        Services.categoryRepository = categoryRepository;
     }
 
-    protected void setCustomerRepository(CustomerRepository customerRepository) {
-        this.customerRepository = customerRepository;
+    public static void setCustomerRepository(CustomerRepository customerRepository) {
+        Services.customerRepository = customerRepository;
     }
 
-    protected void setOrderRepository(OrderRepository orderRepository) {
-        this.orderRepository = orderRepository;
+    public static void setOrderRepository(OrderRepository orderRepository) {
+        Services.orderRepository = orderRepository;
     }
 
-    protected void setCheckoutRepository(CheckoutRepository checkoutRepository) {
-        this.checkoutRepository = checkoutRepository;
+    public static void setCheckoutRepository(CheckoutRepository checkoutRepository) {
+        Services.checkoutRepository = checkoutRepository;
     }
 
-    protected void setAdminRepository(AdminRepository adminRepository) {
-        this.adminRepository = adminRepository;
+    public static void setAdminRepository(AdminRepository adminRepository) {
+        Services.adminRepository = adminRepository;
     }
 }

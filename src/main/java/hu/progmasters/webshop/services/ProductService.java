@@ -12,7 +12,7 @@ import java.util.TreeMap;
 
 public class ProductService extends Services {
 
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
@@ -41,7 +41,7 @@ public class ProductService extends Services {
         System.out.println(System.lineSeparator() + "Found " + founded.size() + " product");
         Map<String, String> productsList = new TreeMap<>();
         founded.forEach(product -> productsList.put(String.valueOf(product.getId()), product.getValuesForList()));
-        OutputHandler.printMapStringKey(productsList, "ID", "Products");
+         OutputHandler.printMapStringKey(productsList, "ID", "Products");
     }
 
     public void listProductTypes() {

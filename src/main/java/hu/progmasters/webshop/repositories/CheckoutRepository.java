@@ -15,13 +15,13 @@ public class CheckoutRepository extends Repository {
 
     private static final String TABLE = "orders";
 
-    public int saveOrder(Map<String, String> order, List<Product> orderedProducts) {
+    public int saveOrder(Map<String, Object> order, List<Product> orderedProducts) {
         int id = insert(TABLE, order);
         updateOrderedProductsTable(id, orderedProducts);
         return id;
     }
 
-    public Map<Integer, Integer> getShippingMethods(int orderTotal) {
+    public Map<Integer, Integer> getShippingMethods(long orderTotal) {
         Map<Integer, Integer> shippingMethods = new TreeMap<>();
         String sql = "SELECT sm.id, sm_name, sp.price FROM shipping_methods AS sm " +
                 "JOIN shipping_price AS sp ON sp.shipping_method = sm.id " +
@@ -40,7 +40,7 @@ public class CheckoutRepository extends Repository {
         return shippingMethods;
     }
 
-    public int getShippingCostById(int id, int orderTotal) {
+    public int getShippingCostById(int id, long orderTotal) {
         int price = 0;
         String sql = "SELECT price FROM shipping_price " +
                 "WHERE amount_min < " + orderTotal +
@@ -91,7 +91,7 @@ public class CheckoutRepository extends Repository {
     }
 
     public void updateOrderedProductsTable(int orderId, List<Product> products) {
-        Map<String, String> datas = new TreeMap<>();
+        Map<String, Object> datas = new TreeMap<>();
         datas.put("order_id", String.valueOf(orderId));
         for (Product product : products) {
             datas.put("product_id", String.valueOf(product.getId()));

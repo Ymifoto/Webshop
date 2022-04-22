@@ -2,7 +2,6 @@ package hu.progmasters.webshop.repositories;
 
 import hu.progmasters.webshop.domain.Category;
 import hu.progmasters.webshop.domain.Product;
-import hu.progmasters.webshop.domain.Tax;
 import hu.progmasters.webshop.handlers.OutputHandler;
 
 import java.sql.*;
@@ -58,7 +57,7 @@ public class CategoryRepository extends Repository {
         return data;
     }
 
-    public int addCategory(Map<String, String> data) {
+    public int addCategory(Map<String, Object> data) {
         int id = insert(TABLE, data);
         updateCategoriesTable();
         return id;
@@ -85,16 +84,7 @@ public class CategoryRepository extends Repository {
             List<Product> productList = category.getProducts();
             while (result.next()) {
                 if (result.getInt("product_id") != 0) {
-                    productList.add(new Product(
-                            result.getInt("product_id"),
-                            result.getString("name"),
-                            result.getString("vendor_name"),
-                            result.getInt("price"),
-                            result.getInt("sale_price"),
-                            result.getString("description"),
-                            result.getString("product_type_name"),
-                            Tax.valueOf(result.getString("tax")),
-                            result.getBoolean("in_stock")));
+                    productList.add(createProduct(result));
                 }
             }
         } catch (SQLException e) {

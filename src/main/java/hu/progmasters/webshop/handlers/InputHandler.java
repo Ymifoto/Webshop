@@ -24,6 +24,20 @@ public class InputHandler {
         return option;
     }
 
+    public static long getInputLong() {
+        long option = -1;
+        do {
+            try {
+                option = SCANNER.nextLong();
+            } catch (InputMismatchException e) {
+                OutputHandler.outputRed("It's not a number");
+                SCANNER.nextLine();
+            }
+        } while (option < 0);
+        SCANNER.nextLine();
+        return option;
+    }
+
     public static String getInputString() {
         String data;
         do {

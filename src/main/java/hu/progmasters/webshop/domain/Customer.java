@@ -43,8 +43,8 @@ public class Customer implements Comparable<Customer> {
         return sb.toString();
     }
 
-    public Map<String, String> getData() {
-        Map<String, String> data = new TreeMap<>();
+    public Map<String, Object> getData() {
+        Map<String, Object> data = new TreeMap<>();
         data.put("name", name);
         data.put("email", email);
         data.put("company_name", companyName);

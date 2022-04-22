@@ -1,11 +1,13 @@
 package hu.progmasters.webshop.repositories;
 
 import hu.progmasters.webshop.domain.DatabaseConfig;
+import hu.progmasters.webshop.domain.Product;
 import hu.progmasters.webshop.handlers.LogHandler;
 import hu.progmasters.webshop.handlers.OutputHandler;
 
 import java.sql.*;
 import java.util.Map;
+import java.util.TreeMap;
 
 public abstract class Repository {
 
@@ -21,7 +23,7 @@ public abstract class Repository {
         }
     }
 
-    protected void update(String table, int id, Map<String, String> datas) {
+    protected void update(String table, int id, Map<String, Object> datas) {
         String sql = "UPDATE " + table + " SET " + String.join(" = ?,", datas.keySet()) + " = ? WHERE id = ?;";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -34,7 +36,7 @@ public abstract class Repository {
         LogHandler.addLog("Update " + table + " table, updated id: " + id + ", " + datas.keySet());
     }
 
-    protected int insert(String table, Map<String, String> datas) {
+    protected int insert(String table, Map<String, Object> datas) {
         int id = -1;
         String sql = "INSERT INTO " + table + "(" + String.join(", ", datas.keySet()) + ") VALUES(" + getPlaceHolders(datas.size()) + ");";
         try (Connection connection = getConnection();
@@ -54,25 +56,10 @@ public abstract class Repository {
         return id;
     }
 
-    private String getPlaceHolders(int count) {
-        String placeHolders = "";
-        for (int i = 0; i < count; i++) {
-            placeHolders += i + 1 == count ? "?" : "?,";
-        }
-        return placeHolders;
-    }
-
-    private void setMapValues(PreparedStatement preparedStatement, Map<String, String> datas) throws SQLException {
-        int counter = 1;
-        for (Map.Entry<String, String> entry : datas.entrySet()) {
-            preparedStatement.setString(counter, entry.getValue());
-            counter++;
-        }
-    }
-
     protected void updateCategoriesTable() {
-        String sql = "DELETE FROM categories WHERE id > 0;" +
-                "INSERT INTO categories(product_id,category_id) SELECT id,category_id FROM products WHERE category_id IS NOT NULL;";
+        String sqlDelete = "DELETE FROM categories WHERE id > 0; ";
+        execute(sqlDelete);
+        String sql = "INSERT INTO categories(product_id,category_id) SELECT id,category_id FROM products WHERE category_id IS NOT NULL;";
         execute(sql);
     }
 
@@ -81,6 +68,16 @@ public abstract class Repository {
             return DatabaseConfig.getTestConnection();
         }
         return DatabaseConfig.getConnection();
+    }
+
+    protected Product createProduct(ResultSet result) throws SQLException {
+        ResultSetMetaData resultData = result.getMetaData();
+        Map<String, Object> data = new TreeMap<>();
+
+        for (int i = 1; i <= resultData.getColumnCount(); i++) {
+            data.put(resultData.getColumnLabel(i), result.getObject(i));
+        }
+        return new Product().updateData(data);
     }
 
     public static void setTestMode(boolean testMode) {
@@ -93,5 +90,21 @@ public abstract class Repository {
 
     public static boolean isTestDatabaseCreated() {
         return testDatabaseCreated;
+    }
+
+    private String getPlaceHolders(int count) {
+        String placeHolders = "";
+        for (int i = 0; i < count; i++) {
+            placeHolders += i + 1 == count ? "?" : "?,";
+        }
+        return placeHolders;
+    }
+
+    private void setMapValues(PreparedStatement preparedStatement, Map<String, Object> datas) throws SQLException {
+        int counter = 1;
+        for (Map.Entry<String, Object> entry : datas.entrySet()) {
+            preparedStatement.setString(counter, (String) entry.getValue());
+            counter++;
+        }
     }
 }

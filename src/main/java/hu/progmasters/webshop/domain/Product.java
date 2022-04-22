@@ -1,40 +1,30 @@
 package hu.progmasters.webshop.domain;
 
+import lombok.Getter;
+
 import java.util.Map;
 import java.util.TreeMap;
 
+@Getter
 public class Product {
 
-    private final int id;
+    private int id;
     private String name;
     private String vendor;
-    private int price;
-    private int salePrice;
+    private long price;
+    private long salePrice;
     private String description;
     private String productType;
-    private final Tax tax;
+    private Tax tax;
     private boolean onSale;
     private boolean inStock;
-
-    public Product(int id, String name, String vendor, int price, int salePrice, String description, String productType, Tax tax, boolean inStock) {
-        this.id = id;
-        this.name = name;
-        this.vendor = vendor;
-        this.price = price;
-        this.salePrice = salePrice;
-        this.description = description;
-        this.productType = productType;
-        this.tax = tax;
-        this.inStock = inStock;
-        setOnSale();
-    }
 
     public String getValuesForList() {
         return name + ", Sale price: " + getPrice() + ", " + (onSale ? "On Sale! Original price: " + price : "") + ", " + (inStock ? "In stock" : "Out of stock");
     }
 
-    public Map<String, String> getData() {
-        Map<String, String> data = new TreeMap<>();
+    public Map<String, Object> getData() {
+        Map<String, Object> data = new TreeMap<>();
         data.put("name", name);
         data.put("vendor", vendor);
         data.put("price", String.valueOf(price));
@@ -45,38 +35,45 @@ public class Product {
         return data;
     }
 
-    public void updateData(Map<String, String> data) {
+    public Product updateData(Map<String, Object> data) {
 
-        if (data.get("name") != null && data.get("name").length() > 0) {
-            name = data.get("name");
+        if (data.containsKey("id") && data.get("id") != null) {
+            id = (Integer) data.get("id");
         }
-        if (data.get("vendor") != null && data.get("vendor").length() > 0) {
-            vendor = data.get("vendor");
+
+        if (data.containsKey("name") && data.get("name") != null) {
+            name = (String) data.get("name");
         }
-        if (data.get("product_type") != null && data.get("product_type").length() > 0) {
-            productType = data.get("product_type");
+
+        if (data.containsKey("vendor_name") && data.get("vendor_name") != null) {
+            vendor = (String) data.get("vendor_name");
         }
-        try {
-            if (data.get("price") != null && data.get("price").length() > 0) {
-                price = Integer.parseInt(data.get("price"));
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("Not a number, price not updated");
+
+        if (data.containsKey("product_type_name") && data.get("product_type_name") != null) {
+            productType = (String) data.get("product_type_name");
         }
-        try {
-            if (data.get("sale_price") != null && data.get("sale_price").length() > 0) {
-                salePrice = Integer.parseInt(data.get("sale_price"));
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("Not a number, sale price not updated");
+
+        if (data.containsKey("price") && data.get("price") != null) {
+            price =  (Long) data.get("price");
         }
-        if (data.get("description") != null && data.get("description").length() > 0) {
-            description = data.get("description");
+
+        if (data.containsKey("sale_price") && data.get("sale_price") != null) {
+            salePrice =  (Long) data.get("sale_price");
         }
-        if (data.get("in_stock") != null && data.get("in_stock").length() > 0) {
-            inStock = data.get("in_stock").equals("1");
+
+        if (data.containsKey("description") && data.get("description") != null) {
+            description = (String) data.get("description");
+        }
+
+        if (data.containsKey("tax") && data.get("tax") != null) {
+            tax = Tax.valueOf((String) data.get("tax"));
+        }
+
+        if (data.containsKey("in_stock") && data.get("in_stock") != null) {
+            inStock = (Boolean) data.get("in_stock");
         }
         setOnSale();
+        return this;
     }
 
     @Override
@@ -93,52 +90,12 @@ public class Product {
         return sb.toString();
     }
 
-    public boolean isInStock() {
-        return inStock;
-    }
-
-    public String getVendor() {
-        return vendor;
-    }
-
-    public String getProductType() {
-        return productType;
-    }
-
-    public int getSalePrice() {
-        return salePrice;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getPrice() {
+    public long getFinalPrice() {
         return onSale ? salePrice : price;
-    }
-
-    public int getBasicPrice() {
-        return price;
-    }
-
-    public Tax getTax() {
-        return tax;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     private void setOnSale() {
         onSale = salePrice > 0;
-    }
-
-    public boolean isOnSale() {
-        return onSale;
     }
 }
 

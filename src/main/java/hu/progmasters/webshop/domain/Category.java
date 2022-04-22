@@ -1,10 +1,15 @@
 package hu.progmasters.webshop.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+@Getter
+@Setter
 public class Category {
 
     private int id;
@@ -12,51 +17,27 @@ public class Category {
     private final List<Product> products = new ArrayList<>();
     private String description = "";
 
-    public Map<String, String> getData() {
-        Map<String, String> data = new TreeMap<>();
+    public Map<String, Object> getData() {
+        Map<String, Object> data = new TreeMap<>();
         data.put("id", String.valueOf(id));
         data.put("category_name", name);
         data.put("category_desc", description);
         return data;
     }
 
-    public void updateData(Map<String, String> data) {
-        if (data.get("category_name") != null && data.get("category_name").length() > 0) {
-            name = data.get("category_name");
+    public void updateData(Map<String, Object> data) {
+        if (data.containsKey("category_name") && data.get("category_name") != null) {
+            name = (String) data.get("category_name");
         }
-        if (data.get("category_desc") != null && data.get("category_desc").length() > 0) {
-            description = data.get("category_desc");
+        if (data.containsKey("category_desc") && data.get("category_desc") != null) {
+            description = (String) data.get("category_desc");
         }
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<Product> getProducts() {
-        return products;
     }
 
     public void setDescription(String description) {
         if (description != null) {
             this.description = description;
         }
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     @Override

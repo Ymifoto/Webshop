@@ -42,8 +42,8 @@ public class Address {
         }
     }
 
-    public Map<String, String> getData() {
-        Map<String, String> data = new TreeMap<>();
+    public Map<String, Object> getData() {
+        Map<String, Object> data = new TreeMap<>();
         data.put("zip", String.valueOf(zip));
         data.put("city", city);
         data.put("street", street);

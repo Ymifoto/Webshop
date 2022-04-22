@@ -3,7 +3,6 @@ package hu.progmasters.webshop.repositories;
 import hu.progmasters.webshop.domain.Customer;
 import hu.progmasters.webshop.domain.Order;
 import hu.progmasters.webshop.domain.Product;
-import hu.progmasters.webshop.domain.Tax;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,7 +10,7 @@ import java.util.List;
 
 public class OrderRepository extends Repository {
 
-    private AddressRepository addressRepository = new AddressRepository();
+    private final AddressRepository addressRepository = new AddressRepository();
 
     public List<Order> getAllOrders() {
         List<Order> orders = new ArrayList<>();
@@ -119,15 +118,7 @@ public class OrderRepository extends Repository {
              ResultSet result = statement.executeQuery(sql)
         ) {
             while (result.next()) {
-                products.add(new Product(result.getInt("product_id")
-                        , result.getString("name")
-                        , result.getString("vendor")
-                        , result.getInt("ordered_price")
-                        , 0
-                        , result.getString("description")
-                        , result.getString("product_type")
-                        , Tax.valueOf(result.getString("tax"))
-                        , result.getBoolean("in_stock")));
+                products.add(createProduct(result));
             }
             return products;
         } catch (SQLException e) {

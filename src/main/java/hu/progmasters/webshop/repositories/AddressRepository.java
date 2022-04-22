@@ -14,7 +14,7 @@ public class AddressRepository extends Repository {
 
     private static final String TABLE = "address";
 
-    public void addAddresses(Map<String, String> data, int customerId) {
+    public void addAddresses(Map<String, Object> data, int customerId) {
         data.put("customer_id", String.valueOf(customerId));
         insert(TABLE, data);
     }

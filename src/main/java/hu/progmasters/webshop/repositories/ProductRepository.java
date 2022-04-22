@@ -1,7 +1,6 @@
 package hu.progmasters.webshop.repositories;
 
 import hu.progmasters.webshop.domain.Product;
-import hu.progmasters.webshop.domain.Tax;
 
 import java.sql.*;
 import java.util.*;
@@ -11,7 +10,7 @@ public class ProductRepository extends Repository {
     private static final String TABLE = "products";
 
     public Product getProductById(int id) {
-        String sql = "SELECT * FROM products AS p " +
+        String sql = "SELECT p.id,name,vendor_name,price,sale_price,description,in_stock,product_type_name FROM products AS p " +
                 "JOIN product_types AS pt ON pt.id = p.product_type " +
                 "JOIN vendors AS v ON v.id = p.vendor " +
                 "WHERE p.id = ?;";
@@ -24,7 +23,7 @@ public class ProductRepository extends Repository {
                 return createProduct(result);
             }
         } catch (SQLException e) {
-            System.out.println("Not find product!");
+            System.out.println("Not found product!");
         }
         return null;
     }
@@ -32,7 +31,7 @@ public class ProductRepository extends Repository {
     public List<Product> productSearch(String keyword) {
         keyword = "%" + keyword + "%";
         List<Product> productList = new ArrayList<>();
-        String sql = "SELECT * FROM products AS p " +
+        String sql = "SELECT p.id,name,vendor_name,price,sale_price,description,in_stock,product_type_name FROM products AS p " +
                 "JOIN product_types AS pt ON pt.id = p.product_type " +
                 "JOIN vendors AS v ON v.id = p.vendor " +
                 "WHERE name LIKE ? " +
@@ -59,7 +58,7 @@ public class ProductRepository extends Repository {
 
     public List<Product> getStockOrDiscountProducts(String option) {
         List<Product> productList = new ArrayList<>();
-        String sql = "SELECT * FROM products AS p " +
+        String sql = "SELECT p.id,name,vendor_name,price,sale_price,description,in_stock,product_type_name FROM products AS p " +
                 "JOIN product_types AS pt ON pt.id = p.product_type " +
                 "JOIN vendors AS v ON v.id = p.vendor " +
                 "WHERE " + option + " = 1;";
@@ -77,22 +76,22 @@ public class ProductRepository extends Repository {
         }
     }
 
-    public int addProduct(Map<String, String> data) {
+    public int addProduct(Map<String, Object> data) {
         int id = insert(TABLE, data);
         updateCategoriesTable();
         return id;
     }
 
     public void updateProduct(Product product) {
-        Map<String, String> productData = product.getData();
-        checkData(productData, "product_type", getValueIdByName(productData.get("product_type"), "product_types", "product_type_name"));
-        checkData(productData, "vendor", getValueIdByName(productData.get("vendor"), "vendors", "vendor_name"));
+        Map<String, Object> productData = product.getData();
+        checkData(productData, "product_type", getValueIdByName((String) productData.get("product_type"), "product_types", "product_type_name"));
+        checkData(productData, "vendor", getValueIdByName((String) productData.get("vendor"), "vendors", "vendor_name"));
         update(TABLE, product.getId(), productData);
         updateCategoriesTable();
     }
 
     public void addProductToCategory(int productId, int categoryId) {
-        Map<String, String> data = new TreeMap<>();
+        Map<String, Object> data = new TreeMap<>();
         data.put("category_id", String.valueOf(categoryId));
         update(TABLE, productId, data);
         updateCategoriesTable();
@@ -129,23 +128,11 @@ public class ProductRepository extends Repository {
         return 0;
     }
 
-    private void checkData(Map<String, String> productData, String key, int value) {
+    private void checkData(Map<String, Object> productData, String key, int value) {
         if (value != 0) {
             productData.replace(key, String.valueOf(value));
         } else {
             productData.remove(key);
         }
-    }
-
-    private Product createProduct(ResultSet result) throws SQLException {
-        return new Product(result.getInt("id")
-                , result.getString("name")
-                , result.getString("vendor_name")
-                , result.getInt("price")
-                , result.getInt("sale_price")
-                , result.getString("description")
-                , result.getString("product_type_name")
-                , Tax.valueOf(result.getString("tax"))
-                , result.getBoolean("in_stock"));
     }
 }

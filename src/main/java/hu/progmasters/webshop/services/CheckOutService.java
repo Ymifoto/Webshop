@@ -26,9 +26,9 @@ public class CheckOutService extends Services {
     private int shippingMethodId;
     private int paymentMethodId;
     private String paymentMethod;
-    private int generalTotal;
+    private long generalTotal;
 
-    private CheckoutRepository checkoutRepository;
+    private final CheckoutRepository checkoutRepository;
 
     public CheckOutService(CheckoutRepository checkoutRepository) {
         this.checkoutRepository = checkoutRepository;
@@ -98,7 +98,7 @@ public class CheckOutService extends Services {
     }
 
     private void saveOrder(ShoppingCart shoppingCart) {
-        Map<String, String> order = new TreeMap<>();
+        Map<String, Object> order = new TreeMap<>();
         order.put("customer_id", String.valueOf(shoppingCart.getCustomer().getId()));
         order.put("shipping_method", String.valueOf(shippingMethodId));
         order.put("shipping_cost", String.valueOf(shippingCost));
@@ -112,8 +112,8 @@ public class CheckOutService extends Services {
 
     }
 
-    private int getGeneralTotal(ShoppingCart shoppingCart) {
-        return shoppingCart.getProductList().stream().mapToInt(Product::getPrice).sum();
+    private long getGeneralTotal(ShoppingCart shoppingCart) {
+        return shoppingCart.getProductList().stream().mapToLong(Product::getPrice).sum();
     }
 
     private void refreshShippingMethodCost() {
